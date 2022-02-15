@@ -1,21 +1,15 @@
 import "./App.css";
+import HelpButton from "./components/HelpButton";
 
 function App() {
   return (
     <div className="App">
+      <div className = "topBar">
+        <HelpButton heading = "Super helpful help" message = "Here's a message to help you out!" />
+      </div>
       <header className="App-header">
         <h1>Wrathspriter!</h1>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h2>The Ultimate Platform for Wrathskeller Customizability</h2>
       </header>
     </div>
   );
