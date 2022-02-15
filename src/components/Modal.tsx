@@ -14,7 +14,10 @@ class Modal extends Component<ModalShow> {
         if (!this.props.show) return null;
         return (
             <div>
-                <div>The actual content of the modal</div>
+                <div>
+                    <h2>{this.props.handler.props.heading}</h2>
+                    <p>{this.props.handler.props.message}</p>
+                </div>
                 <div>
                     <button onClick = {this.props.handler.hideModal}>Close</button>
                 </div>
