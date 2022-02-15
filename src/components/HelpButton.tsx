@@ -1,16 +1,19 @@
 import { Component } from "react";
+import { ModalShow } from "../components/Modal";
+import Modal from "../components/Modal";
 
 interface HelpProps {
     heading: string;
     message: string;
 }
   
-class HelpButton extends Component<HelpProps> {
+class HelpButton extends Component<HelpProps, ModalShow> {
     constructor(props: HelpProps) {
         super(props);
 
         this.state = {
-            show: false
+            show: false,
+            handler: this
         };
 
         this.showModal = this.showModal.bind(this);
@@ -25,9 +28,12 @@ class HelpButton extends Component<HelpProps> {
         this.setState({ show: false });
     }
 
-    render() {
+    render() {  
         return (
-            <button type="button" onClick = {this.showModal}>{this.props.heading}</button>
+            <div>
+                <Modal show={this.state.show} handler={this} />
+                <button type="button" onClick = {this.showModal}>?</button>
+            </div>
         );
     }
 }
