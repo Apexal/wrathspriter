@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
+import "./sass/theme.scss";
+
 function App() {
   return (
     <div className="App">
