@@ -24,7 +24,7 @@ export interface Move {
     | "launch"
     | "trip"
     | "burst";
-  /**  */
+  /** The ordered frames of the animation */
   animationFrames: AnimationFrame[];
   /** Possible sound effects for the move. One is chosen randomly each time the move is performed. */
   soundEffects: SoundEffect[];
