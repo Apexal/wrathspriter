@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
         <Route path="/" element={<p>Home</p>} />
         <Route path="*" element={<p>Page Not Found!</p>} />
       </Routes>
+      <Footer/>
     </div>
   );
 }
