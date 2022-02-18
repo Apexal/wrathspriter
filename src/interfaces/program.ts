@@ -1,4 +1,4 @@
-import { Move } from "./move";
+import { Move } from ".";
 
 /** Represents a school program like CS, EE, Math, etc. that can be chosen as either a major or minor. */
 export interface SchoolProgram {

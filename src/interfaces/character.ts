@@ -1,5 +1,4 @@
-import { Move } from "./move";
-import { SchoolProgram } from "./program";
+import { AnimationFrame, Move, SchoolProgram } from ".";
 
 /**
  * Represents a Wrathskeller character. The properties of the object
@@ -16,4 +15,15 @@ export interface Character {
   major: SchoolProgram;
   /** The program selected as the character's minor */
   minor: SchoolProgram | null;
+
+  // Self-explanatory animations
+  blockAnimation: AnimationFrame[];
+  crouchAnimation: AnimationFrame[];
+  walkAnimation: AnimationFrame[];
+  dashAnimation: AnimationFrame[];
+  grappledAnimation: AnimationFrame[];
+  // TODO: have multiple hurt animations based on crouching, jumping, etc.?
+  hurtAnimation: AnimationFrame[];
+  winAnimation: AnimationFrame[];
+  loseAnimation: AnimationFrame[];
 }

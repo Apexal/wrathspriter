@@ -5,5 +5,5 @@ export interface AnimationFrame {
   durationInMS: number;
   // TODO:
   // - collision shape here
-  // - position of hit collider
+  // - position of hit collider or NULL if disabled
 }

@@ -1,4 +1,4 @@
-import { AnimationFrame } from "./animations";
+import { AnimationFrame } from ".";
 
 export interface SoundEffect {
   /** Optional display name for this sound effect */
@@ -25,7 +25,7 @@ export interface Move {
     | "trip"
     | "burst";
   /** The ordered frames of the animation */
-  animationFrames: AnimationFrame[];
+  animation: AnimationFrame[];
   /** Possible sound effects for the move. One is chosen randomly each time the move is performed. */
   soundEffects: SoundEffect[];
 }
