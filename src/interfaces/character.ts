@@ -1,4 +1,4 @@
-import { AnimationFrame, Move, SchoolProgram } from ".";
+import { AnimationFrame, Move, SchoolProgram, SoundEffect } from ".";
 
 /**
  * Represents a Wrathskeller character. The properties of the object
@@ -15,6 +15,11 @@ export interface Character {
   major: SchoolProgram;
   /** The program selected as the character's minor */
   minor: SchoolProgram | null;
+
+  /** Sound effects to randomly choose from when hurt */
+  hurtSoundEffects: SoundEffect[];
+  /** Sound effects to randomly choose from on character entry */
+  enterSoundEffects: SoundEffect[];
 
   // Self-explanatory animations
   blockAnimation: AnimationFrame[];
