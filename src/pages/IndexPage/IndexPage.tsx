@@ -1,4 +1,5 @@
 import "./IndexPage.scss";
+import HelpButton from "../../components/HelpButton";
 
 /**
  * The homepage displayed to all users. Allows them to either
@@ -9,6 +10,9 @@ export function IndexPage() {
     <section id="index-page" className="section page">
       <div className="container has-text-centered">
         <header>
+        <div className = "topBar">
+          <HelpButton heading = "Welcome to Wrathspriter!" message = "This is the companion app for creating characters for Wrathskeller! You'll choose a name, major, and minor and then take some poses! Already made a character and want to edit it or send to the game? Just navigate to the saved characters screen." />
+        </div>
           <h1 className="is-uppercase is-size-1">Wrathspriter</h1>
           <h2 className="is-size-5 is-uppercase">
             the ultimate platform for wrathskeller customizability™

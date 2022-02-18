@@ -11,11 +11,9 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <div className = "topBar">
-          <HelpButton heading = "Welcome to Wrathspriter!" message = "This is the companion app for creating characters for Wrathskeller! You'll choose a name, major, and minor and then take some poses! Already made a character and want to edit it or send to the game? Just navigate to the saved characters screen." />
-        </div>
         <Route path="/" element={<IndexPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
+        
       </Routes>
       <Footer/>
     </div>
