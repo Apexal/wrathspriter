@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import "./IndexPage.scss";
 
 /**
@@ -23,8 +25,16 @@ export function IndexPage() {
             />
           </figure>
           <div className="is-flex is-flex-direction-column is-align-items-center action-buttons">
-            <button className="button is-flex-grow-0 mt-5">Create</button>
-            <button className="button is-flex-grow-0 mt-5">Saved</button>
+            <button
+              className="button is-flex-grow-0 mt-5"
+              title="Coming soon..."
+              disabled
+            >
+              Create
+            </button>
+            <Link to="/saved" className="button is-flex-grow-0 mt-5">
+              Saved
+            </Link>
           </div>
         </main>
       </div>

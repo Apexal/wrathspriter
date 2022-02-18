@@ -3,6 +3,7 @@ import Footer from "./components/Footer/Footer";
 
 // Page imports
 import { IndexPage } from "./pages/IndexPage/IndexPage";
+import { SavedCharactersPage } from "./pages/SavedCharactersPage/SavedCharactersPage";
 
 import "./sass/theme.scss";
 
@@ -11,9 +12,10 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<IndexPage />} />
+        <Route path="/saved" element={<SavedCharactersPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
       </Routes>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
