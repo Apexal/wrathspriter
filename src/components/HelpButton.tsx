@@ -1,41 +1,24 @@
-import { Component } from "react";
-import { ModalShow } from "../components/Modal";
-import Modal from "../components/Modal";
+import React, { useState } from "react";
+import Modal from "./Modal";
 
 interface HelpProps {
     heading: string;
-    message: string;
+    body: JSX.Element;
 }
-  
-class HelpButton extends Component<HelpProps, ModalShow> {
-    constructor(props: HelpProps) {
-        super(props);
 
-        this.state = {
-            show: false,
-            handler: this
-        };
+function HelpButton(props: HelpProps) {
+    const [show, setShow] = useState(false);
 
-        this.showModal = this.showModal.bind(this);
-        this.hideModal = this.hideModal.bind(this);
-    }
-
-    showModal = () => {
-        this.setState({ show: true });
-    }
-
-    hideModal = () => {
-        this.setState({ show: false });
-    }
-
-    render() {  
-        return (
-            <div>
-                <Modal show={this.state.show} handler={this} />
-                <button type="button" onClick = {this.showModal}>?</button>
+    return(
+        <div>
+            <div className = "has-text-right">
+                <button className = "button js-modal-trigger" onClick = {() => {setShow(true);}}>
+                    ?
+                </button>
             </div>
-        );
-    }
+            <Modal setShow = {setShow} show = {show} heading = {props.heading} body = {props.body}/>
+        </div>
+    );
 }
-  
-  export default HelpButton;
+
+export default HelpButton;

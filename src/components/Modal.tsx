@@ -1,29 +1,33 @@
-import { Component } from "react";
-import HelpButton from "../components/HelpButton";
+import React from "react";
 
-export interface ModalShow {
+interface ModalProps {
+    heading: string;
+    body: JSX.Element;
+    setShow: (set: boolean) => void;
     show: boolean;
-    handler: HelpButton;
 }
 
-class Modal extends Component<ModalShow> {
-    constructor(props: ModalShow) {
-        super(props);
-    }
-    render() {
-        if (!this.props.show) return null;
-        return (
-            <div>
-                <div>
-                    <h2>{this.props.handler.props.heading}</h2>
-                    <p>{this.props.handler.props.message}</p>
-                </div>
-                <div>
-                    <button onClick = {this.props.handler.hideModal}>Close</button>
+function Modal(props: ModalProps) {
+
+    let modalClass: string = "modal";
+    if (props.show) modalClass = "modal is-active";
+
+    return (
+    <div>
+        <div className = {modalClass}>
+            <div className = "modal-background"></div>
+            <div className = "modal-card">
+                <header className = "modal-card-head has-text-centered">
+                    <h1 className = "modal-card-title">{props.heading}</h1>
+                    <button className = "delete" onClick = {() => {props.setShow(false);}}></button>
+                </header>
+                <div className = "modal-card-body">
+                    {props.body}
                 </div>
             </div>
-        );
-    }
+        </div>
+    </div>
+    );
 }
 
 export default Modal;

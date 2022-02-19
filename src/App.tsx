@@ -1,4 +1,3 @@
-import HelpButton from "./components/HelpButton";
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 
