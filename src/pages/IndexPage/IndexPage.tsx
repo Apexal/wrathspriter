@@ -8,14 +8,13 @@ import HelpButton from "../../components/HelpButton";
 export function IndexPage() {
   return (
     <section id="index-page" className="section page">
-      <HelpButton heading = "Welcome to Wrathspriter!" body = {
-        <div>
-          <p>This is the companion app for creating characters for <a href="https://www.github.com/Apexal/Wrathskeller" target = "_blank" rel = "noreferrer">Wrathskeller</a>!</p>
-          <br/>
-          <p>You'll choose a name, major, and minor and then take some fighting pose pictures before sending your creation off into the game!</p>
-          <br/>
-          <p>Already made a character? Don't worry! Just navigate to the "Saved" screen to edit an existing character or send it off again.</p></div>
-      }/>
+      <HelpButton heading = "Welcome to Wrathspriter!">
+        <p>This is the companion app for creating characters for <a href="https://www.github.com/Apexal/Wrathskeller" target = "_blank" rel = "noreferrer">Wrathskeller</a>!</p>
+        <br/>
+        <p>You'll choose a name, major, and minor and then take some fighting pose pictures before sending your creation off into the game!</p>
+        <br/>
+        <p>Already made a character? Don't worry! Just navigate to the "Saved" screen to edit an existing character or send it off again.</p>
+      </HelpButton>
       <div className="container has-text-centered">
         <header>
           <h1 className="is-uppercase is-size-1">Wrathspriter</h1>

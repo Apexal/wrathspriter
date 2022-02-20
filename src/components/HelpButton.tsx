@@ -3,7 +3,7 @@ import Modal from "./Modal";
 
 interface HelpProps {
     heading: string;
-    body: JSX.Element;
+    children: JSX.Element[];
 }
 
 function HelpButton(props: HelpProps) {
@@ -16,7 +16,9 @@ function HelpButton(props: HelpProps) {
                     ?
                 </button>
             </div>
-            <Modal setShow = {setShow} show = {show} heading = {props.heading} body = {props.body}/>
+            <Modal setShow = {setShow} show = {show} heading = {props.heading}>
+                {props.children}
+            </Modal>
         </div>
     );
 }

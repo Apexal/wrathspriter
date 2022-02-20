@@ -2,7 +2,7 @@ import React from "react";
 
 interface ModalProps {
     heading: string;
-    body: JSX.Element;
+    children: JSX.Element[];
     setShow: (set: boolean) => void;
     show: boolean;
 }
@@ -22,7 +22,7 @@ function Modal(props: ModalProps) {
                     <button className = "delete" onClick = {() => {props.setShow(false);}}></button>
                 </header>
                 <div className = "modal-card-body">
-                    {props.body}
+                    {props.children}
                 </div>
             </div>
         </div>
