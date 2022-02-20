@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
+        
       </Routes>
       <Footer/>
     </div>
