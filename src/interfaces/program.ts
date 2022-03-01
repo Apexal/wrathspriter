@@ -8,11 +8,8 @@ export interface SchoolProgram {
   backstory: string;
   /** Example set of specific moves to previews to users when they are choosing a major and minor */
   sampleMoveset: Move[];
-
-  // TODO:
-  // We need to define some interface for the placeholders for moves?
   /** Moves that are used when the program is chosen as a character's major */
-  // majorMoves: ?;
+  majorMoveTemplates: Move[];
   /** Moves that are used when the program is chosen as a character's minor */
-  // minorMoves: ?;
+  minorMoveTemplates: Move[];
 }

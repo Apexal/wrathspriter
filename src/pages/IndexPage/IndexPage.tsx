@@ -1,5 +1,7 @@
-import "./IndexPage.scss";
+import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
+
+import "./IndexPage.scss";
 
 /**
  * The homepage displayed to all users. Allows them to either
@@ -8,12 +10,31 @@ import HelpButton from "../../components/HelpButton";
 export function IndexPage() {
   return (
     <section id="index-page" className="section page">
-      <HelpButton heading = "Welcome to Wrathspriter!">
-        <p>This is the companion app for creating characters for <a href="https://www.github.com/Apexal/Wrathskeller" target = "_blank" rel = "noreferrer">Wrathskeller</a>!</p>
-        <br/>
-        <p>You'll choose a name, major, and minor and then take some fighting pose pictures before sending your creation off into the game!</p>
-        <br/>
-        <p>Already made a character? Don't worry! Just navigate to the "Saved" screen to edit an existing character or send it off again.</p>
+      <HelpButton
+        heading="Welcome to Wrathspriter!"
+        className="is-pulled-right"
+      >
+        <p>
+          This is the companion app for creating characters for{" "}
+          <a
+            href="https://www.github.com/Apexal/Wrathskeller"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Wrathskeller
+          </a>
+          !
+        </p>
+        <br />
+        <p>
+          You'll choose a name, major, and minor and then take some fighting
+          pose pictures before sending your creation off into the game!
+        </p>
+        <br />
+        <p>
+          Already made a character? Don't worry! Just navigate to the "Saved"
+          screen to edit an existing character or send it off again.
+        </p>
       </HelpButton>
       <div className="container has-text-centered">
         <header>
@@ -24,15 +45,23 @@ export function IndexPage() {
         </header>
 
         <main>
-          <figure className="image display-image my-5">
+          <figure className="image display-image m-auto my-5">
             <img
               src="https://media3.giphy.com/media/1xb8n8qWt2RNtShhWT/giphy.gif?cid=ecf05e473uv5y1rizuesg8h5q9r1dk2pdt3caryqkk3h9l9u&rid=giphy.gif&ct=s"
               alt="Dancing animation"
             />
           </figure>
           <div className="is-flex is-flex-direction-column is-align-items-center action-buttons">
-            <button className="button is-flex-grow-0 mt-5">Create</button>
-            <button className="button is-flex-grow-0 mt-5">Saved</button>
+            <button
+              className="button is-flex-grow-0 mt-5"
+              title="Coming soon..."
+              disabled
+            >
+              Create
+            </button>
+            <Link to="/saved" className="button is-flex-grow-0 mt-5">
+              Saved
+            </Link>
           </div>
         </main>
       </div>

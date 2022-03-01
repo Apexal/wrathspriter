@@ -3,7 +3,7 @@ import { AnimationFrame } from ".";
 export interface SoundEffect {
   /** Optional display name for this sound effect */
   name: string | null;
-  base64encodedAudio: string;
+  base64EncodedAudio: string;
 }
 
 /** Represents a move the character can perform. */
@@ -23,6 +23,7 @@ export interface Move {
     | "grab"
     | "launch"
     | "trip"
+    | "taunt"
     | "burst";
   /** The ordered frames of the animation */
   animation: AnimationFrame[];

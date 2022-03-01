@@ -1,9 +1,9 @@
 /** Represents a single frame of an animation. The image is Base64 encoded. */
 export interface AnimationFrame {
-  base64encodedImage: string;
+  /** The hardcoded pose for this animation frame move. Is set if this is a school program move. Meant to be displayed on top of camera for user to align themselves with. */
+  base64EncodedPoseImage: string | null;
+  /** The actual frame image, Base64 encoded. */
+  base64EncodedImage: string | null;
   /** The number of milliseconds this frame is displayed for before going to the next frame */
   durationInMS: number;
-  // TODO:
-  // - collision shape here
-  // - position of hit collider or NULL if disabled
 }
