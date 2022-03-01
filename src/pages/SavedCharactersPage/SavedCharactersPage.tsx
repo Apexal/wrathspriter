@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
+import HelpButton from "../../components/HelpButton";
 
 import { testCharacter } from "../../constants";
 
@@ -9,6 +10,14 @@ import { testCharacter } from "../../constants";
 export function SavedCharactersPage() {
   return (
     <section id="saved-characters-page" className="section page">
+      <HelpButton heading="Saved Characters Page" className="is-pulled-right">
+        <p>
+          This page will display the characters you have created so far, and
+          allow you to edit them, remove them, or send them to Wrathskeller to
+          play.
+        </p>
+      </HelpButton>
+
       <div className="container">
         <h1 className="title">Saved Characters</h1>
 

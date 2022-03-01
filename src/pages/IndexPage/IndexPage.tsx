@@ -10,7 +10,10 @@ import "./IndexPage.scss";
 export function IndexPage() {
   return (
     <section id="index-page" className="section page">
-      <HelpButton heading="Welcome to Wrathspriter!">
+      <HelpButton
+        heading="Welcome to Wrathspriter!"
+        className="is-pulled-right"
+      >
         <p>
           This is the companion app for creating characters for{" "}
           <a
