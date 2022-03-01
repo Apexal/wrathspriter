@@ -1,6 +1,49 @@
+import React, { useState } from "react";
 import HelpButton from "../../components/HelpButton";
+import { SchoolProgram } from "../../interfaces/program";
+
+enum Programs {
+    None = -1,
+    ComputerScience = 0,
+    Mathematics = 1,
+    English = 2,
+    Management = 3,
+}
+
 
 export function DevCreator() {
+
+    const [name, setName] = useState("");
+    let major : Programs = Programs.None;
+    let minor : Programs = Programs.None;
+
+    let minorInDanger
+
+    function createCharacter(event : React.SyntheticEvent) {
+        event.preventDefault();
+
+        
+    }
+
+    function setMajor(event: React.ChangeEvent<HTMLSelectElement>) {
+        // Convert from string to enum
+        let id : number = -1;
+        if (event.target.selectedOptions[0] != undefined)
+            id = Number(event.target.selectedOptions[0].dataset.id);
+        
+        // Update the major field
+        major = id as Programs;
+    }
+
+    function setMinor(event: React.ChangeEvent<HTMLSelectElement>) {
+        let id : number = -1;
+        if (event.target.selectedOptions[0] != undefined)
+            id = Number(event.target.selectedOptions[0].dataset.id);
+
+        // Update the minor field
+        minor = id as Programs;
+    }
+
     return(
         <section id="dev-creator-page" className = "sectionPage">
             <HelpButton heading = "Test Characters">
@@ -19,41 +62,46 @@ export function DevCreator() {
                 <h2 className = "is-size-5">
                     Can you keep this page a secret?
                 </h2>
-                <div className = "field">
-                    <p className = "control">
-                        <input className = "input" type = "name" placeholder = "Name"></input>
-                    </p>
-                </div>
-                <div className = "control">
-                    <div className = "select">
-                        <select>
-                            <option selected>Major</option>
-                            <option>Computer Science</option>
-                            <option>Mathematics</option>
-                            <option>English</option>
-                            <option>Architecture</option>
-                            <option>Management</option>
-                            <option>Chemistry</option>
-                            <option>Physics</option>
-                            <option>Philosophy</option>
-                        </select>
+                <form onSubmit = { (e) => { createCharacter(e); } }>
+                    <div className = "field">
+                        <div className = "control">
+                            <input className = "input" type = "name" placeholder = "Name" onChange = {(e) => { setName(e.target.value); }}></input>
+                        </div>
                     </div>
-                </div>
-                <div className = "control">
-                    <div className = "select">
-                        <select>
-                            <option selected>Minor</option>
-                            <option>Computer Science</option>
-                            <option>Mathematics</option>
-                            <option>English</option>
-                            <option>Architecture</option>
-                            <option>Management</option>
-                            <option>Chemistry</option>
-                            <option>Physics</option>
-                            <option>Philosophy</option>
-                        </select>
+                    <div className = "field">
+                        <div className = "control">
+                            <div className = "select">
+                                <select onChange = { (e) => { setMajor(e); } }>
+                                    <option selected data-id = "-1">Major</option>
+                                    <option data-id = "0">Computer Science</option>
+                                    <option data-id = "1">Mathematics</option>
+                                    <option data-id = "2">English</option>
+                                    <option data-id = "3">Management</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div className = "field">
+                        <div className = "control">
+                            <div className = "select">
+                                <select onChange = { (e) => { setMinor(e); } }>
+                                    <option selected data-id = "-1">Major</option>
+                                    <option data-id = "0">Computer Science</option>
+                                    <option data-id = "1">Mathematics</option>
+                                    <option data-id = "2">English</option>
+                                    <option data-id = "3">Management</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className = "field is-grouped is-grouped-centered">
+                        <p className = "control">
+                            <button className = "button is-primary" type = "submit" >
+                                Submit
+                            </button>
+                        </p>
+                    </div>
+                </form>
             </header>
         </section>
     )
