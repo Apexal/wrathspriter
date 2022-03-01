@@ -1,7 +1,5 @@
 import { Character } from "../../../../interfaces";
 
-import "./CharacterPreviews.scss";
-
 type CharacterPreviewPropTypes = {
   character: Character;
   // TODO: allow props to specify animation to show on hover
@@ -16,7 +14,7 @@ export function CharacterPreview({ character }: CharacterPreviewPropTypes) {
     <div className="character-preview has-text-centered box">
       <h6 className="title is-size-4 m-0 character-name">{character.name}</h6>
       {/* Preview animations here on hover */}
-      <figure className="image is-square my-2 character-animations">
+      <figure className="image is-square m-auto my-2 character-animations">
         <img
           src="https://bulma.io/images/placeholders/128x128.png"
           alt="A randomly selected sample animation of the character"
