@@ -8,6 +8,8 @@ export const testCharacter: Character = {
     name: "Computer Science",
     backstory: "",
     sampleMoveset: [],
+    majorMoveTemplates: [],
+    minorMoveTemplates: [],
   },
   minor: null,
   hurtSoundEffects: [],
