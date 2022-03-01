@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
+
+import clsx from "clsx";
 
 interface HelpProps {
   heading: string;
-  children: JSX.Element[];
+  children: JSX.Element | JSX.Element[];
+  className?: string;
 }
 
 function HelpButton(props: HelpProps) {
@@ -11,7 +14,7 @@ function HelpButton(props: HelpProps) {
 
   return (
     <div>
-      <div className="has-text-right">
+      <div className={clsx("has-text-right", props.className)}>
         <button
           className="button js-modal-trigger"
           onClick={() => {

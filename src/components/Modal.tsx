@@ -2,7 +2,7 @@ import React from "react";
 
 interface ModalProps {
   heading: string;
-  children: JSX.Element[];
+  children: JSX.Element | JSX.Element[];
   setShow: (set: boolean) => void;
   show: boolean;
 }
