@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { Outlet } from "react-router-dom";
 import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
 
@@ -10,8 +11,8 @@ CharacterContext.displayName = "CharacterContext";
 
 export function CreateCharacterPage() {
   return (
-    <CharacterContext.Provider
-      value={emptyCharacter}
-    ></CharacterContext.Provider>
+    <CharacterContext.Provider value={emptyCharacter}>
+      <Outlet />
+    </CharacterContext.Provider>
   );
 }
