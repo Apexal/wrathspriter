@@ -4,8 +4,8 @@ export interface AnimationFrame {
   base64EncodedPoseImage: string | null;
   /** The actual frame image, Base64 encoded. */
   base64EncodedImage: string | null;
-  /** The number of milliseconds this frame is displayed for before going to the next frame */
-  durationInMS: number;
+  /** The number of seconds this frame is displayed for before going to the next frame */
+  durationInS: number;
   /** Whether or not the character is immune to damage/attack cancellation during this frame. */
   isInvincible: boolean;
 }
