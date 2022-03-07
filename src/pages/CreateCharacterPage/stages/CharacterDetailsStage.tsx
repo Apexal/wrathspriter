@@ -35,7 +35,7 @@ export function CharacterDetailsStage() {
 
         <div className="buttons">
           <button className="button is-warning">Back</button>
-          <button className="button is-primary">Save and Continue</button>
+          <button className="button is-primary">Next</button>
           <button
             className="button is-danger"
             onClick={() => downloadCharacter(characterCtx.character)}

@@ -22,9 +22,11 @@ export function CharacterPreview({ character }: CharacterPreviewPropTypes) {
       </figure>
       <div className="character-details">
         <ul>
-          <li>
-            <em>{character.major.name}</em> Major
-          </li>
+          {character.major && (
+            <li>
+              <em>{character.major.name}</em> Major
+            </li>
+          )}
           {character.minor && (
             <li>
               <em>{character.minor.name}</em> Minor

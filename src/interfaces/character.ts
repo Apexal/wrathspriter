@@ -12,13 +12,13 @@ export interface Character {
   /** The moves this character can make */
   moveset: Move[];
   /** The program selected as the character's major */
-  major: SchoolProgram;
+  major: SchoolProgram | null;
   /** The program selected as the character's minor */
   minor: SchoolProgram | null;
 
   /** Sound effects to randomly choose from when hurt */
   hurtSoundEffects: SoundEffect[];
-  /** Sound effects to randomly choose from on character entry */
+  /** Sound effects to randomly choose from on character entry to stage */
   enterSoundEffects: SoundEffect[];
 
   // Self-explanatory animations

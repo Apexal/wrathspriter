@@ -6,13 +6,17 @@ import { Character } from "../../interfaces";
 export type CharacterContextType = {
   character: Character;
 };
-export const CharacterContext =
-  createContext<CharacterContextType>(emptyCharacter);
+const characterContextDefault = {
+  character: emptyCharacter,
+};
+export const CharacterContext = createContext<CharacterContextType>(
+  characterContextDefault
+);
 CharacterContext.displayName = "CharacterContext";
 
 export function CreateCharacterPage() {
   return (
-    <CharacterContext.Provider value={emptyCharacter}>
+    <CharacterContext.Provider value={characterContextDefault}>
       <Outlet />
     </CharacterContext.Provider>
   );
