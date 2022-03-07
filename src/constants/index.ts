@@ -1,6 +1,6 @@
 export const emptyCharacter =  {
     character: {
-      name: "",
+      name: "Character",
       backstory: "",
       moveset: [],
       major: {
