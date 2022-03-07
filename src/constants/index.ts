@@ -1,0 +1,27 @@
+export const emptyCharacter =  {
+    character: {
+      name: "",
+      backstory: "",
+      moveset: [],
+      major: {
+        name: "Computer Science",
+        backstory: "",
+        sampleMoveset: [],
+        majorMoveTemplates: [],
+        minorMoveTemplates: [],
+      },
+      minor: null,
+      hurtSoundEffects: [],
+      enterSoundEffects: [],
+      blockAnimation: [],
+      crouchAnimation: [],
+      dashAnimation: [],
+      grappledAnimation: [],
+      hurtAnimation: [],
+      idleAnimation: [],
+      loseAnimation: [],
+      previewAnimation: [],
+      walkAnimation: [],
+      winAnimation: [],
+    },
+  }

@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
+import { CreateCharacterPage } from "./pages/CreateCharactorPage/CreateCharacterPage";
 
 // Page imports
 import { IndexPage } from "./pages/IndexPage/IndexPage";
@@ -12,9 +13,9 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<IndexPage />} />
+        <Route path="/create" element={<CreateCharacterPage />} />
         <Route path="/saved" element={<SavedCharactersPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
-        
       </Routes>
       <Footer />
     </div>
