@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
 import HelpButton from "../../components/HelpButton";
 
-import { testCharacter } from "../../constants";
+import testCharacter from "../../constants/character.json";
 
 /**
  * Page that lists all saved characters from the user's browser.

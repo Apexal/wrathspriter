@@ -22,6 +22,7 @@ export interface Character {
   enterSoundEffects: SoundEffect[];
 
   // Self-explanatory animations
+  idleAnimation: AnimationFrame[];
   blockAnimation: AnimationFrame[];
   crouchAnimation: AnimationFrame[];
   walkAnimation: AnimationFrame[];
@@ -31,4 +32,6 @@ export interface Character {
   hurtAnimation: AnimationFrame[];
   winAnimation: AnimationFrame[];
   loseAnimation: AnimationFrame[];
+
+  previewAnimation: AnimationFrame[];
 }
