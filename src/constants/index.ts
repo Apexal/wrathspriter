@@ -30,9 +30,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "cs",
     backstory: "",
-    name: " Computer Science",
-    majorMoveTemplates: [],
-    minorMoveTemplates: [],
-    sampleMoveset: [],
+    name: "Computer Science",
+    actionTemplates: [],
   },
 ];
