@@ -1,4 +1,4 @@
-import { AnimationFrame, Move, SchoolProgram, SoundEffect } from ".";
+import { AnimationFrame, Action, SchoolProgram, SoundEffect } from ".";
 
 /**
  * Represents a Wrathskeller character. The properties of the object
@@ -9,29 +9,36 @@ export interface Character {
   name: string;
   /** Short backstory of the character */
   backstory: string;
-  /** The moves this character can make */
-  moveset: Move[];
+  /** The actions this character can perform */
+  actions: Action[];
   /** The program selected as the character's major */
-  major: SchoolProgram;
+  major: SchoolProgram | null;
   /** The program selected as the character's minor */
   minor: SchoolProgram | null;
 
-  /** Sound effects to randomly choose from when hurt */
-  hurtSoundEffects: SoundEffect[];
-  /** Sound effects to randomly choose from on character entry */
-  enterSoundEffects: SoundEffect[];
+  /** Sound effects for different possible character states. */
+  stateSoundEffects: {
+    /** Sound effects to randomly choose from when hurt */
+    hurt: SoundEffect[];
+    /** Sound effects to randomly choose from on character entry to stage */
+    enter: SoundEffect[];
+    win: SoundEffect[];
+    lose: SoundEffect[];
+  };
 
-  // Self-explanatory animations
-  idleAnimation: AnimationFrame[];
-  blockAnimation: AnimationFrame[];
-  crouchAnimation: AnimationFrame[];
-  walkAnimation: AnimationFrame[];
-  dashAnimation: AnimationFrame[];
-  grappledAnimation: AnimationFrame[];
-  // TODO: have multiple hurt animations based on crouching, jumping, etc.?
-  hurtAnimation: AnimationFrame[];
-  winAnimation: AnimationFrame[];
-  loseAnimation: AnimationFrame[];
-
-  previewAnimation: AnimationFrame[];
+  /** Animations for different possible character states. */
+  stateAnimations: {
+    // Self-explanatory animations
+    idle: AnimationFrame[];
+    walk: AnimationFrame[];
+    dash: AnimationFrame[];
+    jump: AnimationFrame[];
+    crouch: AnimationFrame[];
+    block: AnimationFrame[];
+    grappled: AnimationFrame[];
+    // TODO: have multiple hurt animations based on crouching, jumping, etc.?
+    hurt: AnimationFrame[];
+    win: AnimationFrame[];
+    lose: AnimationFrame[];
+  };
 }

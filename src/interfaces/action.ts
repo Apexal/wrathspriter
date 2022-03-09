@@ -6,12 +6,12 @@ export interface SoundEffect {
   base64EncodedAudio: string;
 }
 
-/** Represents a move the character can perform. */
-export interface Move {
-  /** The displayed name of the move */
+/** Represents an action the character can perform. */
+export interface Action {
+  /** The displayed name of the action in the editor and game */
   name: string;
   /**
-   * The type of move this is. The game only recognizes these types and assigns controls, damage amounts, logic, etc. to them.
+   * The type of action this is. The game only recognizes these types and assigns controls, damage amounts, logic, etc. to them.
    * See https://github.com/Apexal/wrathskeller/blob/master/documentation/controls_mechanics.md
    **/
   type:
@@ -27,6 +27,6 @@ export interface Move {
     | "burst";
   /** The ordered frames of the animation */
   animation: AnimationFrame[];
-  /** Possible sound effects for the move. One is chosen randomly each time the move is performed. */
+  /** Possible sound effects for the action. One is chosen randomly each time the move is performed. */
   soundEffects: SoundEffect[];
 }
