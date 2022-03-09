@@ -43,7 +43,6 @@ export function IndexPage() {
             the ultimate platform for wrathskeller customizability™
           </h2>
         </header>
-
         <main>
           <figure className="image display-image m-auto my-5">
             <img
