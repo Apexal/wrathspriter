@@ -7,6 +7,7 @@ import { CharacterProgramsStage } from "./pages/CreateCharacterPage/stages/Chara
 // Page imports
 import { IndexPage } from "./pages/IndexPage/IndexPage";
 import { SavedCharactersPage } from "./pages/SavedCharactersPage/SavedCharactersPage";
+import { ThemePage } from "./pages/ThemePage/ThemePage";
 
 import "./sass/theme.scss";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="moves" element={<p>Coming soon!</p>} />
           <Route path="review" element={<p>Coming soon!</p>} />
         </Route>
+        <Route path="theme" element={<ThemePage />} />
         <Route path="saved" element={<SavedCharactersPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
       </Routes>
