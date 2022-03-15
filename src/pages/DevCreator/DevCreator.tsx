@@ -28,7 +28,15 @@ export function DevCreator() {
     function createCharacter(event: React.SyntheticEvent) {
         event.preventDefault();
 
+        const jsonCharacter: string = JSON.stringify(character);
 
+        console.log(jsonCharacter);
+
+        let a = document.createElement('a');
+        let blob = new Blob([jsonCharacter], {'type': "text/json"});
+        a.href = window.URL.createObjectURL(blob);
+        a.download = character.name + ".wrath";
+        a.click();
     }
 
     function setMajor(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -50,24 +58,36 @@ export function DevCreator() {
         minor = id as Programs;
     }
 
-    function setHurtSounds(event: React.ChangeEvent<HTMLInputElement>) {
+    function setSounds(event: React.ChangeEvent<HTMLInputElement>, area: SoundEffect[]) {
         if (event.target.files == null) return;
-
-        let sounds: SoundEffect[] = [];
 
         for (let i = 0; i < event.target.files.length; i++) {
             if (event.target.files[i].type != "audio/mpeg") { showUploadFail(); continue; }
             else {
-                sounds.push({
-                    name: event.target.files[i].name,
-                    base64EncodedAudio: "tbd"
-                });
+                // Read the file
+                let name = event.target.files[i].name;
+
+                let reader: FileReader = new FileReader();
+                reader.addEventListener("load", () => {
+
+                    if (!(reader.result instanceof ArrayBuffer)) return;
+                    let base64: string = arrayBufferToBase64(reader.result);
+
+                    area.push({
+                        name: name,
+                        base64EncodedAudio: base64
+                    });
+                })
+                reader.readAsArrayBuffer(event.target.files[i]);
             }
         }
 
-        character.stateSoundEffects.hurt = sounds;
-
         console.log(character);
+    }
+
+    // Converts an array buffer into base64
+    function arrayBufferToBase64(buffer: ArrayBuffer) {
+        return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''))
     }
 
     function showUploadFail() {
@@ -126,7 +146,7 @@ export function DevCreator() {
                     </div>
                     <div className="file has-name is-right">
                         <label className="file-label">
-                            <input onChange = { (e) => { setHurtSounds(e); } } className="file-input" type="file" name="hurt sound" accept = "audio/mp3" multiple/>
+                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.hurt); } } className="file-input" type="file" name="hurt sound" accept = "audio/mpeg" multiple/>
                                 <span className="file-name">
                                     Hurt Sound
                                 </span>
@@ -139,7 +159,7 @@ export function DevCreator() {
                     </div>
                     <div className="file has-name is-right">
                         <label className="file-label">
-                            <input className="file-input" type="file" name="enter sound" multiple/>
+                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.enter); } } className="file-input" type="file" name="enter sound" accept = "audio/mpeg" multiple/>
                                 <span className="file-name">
                                     Enter Sound
                                 </span>
@@ -152,7 +172,7 @@ export function DevCreator() {
                     </div>
                     <div className="file has-name is-right">
                         <label className="file-label">
-                            <input className="file-input" type="file" name="win sound" multiple/>
+                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.win); } } className="file-input" type="file" name="win sound" accept = "audio/mpeg" multiple/>
                                 <span className="file-name">
                                     Win Sound
                                 </span>
@@ -165,7 +185,7 @@ export function DevCreator() {
                     </div>
                     <div className="file has-name is-right">
                         <label className="file-label">
-                            <input className="file-input" type="file" name="lose sound" multiple/>
+                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.lose); } } className="file-input" type="file" name="lose sound" accept = "audio/mpeg" multiple/>
                                 <span className="file-name">
                                     Lose Sound
                                 </span>
