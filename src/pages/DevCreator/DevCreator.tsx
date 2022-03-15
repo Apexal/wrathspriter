@@ -1,3 +1,4 @@
+import { Action } from "history";
 import { encode } from "querystring";
 import React, { useState } from "react";
 import HelpButton from "../../components/HelpButton";
@@ -23,10 +24,18 @@ export function DevCreator() {
 
     let character: Character = emptyCharacter;
 
-    let minorInDanger
-
     function createCharacter(event: React.SyntheticEvent) {
         event.preventDefault();
+
+        let actions: Action[] = [];
+
+        character.name = name;
+        character.major = {
+            id: Programs[major],
+            name: Programs[major],
+            backstory: "",
+            actionTemplates: emptyCharacter.actions
+        }
 
         const jsonCharacter: string = JSON.stringify(character);
 
