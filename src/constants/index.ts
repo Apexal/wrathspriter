@@ -1,25 +1,36 @@
-import { Character } from "../interfaces";
+import { Character, SchoolProgram } from "../interfaces";
 
-export const testCharacter: Character = {
-  name: "Frank",
+export const emptyCharacter: Character = {
+  name: "Character",
   backstory: "",
-  moveset: [],
-  major: {
-    name: "Computer Science",
-    backstory: "",
-    sampleMoveset: [],
-    majorMoveTemplates: [],
-    minorMoveTemplates: [],
-  },
+  actions: [],
+  major: null,
   minor: null,
-  hurtSoundEffects: [],
-  enterSoundEffects: [],
-  blockAnimation: [],
-  crouchAnimation: [],
-  walkAnimation: [],
-  dashAnimation: [],
-  grappledAnimation: [],
-  hurtAnimation: [],
-  winAnimation: [],
-  loseAnimation: [],
+  stateSoundEffects: {
+    hurt: [],
+    enter: [],
+    win: [],
+    lose: [],
+  },
+  stateAnimations: {
+    idle: [],
+    walk: [],
+    dash: [],
+    jump: [],
+    crouch: [],
+    block: [],
+    grappled: [],
+    hurt: [],
+    win: [],
+    lose: [],
+  },
 };
+
+export const schoolPrograms: SchoolProgram[] = [
+  {
+    id: "cs",
+    backstory: "",
+    name: "Computer Science",
+    actionTemplates: [],
+  },
+];

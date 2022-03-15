@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
 import HelpButton from "../../components/HelpButton";
 
-import { testCharacter } from "../../constants";
+import testCharacter from "../../constants/character.json";
+import { Character } from "../../interfaces";
 
 /**
  * Page that lists all saved characters from the user's browser.
@@ -23,13 +24,13 @@ export function SavedCharactersPage() {
 
         <div className="columns is-multiline">
           <div className="column is-3">
-            <CharacterPreview character={testCharacter} />
+            <CharacterPreview character={testCharacter as Character} />
           </div>
           <div className="column is-3">
-            <CharacterPreview character={testCharacter} />
+            <CharacterPreview character={testCharacter as Character} />
           </div>
           <div className="column is-3">
-            <CharacterPreview character={testCharacter} />
+            <CharacterPreview character={testCharacter as Character} />
           </div>
         </div>
 
