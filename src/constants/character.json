@@ -88,7 +88,7 @@
                     "isInvincible": false
                 }
             ],
-            "soundEffects": {
+            "soundEffect": {
                 "name": "special sfx",
                 "base64EncodedAudio": ""
             }
@@ -179,10 +179,7 @@
                     "isInvincible": false
                 }
             ],
-            "soundEffects": {
-                "name": "special sfx",
-                "base64EncodedAudio": ""
-            }
+            "soundEffect": null
         }
     ],
     "major": null,
