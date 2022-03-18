@@ -28,5 +28,5 @@ export interface Action {
   /** The ordered frames of the animation */
   animation: AnimationFrame[];
   /** Possible sound effects for the action. One is chosen randomly each time the move is performed. */
-  soundEffects: SoundEffect[];
+  soundEffect: SoundEffect | null;
 }
