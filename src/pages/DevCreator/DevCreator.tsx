@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import HelpButton from "../../components/HelpButton";
 import { emptyCharacter } from "../../constants";
 import { SoundEffect } from "../../interfaces/action";
+import { AnimationFrame } from "../../interfaces/animations";
 import { Character } from "../../interfaces/character";
+import { Vector2 } from "../../interfaces/index";
 import { SchoolProgram } from "../../interfaces/program";
 
 enum Programs {
@@ -19,6 +21,7 @@ enum Programs {
 export function DevCreator() {
 
     const [name, setName] = useState("");
+    const [backstory, setBackstory] =  useState("");
     let major: Programs = Programs.None;
     let minor: Programs = Programs.None;
 
@@ -30,6 +33,7 @@ export function DevCreator() {
         let actions: Action[] = [];
 
         character.name = name;
+        character.backstory = backstory;
         character.major = {
             id: Programs[major],
             name: Programs[major],
@@ -95,8 +99,51 @@ export function DevCreator() {
                 reader.readAsArrayBuffer(event.target.files[i]);
             }
         }
+    }
 
-        console.log(character);
+    function setFrames(event: React.ChangeEvent<HTMLInputElement>, area: AnimationFrame[], areaText: string) {
+        if (event.target.files == null) return;
+
+        for (let i = 0; i < event.target.files.length; i++) {
+            if (!event.target.files[i].type.includes("image/")) { showUploadFail(); continue; }
+            else {
+                // Read the file
+                let name = event.target.files[i].name;
+
+                let fileList = document.getElementById(areaText + "-anim-list");
+                if (fileList != null) {
+                    if (fileList.textContent == "...") fileList.textContent = name;
+                    else fileList.textContent += ", " + name;
+                }
+
+                let reader: FileReader = new FileReader();
+                reader.addEventListener("load", () => {
+                    if (typeof reader.result != "string") return;
+
+                    let base64 = reader.result.substring(reader.result.indexOf(',') + 1);
+                    let test: Vector2 = {
+                        x: 0,
+                        y: 0
+                    };
+
+                    area.push({
+                        base64EncodedPoseImage: null,
+                        base64EncodedImage: base64,
+                        hitCollider: {
+                            isEnabled: false,
+                            size: null,
+                            position: null
+                        },
+                        bodyCollider: {
+                            size: test,
+                            position: test
+                        },
+                        durationInS: 0.2
+                    });
+                })
+                reader.readAsDataURL(event.target.files[i]);
+            }
+        }
     }
 
     // Converts an array buffer into base64
@@ -134,9 +181,14 @@ export function DevCreator() {
                     </div>
                     <div className="field">
                         <div className="control">
+                            <input className="input" type="name" placeholder="Backstory" onChange={(e) => { setBackstory(e.target.value); }}></input>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <div className="control">
                             <div className="select">
-                                <select onChange={(e) => { setMajor(e); }}>
-                                    <option selected data-id="-1">Major</option>
+                                <select defaultValue={0} onChange={(e) => { setMajor(e); }}>
+                                    <option data-id="-1">Major</option>
                                     <option data-id="0">Computer Science</option>
                                     <option data-id="1">Mathematics</option>
                                     <option data-id="2">English</option>
@@ -148,8 +200,8 @@ export function DevCreator() {
                     <div className="field">
                         <div className="control">
                             <div className="select">
-                                <select onChange={(e) => { setMinor(e); }}>
-                                    <option selected data-id="-1">Minor</option>
+                                <select defaultValue={0} onChange={(e) => { setMinor(e); }}>
+                                    <option data-id="-1">Minor</option>
                                     <option data-id="0">Computer Science</option>
                                     <option data-id="1">Mathematics</option>
                                     <option data-id="2">English</option>
@@ -211,6 +263,139 @@ export function DevCreator() {
                                     </span>
                             </label>
                         </div>
+                    </div>
+                    <br/>
+                    <div id = "animation-images" className = "is-flex is-justify-content-center is-flex-direction-column">
+                        <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.idle, "idle"); } } className="file-input" type="file" name="idle anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Idle Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="idle-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.walk, "walk"); } } className="file-input" type="file" name="walk anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Walk Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="walk-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.dash, "dash"); } } className="file-input" type="file" name="dash anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Dash Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="dash-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.jump, "jump"); } } className="file-input" type="file" name="jump anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Jump Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="jump-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.crouch, "crouch"); } } className="file-input" type="file" name="crouch anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Crouch Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="crouch-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.block, "block"); } } className="file-input" type="file" name="block anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Block Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="block-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.grappled, "grappled"); } } className="file-input" type="file" name="grappled anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Grappled Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="grappled-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.hurt, "hurt"); } } className="file-input" type="file" name="hurt anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Hurt Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="hurt-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.win, "win"); } } className="file-input" type="file" name="win anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Win Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="win-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
+                            <div className="file has-name is-centered">
+                                <label className="file-label">
+                                    <input onChange = { (e) => { setFrames(e, character.stateAnimations.lose, "lose"); } } className="file-input" type="file" name="lose anim" accept = "image/*" multiple/>
+                                        <span className="file-cta">
+                                            <span className="file-label">
+                                                Lose Frame(s)
+                                            </span>
+                                        </span>
+                                        <span className="file-name" id ="lose-anim-list">
+                                            ...
+                                        </span>
+                                </label>
+                            </div>
                     </div>
                     <div className="field is-grouped is-grouped-centered">
                         <p className="control">
