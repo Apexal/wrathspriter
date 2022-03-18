@@ -66,7 +66,7 @@ export function DevCreator() {
         minor = id as Programs;
     }
 
-    function setSounds(event: React.ChangeEvent<HTMLInputElement>, area: SoundEffect[]) {
+    function setSounds(event: React.ChangeEvent<HTMLInputElement>, area: SoundEffect[], areaText: string) {
         if (event.target.files == null) return;
 
         for (let i = 0; i < event.target.files.length; i++) {
@@ -74,6 +74,12 @@ export function DevCreator() {
             else {
                 // Read the file
                 let name = event.target.files[i].name;
+
+                let fileList = document.getElementById(areaText + "-sounds-list");
+                if (fileList != null) {
+                    if (fileList.textContent == "...") fileList.textContent = name;
+                    else fileList.textContent += ", " + name;
+                }
 
                 let reader: FileReader = new FileReader();
                 reader.addEventListener("load", () => {
@@ -152,57 +158,59 @@ export function DevCreator() {
                             </div>
                         </div>
                     </div>
-                    <div className="file has-name is-right">
-                        <label className="file-label">
-                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.hurt); } } className="file-input" type="file" name="hurt sound" accept = "audio/mpeg" multiple/>
-                                <span className="file-name">
-                                    Hurt Sound
-                                </span>
-                                <span className="file-cta">
-                                    <span className="file-label">
-                                        Choose a file…
+                    <div className = "is-flex is-justify-content-center is-flex-direction-column">
+                        <div className="file has-name is-centered">
+                            <label className="file-label ">
+                                <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.hurt, "hurt"); } } className="file-input" type="file" name="hurt sound" accept = "audio/mpeg" multiple/>
+                                    <span className="file-cta">
+                                        <span className="file-label">
+                                            Hurt Sound(s)
+                                        </span>
                                     </span>
-                                </span>
-                        </label>
-                    </div>
-                    <div className="file has-name is-right">
-                        <label className="file-label">
-                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.enter); } } className="file-input" type="file" name="enter sound" accept = "audio/mpeg" multiple/>
-                                <span className="file-name">
-                                    Enter Sound
-                                </span>
-                                <span className="file-cta">
-                                    <span className="file-label">
-                                        Choose a file…
+                                    <span className="file-name" id = "hurt-sounds-list">
+                                            ...
                                     </span>
-                                </span>
-                        </label>
-                    </div>
-                    <div className="file has-name is-right">
-                        <label className="file-label">
-                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.win); } } className="file-input" type="file" name="win sound" accept = "audio/mpeg" multiple/>
-                                <span className="file-name">
-                                    Win Sound
-                                </span>
-                                <span className="file-cta">
-                                    <span className="file-label">
-                                        Choose a file…
+                            </label>
+                        </div>
+                        <div className="file has-name is-centered">
+                            <label className="file-label">
+                                <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.enter, "enter"); } } className="file-input" type="file" name="enter sound" accept = "audio/mpeg" multiple/>
+                                    <span className="file-cta">
+                                        <span className="file-label">
+                                            Enter Sound(s)
+                                        </span>
                                     </span>
-                                </span>
-                        </label>
-                    </div>
-                    <div className="file has-name is-right">
-                        <label className="file-label">
-                            <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.lose); } } className="file-input" type="file" name="lose sound" accept = "audio/mpeg" multiple/>
-                                <span className="file-name">
-                                    Lose Sound
-                                </span>
-                                <span className="file-cta">
-                                    <span className="file-label">
-                                        Choose a file…
+                                    <span className="file-name" id="enter-sounds-list">
+                                        ...
                                     </span>
-                                </span>
-                        </label>
+                            </label>
+                        </div>
+                        <div className="file has-name is-centered">
+                            <label className="file-label">
+                                <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.win, "win"); } } className="file-input" type="file" name="win sound" accept = "audio/mpeg" multiple/>
+                                    <span className="file-cta">
+                                        <span className="file-label">
+                                            Win Sound(s)
+                                        </span>
+                                    </span>
+                                    <span className="file-name" id = "win-sounds-list">
+                                        ...
+                                    </span>
+                            </label>
+                        </div>
+                        <div className="file has-name is-centered">
+                            <label className="file-label">
+                                <input onChange = { (e) => { setSounds(e, character.stateSoundEffects.lose, "lose"); } } className="file-input" type="file" name="lose sound" accept = "audio/mpeg" multiple/>
+                                    <span className="file-cta">
+                                        <span className="file-label">
+                                            Lose Sound(s)
+                                        </span>
+                                    </span>
+                                    <span className="file-name" id ="lose-sounds-list">
+                                        ...
+                                    </span>
+                            </label>
+                        </div>
                     </div>
                     <div className="field is-grouped is-grouped-centered">
                         <p className="control">
