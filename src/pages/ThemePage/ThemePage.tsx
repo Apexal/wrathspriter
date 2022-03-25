@@ -33,8 +33,8 @@ export function ThemePage() {
           <p className="subtitle">Primary</p>
         </div>
       </section>
-      <section className="section">
-        <h1 className="title">Page Title</h1>
+      <section className="section is-text">
+        <h1 className="title is-text">Page Title</h1>
         <h2 className="subtitle">Ooh cool subtitle...</h2>
 
         <div className="notification is-danger">
