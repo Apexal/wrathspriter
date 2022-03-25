@@ -8,9 +8,10 @@ import { AnimationFrame } from "../../interfaces/animations";
 import { Character } from "../../interfaces/character";
 import { Vector2 } from "../../interfaces/index";
 import { DevPreview } from "./DevPreview";
+import { ProgramSelect } from "./ProgramSelect";
 import { setConstantValue } from "typescript";
 
-enum Programs {
+export enum Programs {
     None = -1,
     ComputerScience = 0,
     Mathematics = 1,
@@ -191,32 +192,8 @@ export function DevCreator() {
                             <input className="input" type="name" placeholder="Backstory" onChange={(e) => { setBackstory(e.target.value); }}></input>
                         </div>
                     </div>
-                    <div className="field">
-                        <div className="control">
-                            <div className="select">
-                                <select defaultValue={0} onChange={(e) => { setMajor(e); }}>
-                                    <option data-id="-1">Major</option>
-                                    <option data-id="0">Computer Science</option>
-                                    <option data-id="1">Mathematics</option>
-                                    <option data-id="2">English</option>
-                                    <option data-id="3">Management</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="field">
-                        <div className="control">
-                            <div className="select">
-                                <select defaultValue={0} onChange={(e) => { setMinor(e); }}>
-                                    <option data-id="-1">Minor</option>
-                                    <option data-id="0">Computer Science</option>
-                                    <option data-id="1">Mathematics</option>
-                                    <option data-id="2">English</option>
-                                    <option data-id="3">Management</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <ProgramSelect fieldName = "Major" props = {props} onChange = {0}/>
+                    <ProgramSelect fieldName = "Minor" props = {props} onChange = {1} />
                     <div className = "is-flex is-justify-content-center is-flex-direction-column">
                         <div className="file has-name is-centered">
                             <label className="file-label ">
