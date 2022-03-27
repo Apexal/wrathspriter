@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { CharacterContext } from "../../../state";
-import { downloadCharacter } from "../../../utils/download";
 
 export function CharacterDetailsStage() {
-  const characterCtx = useContext(CharacterContext);
+  const { character, setCharacter } = useContext(CharacterContext);
 
   return (
     <section id="character-details-stage" className="section stage">
@@ -20,6 +19,13 @@ export function CharacterDetailsStage() {
               type="text"
               className="input"
               placeholder=""
+              value={character.name}
+              onChange={(e) =>
+                setCharacter({
+                  ...character,
+                  name: e.currentTarget.value,
+                })
+              }
             />
           </div>
         </div>
@@ -29,19 +35,22 @@ export function CharacterDetailsStage() {
             Character Backstory
           </label>
           <div className="control">
-            <textarea id="character-backstory" className="textarea"></textarea>
+            <textarea
+              id="character-backstory"
+              className="textarea"
+              onChange={(e) =>
+                setCharacter({
+                  ...character,
+                  backstory: e.currentTarget.value,
+                })
+              }
+            ></textarea>
           </div>
         </div>
 
         <div className="buttons">
           <button className="button is-warning">Back</button>
           <button className="button is-primary">Next</button>
-          <button
-            className="button is-danger"
-            onClick={() => downloadCharacter(characterCtx.character)}
-          >
-            Download
-          </button>
         </div>
       </div>
     </section>
