@@ -1,6 +1,6 @@
 import { useContext } from "react";
+import { CharacterContext } from "../../../state";
 import { downloadCharacter } from "../../../utils/download";
-import { CharacterContext } from "../CreateCharacterPage";
 
 export function CharacterDetailsStage() {
   const characterCtx = useContext(CharacterContext);
