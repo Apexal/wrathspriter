@@ -19,7 +19,8 @@ function App() {
         <Route path="create" element={<CreateCharacterPage />}>
           <Route index element={<CharacterDetailsStage />} />
           <Route path="programs" element={<CharacterProgramsStage />} />
-          <Route path="moves" element={<p>Coming soon!</p>} />
+          <Route path="states" element={<p>Coming soon!</p>} />
+          <Route path="actions" element={<p>Coming soon!</p>} />
           <Route path="review" element={<p>Coming soon!</p>} />
         </Route>
         <Route path="theme" element={<ThemePage />} />

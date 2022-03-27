@@ -38,6 +38,7 @@ export function CharacterDetailsStage() {
             <textarea
               id="character-backstory"
               className="textarea"
+              value={character.backstory}
               onChange={(e) =>
                 setCharacter({
                   ...character,
@@ -46,11 +47,6 @@ export function CharacterDetailsStage() {
               }
             ></textarea>
           </div>
-        </div>
-
-        <div className="buttons">
-          <button className="button is-warning">Back</button>
-          <button className="button is-primary">Next</button>
         </div>
       </div>
     </section>
