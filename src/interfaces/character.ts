@@ -30,6 +30,7 @@ export interface Character {
   stateAnimations: {
     // Self-explanatory animations
     idle: AnimationFrame[];
+    enter: AnimationFrame[];
     walk: AnimationFrame[];
     dash: AnimationFrame[];
     jump: AnimationFrame[];

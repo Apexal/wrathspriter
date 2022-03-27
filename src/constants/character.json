@@ -191,6 +191,7 @@
         "lose": []
     },
     "stateAnimations": {
+        "enter": [],
         "idle": [
             {
                 "base64EncodedPoseImage": null,

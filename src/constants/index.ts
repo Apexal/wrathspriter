@@ -13,6 +13,7 @@ export const emptyCharacter: Character = {
     lose: [],
   },
   stateAnimations: {
+    enter: [],
     idle: [],
     walk: [],
     dash: [],
