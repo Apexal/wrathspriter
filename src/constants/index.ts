@@ -29,7 +29,8 @@ export const emptyCharacter: Character = {
 export const schoolPrograms: SchoolProgram[] = [
   {
     id: "cs",
-    backstory: "",
+    backstory:
+      "Something something something something something something something something ",
     name: "Computer Science",
     actionTemplates: [],
   },

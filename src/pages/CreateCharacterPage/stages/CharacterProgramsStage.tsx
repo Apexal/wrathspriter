@@ -1,10 +1,14 @@
+import { useContext } from "react";
 import { schoolPrograms } from "../../../constants";
+import { CharacterContext } from "../../../state";
 
 export function CharacterProgramsStage() {
+  const { character, setCharacter } = useContext(CharacterContext);
+
   return (
     <section id="character-programs-stage" className="section stage">
       <div className="container">
-        <h1 className="title">Select Major and Minor</h1>
+        <h1 className="title">Select {character.name}'s Major and Minor</h1>
 
         <div className="columns is-multiline">
           {schoolPrograms.map((program) => (
@@ -24,19 +28,43 @@ export function CharacterProgramsStage() {
                       </figure>
                     </div>
                     <div className="column">
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Accusamus facere mollitia officiis corrupti suscipit a
-                        pariatur ipsa. Ipsum eveniet incidunt animi labore optio
-                        non, mollitia et, voluptatum commodi nesciunt
-                        voluptatibus.
-                      </p>
+                      <div className="content">
+                        <strong>Backstory</strong>
+                        <blockquote>
+                          <p>{program.backstory}</p>
+                        </blockquote>
+
+                        <strong>Pros</strong>
+                        <p></p>
+                        <strong>Cons</strong>
+                        <p></p>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="card-footer">
-                  <a className="card-footer-item">Use as Major</a>
-                  <a className="card-footer-item">Use as Minor</a>
+                  <button
+                    className="button card-footer-item"
+                    onClick={() =>
+                      setCharacter({
+                        ...character,
+                        major: program,
+                      })
+                    }
+                  >
+                    Use as Major
+                  </button>
+                  <button
+                    className="button card-footer-item"
+                    onClick={() =>
+                      setCharacter({
+                        ...character,
+                        minor: program,
+                      })
+                    }
+                  >
+                    Use as Minor
+                  </button>
                 </div>
               </div>
             </div>

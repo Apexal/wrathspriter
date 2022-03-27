@@ -61,7 +61,6 @@ export function CreateCharacterPage() {
           </div>
         </div>
       </section>
-      <hr />
     </CharacterContext.Provider>
   );
 }
