@@ -1,22 +1,22 @@
-import { createContext } from "react";
+import { useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
+
 import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
-
-export type CharacterContextType = {
-  character: Character;
-};
-const characterContextDefault = {
-  character: emptyCharacter,
-};
-export const CharacterContext = createContext<CharacterContextType>(
-  characterContextDefault
-);
-CharacterContext.displayName = "CharacterContext";
+import { CharacterContext, CharacterContextType } from "../../state";
 
 export function CreateCharacterPage() {
+  const [character, setCharacter] = useState<Character>(emptyCharacter);
+  const characterContextValue = useMemo<CharacterContextType>(
+    () => ({
+      character,
+      setCharacter,
+    }),
+    [character, setCharacter]
+  );
+
   return (
-    <CharacterContext.Provider value={characterContextDefault}>
+    <CharacterContext.Provider value={characterContextValue}>
       <Outlet />
     </CharacterContext.Provider>
   );
