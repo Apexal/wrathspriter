@@ -3,10 +3,85 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
+import { SoundEffect } from "../../../interfaces";
+
+function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
+  const { character, setCharacter } = useContext(CharacterContext);
+
+  const handleClearAnimation = () => {
+    setCharacter({
+      ...character,
+      stateAnimations: {
+        ...character.stateAnimations,
+        [state.id]: [],
+      },
+    });
+  };
+
+  return (
+    <div className="animation-editor">
+      <div>
+        <h3 className="subtitle is-capitalized">Animation</h3>
+        {character.stateAnimations[state.id].length === 0 ? (
+          <span>Add frames!</span>
+        ) : (
+          <AnimatedSprite
+            width={150}
+            height={150}
+            animation={character.stateAnimations[state.id]}
+          />
+        )}
+      </div>
+      <div className="buttons">
+        <button className="button is-primary is-small">Add Frame</button>
+        <button className="button is-small" onClick={handleClearAnimation}>
+          Clear
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
+  const { character, setCharacter } = useContext(CharacterContext);
+
+  if (!(state.id in character.stateSoundEffects)) {
+    return null;
+  }
+  // @ts-expect-error
+  const sfx = character.stateSoundEffects[state.id];
+
+  const handleClearSfx = () => {
+    setCharacter({
+      ...character,
+      stateSoundEffects: {
+        ...character.stateSoundEffects,
+        [state.id]: [],
+      },
+    });
+  };
+
+  return (
+    <div>
+      <h3 className="subtitle is-capitalized">Sound Effects</h3>
+      {sfx.map((soundEffect: SoundEffect) => (
+        <audio
+          src={"data:audio/mp3;base64," + soundEffect.base64EncodedAudio}
+          controls
+        ></audio>
+      ))}
+
+      <div className="buttons">
+        <button className="button is-small is-primary">Record New</button>
+        <button className="button is-small" onClick={handleClearSfx}>
+          Clear
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function CharacterStateBox({ state }: { state: CharacterState }) {
-  const { character } = useContext(CharacterContext);
-
   return (
     <div className="box">
       <div className="columns">
@@ -15,24 +90,12 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
           <h3 className="subtitle">{state.description}</h3>
         </div>
         <div className="column">
-          <h3 className="subtitle is-capitalized">Sound Effects</h3>
+          <CharacterStateSfxEditor state={state} />
         </div>
         <div className="column">
-          <div className="animation-editor">
-            <div>
-              <h3 className="subtitle is-capitalized">Animation</h3>
-              <AnimatedSprite
-                width={150}
-                height={150}
-                animation={character.stateAnimations[state.id]}
-              />
-            </div>
-            <button className="button is-primary is-small">Add Frame</button>
-          </div>
+          <CharacterStateAnimationEditor state={state} />
         </div>
       </div>
-
-      <div className="sound-effects"></div>
     </div>
   );
 }
