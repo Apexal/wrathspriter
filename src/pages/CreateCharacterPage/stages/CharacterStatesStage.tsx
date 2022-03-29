@@ -3,14 +3,16 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { AnimationFrame, SoundEffect } from "../../../interfaces";
+import { SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
 
+/** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
 
+  /** Clears the state's animation frames. */
   const handleClearAnimation = () => {
     setCharacter({
       ...character,
@@ -21,15 +23,14 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
+  /** Grabs the image file, sends it to the server to process, and then adds it in a new frame to the state animation. */
   const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (
     ev
   ) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
-      fileToBase64Url(file).then((b64MP3Url) => {
-        console.log(b64MP3Url);
-
-        const b64 = b64MP3Url.replace("data:image/png;base64,", "");
+      fileToBase64Url(file).then((b64Url) => {
+        const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
 
         processImage(b64).then((processB64) => {
           setCharacter({
@@ -54,9 +55,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     <div className="animation-editor">
       <div>
         <h3 className="subtitle is-capitalized">Animation</h3>
-        {character.stateAnimations[state.id].length === 0 ? (
-          <span>Add frames!</span>
-        ) : (
+        {character.stateAnimations[state.id].length > 0 && (
           <AnimatedSprite
             isPlaying={true}
             width={150}
@@ -65,15 +64,16 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
           />
         )}
       </div>
-      <input
-        type="file"
-        id="imageFile"
-        capture="user"
-        accept="image/png"
-        onChange={handleImageUpload}
-      />
+
       <div className="buttons">
-        <button className="button is-primary is-small">Add Frame</button>
+        <input
+          type="file"
+          id="imageFile"
+          capture="user"
+          accept="image/*"
+          onChange={handleImageUpload}
+        />
+
         <button className="button is-small" onClick={handleClearAnimation}>
           Clear
         </button>
@@ -82,6 +82,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   );
 }
 
+/** Editor for users to record and clear sound effects for a particular state. */
 function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
   const audioInputRef = useRef<HTMLInputElement>(null);
@@ -152,7 +153,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
             onChange={handleSfxUpload}
           />
           <span className="file-cta">
-            <span className="file-label">Choose a file…</span>
+            <span className="file-label">Upload/Record</span>
           </span>
         </label>
       </div>
@@ -167,6 +168,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   );
 }
 
+/** A self-contained editor for a particular character state. Includes SFX editor and animation editor. */
 function CharacterStateBox({ state }: { state: CharacterState }) {
   return (
     <div className="box">
@@ -186,6 +188,7 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
   );
 }
 
+/** Stage where users record sound effects and upload animation frames for the different character states. */
 export function CharacterStatesStage() {
   const { character } = useContext(CharacterContext);
 
