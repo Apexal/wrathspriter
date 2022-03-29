@@ -124,6 +124,11 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   const handleSfxUpload: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
+      const sfxName = prompt("What's the name of the sound effect?");
+      if (!sfxName || sfxName.trim().length === 0) {
+        return;
+      }
+
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
 
@@ -136,7 +141,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
                 ...character.stateSoundEffects,
                 [state.id]: [
                   {
-                    name: "Uploaded",
+                    name: sfxName.trim(),
                     base64EncodedAudio: processB64,
                   },
                 ],
@@ -170,11 +175,14 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
     <div>
       <h3 className="subtitle is-capitalized">Sound Effects</h3>
       {sfx.map((soundEffect: SoundEffect, index: number) => (
-        <audio
-          key={index}
-          src={"data:audio/mpeg;base64," + soundEffect.base64EncodedAudio}
-          controls
-        ></audio>
+        <div>
+          <audio
+            key={index}
+            title={soundEffect.name ?? ""}
+            src={"data:audio/mpeg;base64," + soundEffect.base64EncodedAudio}
+            controls
+          ></audio>
+        </div>
       ))}
 
       {isProcessing ? (
