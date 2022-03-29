@@ -92,8 +92,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         <div className="buttons">
           <input
             type="file"
-            id="imageFile"
-            capture="user"
+            capture="environment"
             accept="image/*"
             onChange={handleImageUpload}
           />
@@ -193,7 +192,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
             ref={audioInputRef}
             type="file"
             accept="audio/mpeg"
-            capture
+            capture="user"
             onChange={handleSfxUpload}
           />
           <button
