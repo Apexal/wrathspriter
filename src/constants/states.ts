@@ -12,11 +12,11 @@ const states: CharacterState[] = [
   },
   {
     id: "win",
-    description: "",
+    description: "Your character winning a round and celebrating.",
   },
   {
     id: "lose",
-    description: "",
+    description: "Your character losing a round and getting knocked out.",
   },
   {
     id: "idle",
@@ -24,11 +24,11 @@ const states: CharacterState[] = [
   },
   {
     id: "walk",
-    description: "Your character crouching.",
+    description: "Your character walking.",
   },
   {
     id: "jump",
-    description: "Your character crouching.",
+    description: "Your character jumping.",
   },
   {
     id: "crouch",
@@ -36,7 +36,7 @@ const states: CharacterState[] = [
   },
   {
     id: "block",
-    description: "Your character crouching.",
+    description: "Your character blocking attacks.",
   },
   {
     id: "hurt",
