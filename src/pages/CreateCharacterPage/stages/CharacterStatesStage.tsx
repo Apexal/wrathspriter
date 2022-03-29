@@ -105,7 +105,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
             className="file-input"
             ref={audioInputRef}
             type="file"
-            accept="audio/*"
+            accept="audio/mpeg"
             capture
             onChange={handleSfxUpload}
           />
