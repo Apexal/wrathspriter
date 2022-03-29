@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
@@ -11,6 +11,8 @@ import { defaultFrame } from "../../../constants";
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
+
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   /** Clears the state's animation frames. */
   const handleClearAnimation = () => {
@@ -31,22 +33,26 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
       const file = ev.target.files[0];
       fileToBase64Url(file).then((b64Url) => {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
-
-        processImage(b64).then((processB64) => {
-          setCharacter({
-            ...character,
-            stateAnimations: {
-              ...character.stateAnimations,
-              [state.id]: [
-                ...character.stateAnimations[state.id],
-                {
-                  ...defaultFrame,
-                  base64EncodedImage: processB64,
-                },
-              ],
-            },
+        setIsProcessing(true);
+        processImage(b64)
+          .then((processB64) => {
+            setCharacter({
+              ...character,
+              stateAnimations: {
+                ...character.stateAnimations,
+                [state.id]: [
+                  ...character.stateAnimations[state.id],
+                  {
+                    ...defaultFrame,
+                    base64EncodedImage: processB64,
+                  },
+                ],
+              },
+            });
+          })
+          .finally(() => {
+            setIsProcessing(false);
           });
-        });
       });
     }
   };
@@ -66,15 +72,23 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
       </div>
 
       <div className="buttons">
-        <input
-          type="file"
-          id="imageFile"
-          capture="user"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
+        {isProcessing ? (
+          <span>Processing image...</span>
+        ) : (
+          <input
+            type="file"
+            id="imageFile"
+            capture="user"
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
+        )}
 
-        <button className="button is-small" onClick={handleClearAnimation}>
+        <button
+          className="button is-small"
+          onClick={handleClearAnimation}
+          disabled={isProcessing}
+        >
           Clear
         </button>
       </div>
@@ -87,6 +101,8 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
   if (!(state.id in character.stateSoundEffects)) {
     return null;
   }
@@ -97,20 +113,25 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
 
-        processAudio(b64).then((processB64) => {
-          setCharacter({
-            ...character,
-            stateSoundEffects: {
-              ...character.stateSoundEffects,
-              [state.id]: [
-                {
-                  name: "Uploaded",
-                  base64EncodedAudio: processB64,
-                },
-              ],
-            },
+        setIsProcessing(true);
+        processAudio(b64)
+          .then((processB64) => {
+            setCharacter({
+              ...character,
+              stateSoundEffects: {
+                ...character.stateSoundEffects,
+                [state.id]: [
+                  {
+                    name: "Uploaded",
+                    base64EncodedAudio: processB64,
+                  },
+                ],
+              },
+            });
+          })
+          .finally(() => {
+            setIsProcessing(false);
           });
-        });
       });
     }
   };
@@ -142,25 +163,33 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
         ></audio>
       ))}
 
-      <div className="file">
-        <label className="file-label">
-          <input
-            className="file-input"
-            ref={audioInputRef}
-            type="file"
-            accept="audio/mpeg"
-            capture
-            onChange={handleSfxUpload}
-          />
-          <span className="file-cta">
-            <span className="file-label">Upload/Record</span>
-          </span>
-        </label>
-      </div>
+      {isProcessing ? (
+        <span>Processing audio...</span>
+      ) : (
+        <div className="file">
+          <label className="file-label">
+            <input
+              className="file-input"
+              ref={audioInputRef}
+              type="file"
+              accept="audio/mpeg"
+              capture
+              onChange={handleSfxUpload}
+            />
+            <span className="file-cta">
+              <span className="file-label">Upload/Record</span>
+            </span>
+          </label>
+        </div>
+      )}
 
       <div className="buttons">
         {/* <button className="button is-small is-primary">Record New</button> */}
-        <button className="button is-small" onClick={handleClearSfx}>
+        <button
+          className="button is-small"
+          onClick={handleClearSfx}
+          disabled={isProcessing}
+        >
           Clear
         </button>
       </div>
