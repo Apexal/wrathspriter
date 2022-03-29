@@ -59,22 +59,22 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
   return (
     <div className="animation-editor">
-      <div>
-        <h3 className="subtitle is-capitalized">Animation</h3>
-        {character.stateAnimations[state.id].length > 0 && (
+      <h3 className="subtitle is-capitalized">Animation</h3>
+      {character.stateAnimations[state.id].length > 0 && (
+        <div>
           <AnimatedSprite
             isPlaying={true}
             width={150}
             height={150}
             animation={character.stateAnimations[state.id]}
           />
-        )}
-      </div>
+        </div>
+      )}
 
-      <div className="buttons">
-        {isProcessing ? (
-          <span>Processing image...</span>
-        ) : (
+      {isProcessing ? (
+        <span>Processing image...</span>
+      ) : (
+        <div className="buttons">
           <input
             type="file"
             id="imageFile"
@@ -82,16 +82,15 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
             accept="image/*"
             onChange={handleImageUpload}
           />
-        )}
-
-        <button
-          className="button is-small"
-          onClick={handleClearAnimation}
-          disabled={isProcessing}
-        >
-          Clear
-        </button>
-      </div>
+          <button
+            className="button is-small"
+            onClick={handleClearAnimation}
+            disabled={isProcessing}
+          >
+            Clear
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -166,33 +165,23 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
       {isProcessing ? (
         <span>Processing audio...</span>
       ) : (
-        <div className="file">
-          <label className="file-label">
-            <input
-              className="file-input"
-              ref={audioInputRef}
-              type="file"
-              accept="audio/mpeg"
-              capture
-              onChange={handleSfxUpload}
-            />
-            <span className="file-cta">
-              <span className="file-label">Upload/Record</span>
-            </span>
-          </label>
+        <div className="buttons">
+          <input
+            ref={audioInputRef}
+            type="file"
+            accept="audio/mpeg"
+            capture
+            onChange={handleSfxUpload}
+          />
+          <button
+            className="button is-small"
+            onClick={handleClearSfx}
+            disabled={isProcessing}
+          >
+            Clear
+          </button>
         </div>
       )}
-
-      <div className="buttons">
-        {/* <button className="button is-small is-primary">Record New</button> */}
-        <button
-          className="button is-small"
-          onClick={handleClearSfx}
-          disabled={isProcessing}
-        >
-          Clear
-        </button>
-      </div>
     </div>
   );
 }
