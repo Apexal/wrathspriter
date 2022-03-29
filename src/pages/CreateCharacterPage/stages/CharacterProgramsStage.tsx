@@ -22,7 +22,7 @@ export function CharacterProgramsStage() {
                     <div className="column">
                       <figure className="image is-square">
                         <img
-                          src="https://via.placeholder.com/500"
+                          src="https://media0.giphy.com/media/FopJy18z4t5hHlViZn/giphy.gif?cid=ecf05e478diube0770ny2jf9vye3fr4eefefgwvke6vk6ql3&rid=giphy.gif&ct=s"
                           alt="Placeholder"
                         />
                       </figure>
@@ -52,7 +52,7 @@ export function CharacterProgramsStage() {
                       })
                     }
                   >
-                    Use as Major
+                    Become {program.name} Major
                   </button>
                   <button
                     className="button card-footer-item"
@@ -63,7 +63,7 @@ export function CharacterProgramsStage() {
                       })
                     }
                   >
-                    Use as Minor
+                    Become {program.name} Minor
                   </button>
                 </div>
               </div>

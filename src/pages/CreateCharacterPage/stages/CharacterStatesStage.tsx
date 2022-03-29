@@ -68,19 +68,21 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     }
   };
 
+  const frames = character.stateAnimations[state.id];
+
   return (
-    <div className="animation-editor">
-      <h3 className="subtitle is-capitalized">Animation</h3>
-      {character.stateAnimations[state.id].length > 0 && (
+    <div className="box animation-editor">
+      <h3 className="subtitle is-capitalized">Animation 🎞️</h3>
+      {frames.length > 0 && (
         <div className="is-flex">
           <AnimatedSprite
             isPlaying={!isProcessing}
             width={150}
             height={150}
-            animation={character.stateAnimations[state.id]}
+            animation={frames}
           />
           <div className="frames">
-            {character.stateAnimations[state.id].map((frame, index) => (
+            {frames.map((frame, index) => (
               <div key={index} className="frame-preview">
                 <img
                   src={"data:image/png;base64," + frame.base64EncodedImage}
@@ -100,13 +102,15 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
       ) : (
         <div className="buttons">
           <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <button
-            className="button is-small"
-            onClick={handleClearAnimation}
-            disabled={isProcessing}
-          >
-            Clear
-          </button>
+          {frames.length > 0 && (
+            <button
+              className="button is-small"
+              onClick={handleClearAnimation}
+              disabled={isProcessing}
+            >
+              Clear
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -181,8 +185,8 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   };
 
   return (
-    <div>
-      <h3 className="subtitle is-capitalized">Sound Effects</h3>
+    <div className="box">
+      <h3 className="subtitle is-capitalized">Sound Effects 🎙️</h3>
       {sfx.map((soundEffect: SoundEffect, index: number) => (
         <div key={index}>
           <audio
@@ -204,13 +208,15 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
             capture="user"
             onChange={handleSfxUpload}
           />
-          <button
-            className="button is-small"
-            onClick={handleClearSfx}
-            disabled={isProcessing}
-          >
-            Clear
-          </button>
+          {sfx.length > 0 && (
+            <button
+              className="button is-small"
+              onClick={handleClearSfx}
+              disabled={isProcessing}
+            >
+              Clear
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -219,19 +225,10 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 
 /** A self-contained editor for a particular character state. Includes SFX editor and animation editor. */
 function CharacterStateBox({ state }: { state: CharacterState }) {
-  const { character } = useContext(CharacterContext);
-
-  const isDone =
-    character.stateAnimations[state.id].length > 0 &&
-    (state.id in character.stateSoundEffects
-      ? // @ts-expect-error
-        character.stateSoundEffects[state.id].length > 0
-      : true);
-
   return (
-    <div className="box mb-5">
+    <div>
       <div className="columns">
-        <div className="column">
+        <div className="column is-3">
           <h2 className="title is-capitalized">{state.id}</h2>
           <h3 className="subtitle">{state.description}</h3>
         </div>
@@ -281,17 +278,17 @@ export function CharacterStatesStage() {
               }
               className={clsx(
                 "button is-capitalized",
+                isDone(state) && "is-success",
                 state.id === currentState.id && "is-active"
               )}
               onClick={() => setCurrentState(state)}
             >
-              <span className="icon">
-                {isDone(state) ? <span>✔️</span> : <span>❌</span>}
-              </span>
               <span>{state.id}</span>
             </button>
           ))}
         </div>
+
+        <hr />
 
         <CharacterStateBox state={currentState} />
       </div>
