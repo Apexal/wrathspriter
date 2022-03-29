@@ -1,7 +1,7 @@
 import { Character } from "../interfaces";
 
 export type CharacterState = {
-  id: keyof Character["stateAnimations"];
+  id: keyof Character["stateAnimations"] | keyof Character["stateSoundEffects"];
   description: string;
 };
 
