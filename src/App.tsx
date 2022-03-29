@@ -3,6 +3,7 @@ import Footer from "./components/Footer/Footer";
 
 // Page imports
 import { IndexPage } from "./pages/IndexPage/IndexPage";
+import { DevCreator } from "./pages/DevCreator/DevCreator";
 import { SavedCharactersPage } from "./pages/SavedCharactersPage/SavedCharactersPage";
 import { CreateCharacterPage } from "./pages/CreateCharacterPage/CreateCharacterPage";
 import { CharacterDetailsStage } from "./pages/CreateCharacterPage/stages/CharacterDetailsStage";
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+
         <Route index element={<IndexPage />} />
         <Route path="create" element={<CreateCharacterPage />}>
           <Route index element={<CharacterDetailsStage />} />
@@ -26,6 +28,7 @@ function App() {
         </Route>
         <Route path="theme" element={<ThemePage />} />
         <Route path="saved" element={<SavedCharactersPage />} />
+        <Route path="supersecretcharactercreator" element={<DevCreator />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
       </Routes>
       <Footer />
