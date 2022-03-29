@@ -28,18 +28,25 @@ export function CharacterProgramsStage() {
                       </figure>
                     </div>
                     <div className="column">
-                      <div className="content">
-                        <strong>Backstory</strong>
-                        <blockquote>
-                          <p>{program.backstory}</p>
-                        </blockquote>
-
-                        <strong>Pros</strong>
-                        <p></p>
-                        <strong>Cons</strong>
-                        <p></p>
+                      <strong>Actions</strong>
+                      <br />
+                      <div className="select">
+                        <select>
+                          {program.actionTemplates.map((template, index) => (
+                            <option value={index}>
+                              {template.name} ({template.type})
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="content">
+                    <strong>Backstory</strong>
+                    <blockquote>
+                      <p>{program.backstory}</p>
+                    </blockquote>
                   </div>
                 </div>
                 <div className="card-footer">
@@ -52,7 +59,7 @@ export function CharacterProgramsStage() {
                       })
                     }
                   >
-                    Become {program.name} Major
+                    Choose Major
                   </button>
                   <button
                     className="button card-footer-item"
@@ -63,7 +70,7 @@ export function CharacterProgramsStage() {
                       })
                     }
                   >
-                    Become {program.name} Minor
+                    Choose Minor
                   </button>
                 </div>
               </div>
