@@ -211,9 +211,21 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 
 /** A self-contained editor for a particular character state. Includes SFX editor and animation editor. */
 function CharacterStateBox({ state }: { state: CharacterState }) {
+  const { character } = useContext(CharacterContext);
+
+  const isDone =
+    character.stateAnimations[state.id].length > 0 &&
+    (state.id in character.stateSoundEffects
+      ? // @ts-expect-error
+        character.stateSoundEffects[state.id].length > 0
+      : true);
+
   return (
-    <div className="box">
+    <div className="box mb-5">
       <div className="columns">
+        <div className="column is-narrow is-size-2 is-vcentered">
+          {isDone ? <span>✔️</span> : <span>❌</span>}
+        </div>
         <div className="column">
           <h2 className="title is-capitalized">{state.id}</h2>
           <h3 className="subtitle">{state.description}</h3>
