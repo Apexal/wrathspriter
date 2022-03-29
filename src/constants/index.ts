@@ -1,4 +1,31 @@
-import { Character, SchoolProgram } from "../interfaces";
+import { AnimationFrame, Character, SchoolProgram } from "../interfaces";
+
+export const defaultFrame: AnimationFrame = {
+  base64EncodedImage: null,
+  base64EncodedPoseImage: null,
+  hitCollider: {
+    isEnabled: true,
+    size: {
+      x: 50,
+      y: 50,
+    },
+    position: {
+      x: 100,
+      y: -80,
+    },
+  },
+  bodyCollider: {
+    size: {
+      x: 36,
+      y: 140,
+    },
+    position: {
+      x: 0,
+      y: 0,
+    },
+  },
+  durationInS: 0.2,
+};
 
 export const emptyCharacter: Character = {
   name: "Character",

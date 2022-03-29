@@ -3,9 +3,10 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { SoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
-import { processAudio } from "../../../services/api";
+import { processAudio, processImage } from "../../../services/api";
+import { defaultFrame } from "../../../constants";
 
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
@@ -20,6 +21,35 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
+  const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (
+    ev
+  ) => {
+    if (ev.target.files?.length) {
+      const file = ev.target.files[0];
+      fileToBase64Url(file).then((b64MP3Url) => {
+        console.log(b64MP3Url);
+
+        const b64 = b64MP3Url.replace("data:image/png;base64,", "");
+
+        processImage(b64).then((processB64) => {
+          setCharacter({
+            ...character,
+            stateAnimations: {
+              ...character.stateAnimations,
+              [state.id]: [
+                ...character.stateAnimations[state.id],
+                {
+                  ...defaultFrame,
+                  base64EncodedImage: processB64,
+                },
+              ],
+            },
+          });
+        });
+      });
+    }
+  };
+
   return (
     <div className="animation-editor">
       <div>
@@ -28,12 +58,20 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
           <span>Add frames!</span>
         ) : (
           <AnimatedSprite
+            isPlaying={true}
             width={150}
             height={150}
             animation={character.stateAnimations[state.id]}
           />
         )}
       </div>
+      <input
+        type="file"
+        id="imageFile"
+        capture="user"
+        accept="image/png"
+        onChange={handleImageUpload}
+      />
       <div className="buttons">
         <button className="button is-primary is-small">Add Frame</button>
         <button className="button is-small" onClick={handleClearAnimation}>
