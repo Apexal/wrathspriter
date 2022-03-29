@@ -3,7 +3,7 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { SoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
@@ -34,7 +34,6 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   ) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
-      alert(file.name);
 
       fileToBase64Url(file).then((b64Url) => {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
@@ -68,6 +67,39 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     }
   };
 
+  const handleFrameDurationClick = (
+    frameIndex: number,
+    frame: AnimationFrame
+  ) => {
+    if (isProcessing) {
+      return;
+    }
+
+    const newDuration = prompt(
+      `How many seconds should this frame play for? Must be between 0 and 5. (current: ${frame.durationInS}s)`
+    );
+    if (!newDuration) {
+      return;
+    }
+    const newDurationFloat = parseFloat(newDuration);
+    if (
+      isNaN(newDurationFloat) ||
+      newDurationFloat <= 0 ||
+      newDurationFloat > 5
+    ) {
+      return;
+    }
+
+    const newCharacter = {
+      ...character,
+    };
+
+    newCharacter.stateAnimations[state.id][frameIndex].durationInS =
+      newDurationFloat;
+
+    setCharacter(newCharacter);
+  };
+
   const frames = character.stateAnimations[state.id];
 
   return (
@@ -90,7 +122,12 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
                   width={50}
                   height={50}
                 />
-                <p className="m-0 has-text-centered">{frame.durationInS}s</p>
+                <p
+                  onClick={() => handleFrameDurationClick(index, frame)}
+                  className="m-0 has-text-centered"
+                >
+                  {frame.durationInS}s
+                </p>
               </div>
             ))}
           </div>
@@ -235,6 +272,13 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
         <div className="column is-3">
           <h2 className="title is-capitalized">{state.id}</h2>
           <h3 className="subtitle">{state.description}</h3>
+          {state.exampleAnimation && (
+            <AnimatedSprite
+              width={100}
+              height={100}
+              animation={state.exampleAnimation}
+            />
+          )}
         </div>
         <div className="column">
           <CharacterStateSfxEditor state={state} />
