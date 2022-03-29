@@ -8,6 +8,8 @@ import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
 
+import "./CharacterStatesStage.scss";
+
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
@@ -61,13 +63,25 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     <div className="animation-editor">
       <h3 className="subtitle is-capitalized">Animation</h3>
       {character.stateAnimations[state.id].length > 0 && (
-        <div>
+        <div className="is-flex">
           <AnimatedSprite
-            isPlaying={true}
+            isPlaying={!isProcessing}
             width={150}
             height={150}
             animation={character.stateAnimations[state.id]}
           />
+          <div className="frames">
+            {character.stateAnimations[state.id].map((frame, index) => (
+              <img
+                className="frame-preview"
+                key={index}
+                src={"data:image/png;base64," + frame.base64EncodedImage}
+                alt=""
+                width={50}
+                height={50}
+              />
+            ))}
+          </div>
         </div>
       )}
 
