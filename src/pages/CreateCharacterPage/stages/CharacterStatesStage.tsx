@@ -72,14 +72,15 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
           />
           <div className="frames">
             {character.stateAnimations[state.id].map((frame, index) => (
-              <img
-                className="frame-preview"
-                key={index}
-                src={"data:image/png;base64," + frame.base64EncodedImage}
-                alt=""
-                width={50}
-                height={50}
-              />
+              <div key={index} className="frame-preview">
+                <img
+                  src={"data:image/png;base64," + frame.base64EncodedImage}
+                  alt=""
+                  width={50}
+                  height={50}
+                />
+                <p className="m-0 has-text-centered">{frame.durationInS}s</p>
+              </div>
             ))}
           </div>
         </div>
