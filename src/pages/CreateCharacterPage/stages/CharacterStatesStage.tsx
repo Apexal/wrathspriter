@@ -9,6 +9,7 @@ import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
+import clsx from "clsx";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -53,6 +54,12 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
                 ],
               },
             });
+          })
+          .catch((err) => {
+            alert(
+              "There was an error uploading and/or processing the image. Please try again later!"
+            );
+            console.error(err);
           })
           .finally(() => {
             setIsProcessing(false);
@@ -144,6 +151,12 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
               },
             });
           })
+          .catch((err) => {
+            alert(
+              "There was an error uploading and/or processing the audio. Please try again later!"
+            );
+            console.error(err);
+          })
           .finally(() => {
             setIsProcessing(false);
           });
@@ -218,9 +231,6 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
   return (
     <div className="box mb-5">
       <div className="columns">
-        <div className="column is-narrow is-size-2 is-vcentered">
-          {isDone ? <span>✔️</span> : <span>❌</span>}
-        </div>
         <div className="column">
           <h2 className="title is-capitalized">{state.id}</h2>
           <h3 className="subtitle">{state.description}</h3>
@@ -240,18 +250,50 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
 export function CharacterStatesStage() {
   const { character } = useContext(CharacterContext);
 
+  const [currentState, setCurrentState] = useState<CharacterState>(states[0]);
+
+  const isDone = (state: CharacterState) =>
+    character.stateAnimations[state.id].length > 0 &&
+    (state.id in character.stateSoundEffects
+      ? // @ts-expect-error
+        character.stateSoundEffects[state.id].length > 0
+      : true);
+
   return (
     <section id="character-states-stage" className="section stage">
       <div className="container">
         <h1 className="title">
           {character.name}'s State Animations and Sounds
         </h1>
+        <h2 className="subtitle">
+          Your character will find itself in many different states. Each needs
+          pictures to form the animations, and some even need sound effects!
+        </h2>
 
-        <div className="states">
+        <div className="buttons states">
           {states.map((state) => (
-            <CharacterStateBox key={state.id} state={state} />
+            <button
+              key={state.id}
+              title={
+                isDone(state)
+                  ? "This state has the minimum sound effects and pictures."
+                  : "You need to take pictures and/or record audio!"
+              }
+              className={clsx(
+                "button is-capitalized",
+                state.id === currentState.id && "is-active"
+              )}
+              onClick={() => setCurrentState(state)}
+            >
+              <span className="icon">
+                {isDone(state) ? <span>✔️</span> : <span>❌</span>}
+              </span>
+              <span>{state.id}</span>
+            </button>
           ))}
         </div>
+
+        <CharacterStateBox state={currentState} />
       </div>
     </section>
   );
