@@ -131,10 +131,14 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   const handleSfxUpload: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
-      const sfxName = prompt("What's the name of the sound effect?");
-      if (!sfxName || sfxName.trim().length === 0) {
-        return;
-      }
+
+      let sfxName =
+        prompt(
+          `What's the name of the sound effect? (default: ${file.name.replace(
+            ".mp3",
+            ""
+          )})`
+        ) ?? file.name.replace(".mp3", "");
 
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
