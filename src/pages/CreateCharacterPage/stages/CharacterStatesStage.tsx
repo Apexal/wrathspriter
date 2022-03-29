@@ -5,6 +5,7 @@ import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
 import { SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
+import { processAudio } from "../../../services/api";
 
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
@@ -56,17 +57,20 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
       const file = ev.target.files[0];
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
-        setCharacter({
-          ...character,
-          stateSoundEffects: {
-            ...character.stateSoundEffects,
-            [state.id]: [
-              {
-                name: "Uploaded",
-                base64EncodedAudio: b64,
-              },
-            ],
-          },
+
+        processAudio(b64).then((processB64) => {
+          setCharacter({
+            ...character,
+            stateSoundEffects: {
+              ...character.stateSoundEffects,
+              [state.id]: [
+                {
+                  name: "Uploaded",
+                  base64EncodedAudio: processB64,
+                },
+              ],
+            },
+          });
         });
       });
     }
