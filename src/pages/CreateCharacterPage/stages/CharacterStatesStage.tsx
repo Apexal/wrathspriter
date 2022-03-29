@@ -33,6 +33,8 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   ) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
+      alert(file.name);
+
       fileToBase64Url(file).then((b64Url) => {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
         setIsProcessing(true);
@@ -90,12 +92,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         <span>Processing image...</span>
       ) : (
         <div className="buttons">
-          <input
-            type="file"
-            capture="environment"
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
           <button
             className="button is-small"
             onClick={handleClearAnimation}
@@ -174,9 +171,8 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
     <div>
       <h3 className="subtitle is-capitalized">Sound Effects</h3>
       {sfx.map((soundEffect: SoundEffect, index: number) => (
-        <div>
+        <div key={index}>
           <audio
-            key={index}
             title={soundEffect.name ?? ""}
             src={"data:audio/mpeg;base64," + soundEffect.base64EncodedAudio}
             controls
