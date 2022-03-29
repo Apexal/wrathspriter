@@ -1,8 +1,9 @@
-import { Character } from "../interfaces";
+import { AnimationFrame, Character } from "../interfaces";
 
 export type CharacterState = {
   id: keyof Character["stateAnimations"] | keyof Character["stateSoundEffects"];
   description: string;
+  exampleAnimation?: AnimationFrame[];
 };
 
 const states: CharacterState[] = [
@@ -27,6 +28,10 @@ const states: CharacterState[] = [
     description: "Your character walking.",
   },
   {
+    id: "dash",
+    description: "Your character running.",
+  },
+  {
     id: "jump",
     description: "Your character jumping.",
   },
@@ -41,6 +46,10 @@ const states: CharacterState[] = [
   {
     id: "hurt",
     description: "Your character reacting to getting hit.",
+  },
+  {
+    id: "grappled",
+    description: "Your character being grappled and constrained by an enemy.",
   },
 ];
 
