@@ -10,17 +10,36 @@ Wrathspriter is a Progressive Web App that allows users to turn themselves into 
 
 https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/edit?usp=sharing
 
-## Features
+## Current and Planned Features
 
-- [ ] Select character attributes
-- [ ] Take images in poses
-- [ ] Remove image backgrounds
-- [ ] Edit character skills
-- [ ] Export to Wrathskeller
+- [x] Homepage
+- [ ] View saved characters
+  - [ ] Edit saved characters
+- [ ] Delete saved characters
+- [ ] Create new characters
+  - [x] Input character details
+  - [ ] Select character major/minor
+  - [x] Add character state sound effects
+  - [x] Add character state animations
+  - [ ] Select character actions
+  - [ ] Add character action sound effects
+  - [ ] Add character action animations
+  - [x] Send images and audio to server for processing
+  - [x] Export to JSON file
+  - [ ] Save to server
+- [ ] Animation editor
+- [ ] Pose webcam overlay
 
 ## Current Maintainers
 
 - [Frank Matranga](https://github.com/Apexal) (Project Lead)
+- Charles R
+- Jonathan F
+- Alexis H
+- Valeria V
+- Brian L
+- Matthew P
+- Ryan S
 
 ## License
 
