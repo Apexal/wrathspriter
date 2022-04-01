@@ -1,7 +1,9 @@
 import { Pose, POSE_CONNECTIONS, ResultsListener } from "@mediapipe/pose";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { checkIsInPose } from "../../utils/posing";
+import { schoolPrograms } from "../../constants";
 
 export function PoseTestingPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -9,53 +11,69 @@ export function PoseTestingPage() {
   const cameraRef = useRef<Camera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const [isInPose, setIsInPose] = useState<boolean>(false);
+
   const onResults = useCallback<ResultsListener>((results) => {
     if (!canvasRef.current) return;
 
     const canvasCtx = canvasRef.current.getContext("2d");
     if (!canvasCtx) return;
 
-    canvasCtx.save();
-    canvasCtx.clearRect(
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
-    canvasCtx.drawImage(
-      results.segmentationMask,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
+    try {
+      canvasCtx.save();
+      canvasCtx.clearRect(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
+      canvasCtx.drawImage(
+        results.segmentationMask,
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
 
-    // Only overwrite existing pixels.
-    canvasCtx.globalCompositeOperation = "source-in";
-    canvasCtx.fillStyle = "#00FF00";
-    canvasCtx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      // Only overwrite existing pixels.
+      canvasCtx.globalCompositeOperation = "source-in";
+      canvasCtx.fillStyle = "#00FF00";
+      canvasCtx.fillRect(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
 
-    // // Only overwrite missing pixels.
-    canvasCtx.globalCompositeOperation = "source-in";
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
+      // // Only overwrite missing pixels.
+      canvasCtx.globalCompositeOperation = "source-in";
+      canvasCtx.drawImage(
+        results.image,
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
 
-    canvasCtx.globalCompositeOperation = "source-over";
-    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-      color: "#00FF00",
-      lineWidth: 2,
-    });
-    drawLandmarks(canvasCtx, results.poseLandmarks, {
-      color: "#FF0000",
-      lineWidth: 1,
-    });
+      canvasCtx.globalCompositeOperation = "source-over";
+      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+        color: "#00FF00",
+        lineWidth: 2,
+      });
+      drawLandmarks(canvasCtx, results.poseLandmarks, {
+        color: "#FF0000",
+        lineWidth: 1,
+      });
 
-    canvasCtx.restore();
+      canvasCtx.restore();
+
+      // Check woo hoo
+      const pose = schoolPrograms[0].actionTemplates[0].animation[0].pose;
+
+      setIsInPose(checkIsInPose(results.poseLandmarks, pose));
+    } catch (error) {
+      setIsInPose(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -94,6 +112,7 @@ export function PoseTestingPage() {
   return (
     <div className="section pose-testing-page">
       <div className="container">
+        <h1 className="title">{isInPose ? "T-POSE" : "OUT OF POSE"}</h1>
         <video ref={videoRef} />
         <canvas ref={canvasRef} width="400px" height="400px" />
       </div>
