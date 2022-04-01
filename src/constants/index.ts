@@ -1,4 +1,8 @@
-import { POSE_LANDMARKS } from "@mediapipe/pose";
+import {
+  POSE_LANDMARKS,
+  POSE_LANDMARKS_LEFT,
+  POSE_LANDMARKS_RIGHT,
+} from "@mediapipe/pose";
 import { AnimationFrame, Character, SchoolProgram } from "../interfaces";
 
 export const defaultColliders = {
@@ -89,8 +93,43 @@ export const schoolPrograms: SchoolProgram[] = [
                 poseIndex1: POSE_LANDMARKS.LEFT_SHOULDER,
                 poseIndex2: POSE_LANDMARKS.LEFT_ELBOW,
                 poseIndex3: POSE_LANDMARKS.LEFT_WRIST,
-                angleMax: 160,
-                angleMin: 200,
+                angleMax: 190,
+                angleMin: 165,
+              },
+              {
+                poseIndex1: POSE_LANDMARKS.RIGHT_SHOULDER,
+                poseIndex2: POSE_LANDMARKS.RIGHT_ELBOW,
+                poseIndex3: POSE_LANDMARKS.RIGHT_WRIST,
+                angleMax: 190,
+                angleMin: 165,
+              },
+              {
+                poseIndex1: POSE_LANDMARKS.RIGHT_SHOULDER,
+                poseIndex2: POSE_LANDMARKS.RIGHT_HIP,
+                poseIndex3: POSE_LANDMARKS_RIGHT.RIGHT_KNEE,
+                angleMax: 190,
+                angleMin: 170,
+              },
+              {
+                poseIndex1: POSE_LANDMARKS.LEFT_SHOULDER,
+                poseIndex2: POSE_LANDMARKS.LEFT_HIP,
+                poseIndex3: POSE_LANDMARKS_LEFT.LEFT_KNEE,
+                angleMax: 190,
+                angleMin: 170,
+              },
+              {
+                poseIndex1: POSE_LANDMARKS.LEFT_ELBOW,
+                poseIndex2: POSE_LANDMARKS.LEFT_SHOULDER,
+                poseIndex3: POSE_LANDMARKS.LEFT_HIP,
+                angleMax: 100,
+                angleMin: 80,
+              },
+              {
+                poseIndex1: POSE_LANDMARKS.RIGHT_ELBOW,
+                poseIndex2: POSE_LANDMARKS.RIGHT_SHOULDER,
+                poseIndex3: POSE_LANDMARKS.RIGHT_HIP,
+                angleMax: 100,
+                angleMin: 80,
               },
             ],
           },
