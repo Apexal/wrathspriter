@@ -1,5 +1,6 @@
-import { Pose, ResultsListener } from "@mediapipe/pose";
+import { Pose, POSE_CONNECTIONS, ResultsListener } from "@mediapipe/pose";
 import { Camera } from "@mediapipe/camera_utils";
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { useCallback, useEffect, useRef } from "react";
 
 export function PoseTestingPage() {
@@ -43,6 +44,16 @@ export function PoseTestingPage() {
       canvasRef.current.width,
       canvasRef.current.height
     );
+
+    canvasCtx.globalCompositeOperation = "source-over";
+    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+      color: "#00FF00",
+      lineWidth: 2,
+    });
+    drawLandmarks(canvasCtx, results.poseLandmarks, {
+      color: "#FF0000",
+      lineWidth: 1,
+    });
 
     canvasCtx.restore();
   }, []);
