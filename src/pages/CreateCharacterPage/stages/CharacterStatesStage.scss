@@ -4,3 +4,40 @@
     border: 1px dashed rgb(109, 109, 109);
   }
 }
+
+/* div container for the selected major in character creator */
+.card-major-selected {
+
+}
+
+/* div container for the selected minor in character creator */
+.card-minor-selected {
+
+}
+
+/* the container for the selected program text */
+.selected-text-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5vw;
+  margin-right: 1rem;
+}
+
+/* text for the selected program in character creator */
+.selected-text {
+  justify-content: right;
+  padding: 0.75vh 1.5vw !important;
+}
+
+/* text for selected major in character creator
+   will also have selected-text */
+.major-selected-text {
+}
+
+/* text for selected minor in character creator
+   will also have selected-text */
+.minor-selected-text {
+
+}

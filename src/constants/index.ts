@@ -68,4 +68,39 @@ export const schoolPrograms: SchoolProgram[] = [
     name: "Computer Science",
     actionTemplates: [],
   },
+  {
+    id: "math",
+    backstory:
+      "Something something something something something something something something ",
+    name: "Mathematics",
+    actionTemplates: [],
+  },
+  {
+    id: "itws",
+    backstory:
+    "Something something something something something something something something ",
+    name: "Information Technology and Web Science",
+    actionTemplates: [],
+  },
+  {
+    id: "mgmt",
+    backstory:
+    "Something something something something something something something something ",
+    name: "Business & Management",
+    actionTemplates: [],
+  },
+  {
+    id: "gsas",
+    backstory:
+    "Something something something something something something something something ",
+    name: "Games and Simulations Arts and Sciences",
+    actionTemplates: [],
+  },
+  {
+    id: "phys",
+    backstory:
+    "Something something something something something something something something ",
+    name: "Physics",
+    actionTemplates: [],
+  }
 ];
