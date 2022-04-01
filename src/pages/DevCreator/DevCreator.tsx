@@ -9,7 +9,8 @@ import { Character } from "../../interfaces/character";
 import { Vector2 } from "../../interfaces/index";
 import { DevPreview } from "./DevPreview";
 import { ProgramSelect } from "./ProgramSelect";
-import { setConstantValue } from "typescript";
+
+import { AddCharacterForm } from "../../utils/db";
 
 export enum Programs {
     None = -1,
@@ -44,6 +45,8 @@ export function DevCreator() {
 
         props.character.name = name;
         props.character.backstory = backstory;
+
+        AddCharacterForm({ character: props.character } );
 
         downloadCharacter(props.character);
     }
