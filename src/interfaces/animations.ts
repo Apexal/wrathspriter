@@ -1,11 +1,12 @@
 import { Vector2 } from ".";
+import { PoseAngle } from "./pose";
 
 /** Represents a single frame of an animation. The image is Base64 encoded. */
 export interface AnimationFrame {
-  /** The hardcoded pose for this animation frame move. Is set if this is a school program move. Meant to be displayed on top of camera for user to align themselves with. */
-  base64EncodedPoseImage: string | null;
   /** The actual frame image, Base64 encoded */
   base64EncodedImage: string | null;
+  /** The required pose for this action frame encoded in a list of angles. */
+  pose: PoseAngle[];
   /** Animation details for hit collider */
   hitCollider:
     | {

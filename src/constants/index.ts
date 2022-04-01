@@ -2,7 +2,7 @@ import { AnimationFrame, Character, SchoolProgram } from "../interfaces";
 
 export const defaultFrame: AnimationFrame = {
   base64EncodedImage: null,
-  base64EncodedPoseImage: null,
+  pose: [],
   hitCollider: {
     isEnabled: true,
     size: {
