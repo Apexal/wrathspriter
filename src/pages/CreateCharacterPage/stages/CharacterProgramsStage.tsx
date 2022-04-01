@@ -13,9 +13,21 @@ export function CharacterProgramsStage() {
         <div className="columns is-multiline">
           {schoolPrograms.map((program) => (
             <div key={program.id} className="column is-half">
-              <div id={program.id} className="card">
+              <div id={program.id} className={ (character.major != null && character.major.id == program.id ? "card card-major-selected " : ("card")) + (character.minor != null && character.minor.id == program.id ? " card card-minor-selected" : " card")}>
                 <div className="card-header">
                   <p className="card-header-title">{program.name}</p>
+                  <div className = "selected-text-container">
+                    {
+                      (character.major != null && character.major.id == program.id ? (
+                        <p className = "card-header-title selected-text major-selected-text tag is-primary">Major</p>
+                      ) : "")
+                    }
+                    {
+                      (character.minor != null && character.minor.id == program.id ? (
+                        <p className = "card-header-title selected-text minor-selected-text tag is-info">Minor</p>
+                      ) : "")
+                    }
+                  </div>
                 </div>
                 <div className="card-content">
                   <div className="columns">
