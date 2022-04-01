@@ -9,6 +9,7 @@ import { CharacterDetailsStage } from "./pages/CreateCharacterPage/stages/Charac
 import { CharacterProgramsStage } from "./pages/CreateCharacterPage/stages/CharacterProgramsStage";
 import { CharacterStatesStage } from "./pages/CreateCharacterPage/stages/CharacterStatesStage";
 import { ThemePage } from "./pages/ThemePage/ThemePage";
+import { PoseTestingPage } from "./pages/PoseTestingPage/PoseTesting";
 
 import "./sass/theme.scss";
 
@@ -26,6 +27,7 @@ function App() {
         </Route>
         <Route path="theme" element={<ThemePage />} />
         <Route path="saved" element={<SavedCharactersPage />} />
+        <Route path="posing" element={<PoseTestingPage />} />
         <Route path="*" element={<p>Page Not Found!</p>} />
       </Routes>
       <Footer />
