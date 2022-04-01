@@ -12,70 +12,73 @@ export function PoseTestingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [isInPose, setIsInPose] = useState<boolean>(false);
+  const [isSkeletonDrawn, setIsSkeletonDrawn] = useState<boolean>(true);
 
-  const onResults = useCallback<ResultsListener>((results) => {
-    if (!canvasRef.current) return;
+  /** Callback that draws the silhouette of the user in the camera onto the canvas, with optional pose skeleton. */
+  const handleResults = useCallback<ResultsListener>(
+    (results) => {
+      if (!canvasRef.current) return;
 
-    const canvasCtx = canvasRef.current.getContext("2d");
-    if (!canvasCtx) return;
+      const canvasCtx = canvasRef.current.getContext("2d");
+      if (!canvasCtx) return;
 
-    try {
-      canvasCtx.save();
-      canvasCtx.clearRect(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
-      canvasCtx.drawImage(
-        results.segmentationMask,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+      try {
+        canvasCtx.save();
 
-      // Only overwrite existing pixels.
-      canvasCtx.globalCompositeOperation = "source-in";
-      canvasCtx.fillStyle = "#00FF00";
-      canvasCtx.fillRect(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+        // Clear the whole canvas
+        canvasCtx.clearRect(
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
 
-      // // Only overwrite missing pixels.
-      canvasCtx.globalCompositeOperation = "source-in";
-      canvasCtx.drawImage(
-        results.image,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+        // Draw the segmentation mask (the silhouette of the detected person)
+        canvasCtx.drawImage(
+          results.segmentationMask,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
 
-      canvasCtx.globalCompositeOperation = "source-over";
-      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-        color: "#00FF00",
-        lineWidth: 2,
-      });
-      drawLandmarks(canvasCtx, results.poseLandmarks, {
-        color: "#FF0000",
-        lineWidth: 1,
-      });
+        // Draw the image on top of the segmentation mask in source-in mode, so that only the person gets drawn
+        canvasCtx.globalCompositeOperation = "source-in";
+        canvasCtx.drawImage(
+          results.image,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
 
-      canvasCtx.restore();
+        // Draw the connecting lines and landmarks
+        if (isSkeletonDrawn) {
+          canvasCtx.globalCompositeOperation = "source-over";
+          drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+            color: "#00FF00",
+            lineWidth: 2,
+          });
+          drawLandmarks(canvasCtx, results.poseLandmarks, {
+            color: "#FF0000",
+            lineWidth: 1,
+          });
+        }
 
-      // Check woo hoo
-      const pose = schoolPrograms[0].actionTemplates[0].animation[0].pose;
+        canvasCtx.restore();
 
-      setIsInPose(checkIsInPose(results.poseLandmarks, pose));
-    } catch (error) {
-      setIsInPose(false);
-    }
-  }, []);
+        // TODO: Replace this hardcoded pose
+        const pose = schoolPrograms[0].actionTemplates[0].animation[0].pose;
 
+        setIsInPose(checkIsInPose(results.poseLandmarks, pose));
+      } catch (error) {
+        setIsInPose(false);
+      }
+    },
+    [isSkeletonDrawn]
+  );
+
+  /** Create the pose object once. */
   useEffect(() => {
     const pose = new Pose({
       locateFile: (file) => {
@@ -91,23 +94,39 @@ export function PoseTestingPage() {
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
     });
-
-    pose.onResults(onResults);
     poseRef.current = pose;
 
+    return () => {
+      poseRef.current?.close();
+      poseRef.current = null;
+    };
+  }, []);
+
+  /** Update the results handler anytime it changes. */
+  useEffect(() => {
+    if (!poseRef.current) return;
+    poseRef.current.onResults(handleResults);
+  }, [poseRef, handleResults]);
+
+  /** Create the camera and keep it connected to the video element. */
+  useEffect(() => {
     if (videoRef.current) {
       const camera = new Camera(videoRef.current, {
         onFrame: async () => {
           // @ts-expect-error
-          await pose.send({ image: videoRef.current });
+          await poseRef.current?.send({ image: videoRef.current });
         },
         width: 400,
         height: 400,
       });
+
       cameraRef.current = camera;
       camera.start();
+    } else {
+      cameraRef.current?.stop();
+      cameraRef.current = null;
     }
-  }, [onResults, videoRef]);
+  }, [videoRef]);
 
   return (
     <div className="section pose-testing-page">
@@ -115,6 +134,12 @@ export function PoseTestingPage() {
         <h1 className="title">{isInPose ? "T-POSE" : "OUT OF POSE"}</h1>
         <video ref={videoRef} />
         <canvas ref={canvasRef} width="400px" height="400px" />
+        <button
+          className="button"
+          onClick={() => setIsSkeletonDrawn(!isSkeletonDrawn)}
+        >
+          Toggle Pose Skeleton
+        </button>
       </div>
     </div>
   );
