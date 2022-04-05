@@ -9,7 +9,7 @@ interface Props {
 
 export class DexieDatabase extends Dexie {
 
-    characters!: Table<Props>
+    characters!: Table<Character>
 
     constructor() {
         super("characterDatabase");
@@ -25,8 +25,7 @@ export function AddCharacterForm(props: Props) {
     if (!db.isOpen()) db.open();
     async function addCharacter() {
         try {
-            const id = await db.characters.add(props);
-            console.log(id);
+            const id = await db.characters.add(props.character);
         } catch (error) {
             console.log(error);
         }
