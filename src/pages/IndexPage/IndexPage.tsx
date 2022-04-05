@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
 
+import logo from "../../components/IMG-1277.png";
 import "./IndexPage.scss";
 
 /**
@@ -46,7 +47,7 @@ export function IndexPage() {
         <main>
           <figure className="image display-image m-auto my-5">
             <img
-              src="https://media3.giphy.com/media/1xb8n8qWt2RNtShhWT/giphy.gif?cid=ecf05e473uv5y1rizuesg8h5q9r1dk2pdt3caryqkk3h9l9u&rid=giphy.gif&ct=s"
+              src={logo}
               alt="Dancing animation"
             />
           </figure>
