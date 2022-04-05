@@ -131,7 +131,7 @@ export function PoseTestingPage() {
   return (
     <div className="section pose-testing-page">
       <div className="container">
-        <h1 className="title">{isInPose ? "T-POSE" : "OUT OF POSE"}</h1>
+        <h1 className="title">{isInPose ? "IN POSE" : "OUT OF POSE"}</h1>
         <video ref={videoRef} />
         <canvas ref={canvasRef} width="400px" height="400px" />
         <button
