@@ -1,6 +1,6 @@
 import { Character } from "../interfaces";
 
-export function fileToBase64Url(file: File): Promise<string> {
+export function fileToBase64Url(file: File | Blob): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
