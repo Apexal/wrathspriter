@@ -5,6 +5,7 @@ import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
 import { CharacterContext, CharacterContextType } from "../../state";
 import { downloadCharacter } from "../../utils/download";
+import HelpButton from "../../components/HelpButton";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -25,12 +26,33 @@ export function CreateCharacterPage() {
   );
 
   return (
+    
     <CharacterContext.Provider value={characterContextValue}>
       <progress
         className="progress is-success"
         value={routeIndex + 1}
         max={stages.length}
       />
+
+      <HelpButton heading="Create a Character" className="is-pulled-right content">
+        <p>
+          Here's where the fun starts! Use this process to create a character of your own, complete 
+          with animations and sound effects.
+        </p>
+        <br/>
+        <p>
+          Here's the breakdown:
+        </p>
+        <br/>
+        <ul>
+          <li>Choose your character's name and write their backstory</li>
+          <li>Select your character's major and minor</li>
+          <li>Provide animations and sound effects for the basic poses</li>
+          <li>Provide animations and sound effects for the action poses</li>
+          <li>Review your character</li>
+          <li>Send your character to the game!</li>
+        </ul>
+      </HelpButton>
 
       <Outlet />
 
