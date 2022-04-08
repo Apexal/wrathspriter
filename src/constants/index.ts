@@ -1,8 +1,11 @@
+import {
+  POSE_LANDMARKS,
+  POSE_LANDMARKS_LEFT,
+  POSE_LANDMARKS_RIGHT,
+} from "@mediapipe/pose";
 import { AnimationFrame, Character, SchoolProgram } from "../interfaces";
 
-export const defaultFrame: AnimationFrame = {
-  base64EncodedImage: null,
-  base64EncodedPoseImage: null,
+export const defaultColliders = {
   hitCollider: {
     isEnabled: true,
     size: {
@@ -24,7 +27,16 @@ export const defaultFrame: AnimationFrame = {
       y: 0,
     },
   },
+} as {
+  hitCollider: AnimationFrame["hitCollider"];
+  bodyCollider: AnimationFrame["bodyCollider"];
+};
+
+export const defaultFrame: AnimationFrame = {
+  base64EncodedImage: null,
+  pose: [],
   durationInS: 0.2,
+  ...defaultColliders,
 };
 
 export const emptyCharacter: Character = {
@@ -66,7 +78,29 @@ export const schoolPrograms: SchoolProgram[] = [
     backstory:
       "Something something something something something something something something ",
     name: "Computer Science",
-    actionTemplates: [],
+    actionTemplates: [
+      {
+        name: "Keyboard Smash",
+        type: "special",
+        soundEffect: null,
+        animation: [
+          {
+            base64EncodedImage: null,
+            durationInS: 1,
+            ...defaultColliders,
+            pose: [
+              {
+                poseIndex1: POSE_LANDMARKS.LEFT_SHOULDER,
+                poseIndex2: POSE_LANDMARKS.LEFT_ELBOW,
+                poseIndex3: POSE_LANDMARKS.LEFT_WRIST,
+                angleMax: 105,
+                angleMin: 75,
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "math",
