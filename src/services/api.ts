@@ -1,3 +1,5 @@
+import { Character } from "../interfaces";
+
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ?? "http://127.0.0.1:8000";
 
@@ -29,4 +31,19 @@ export async function processImage(imageB64: string) {
 
   const data = await response.json();
   return data.base64EncodedImage;
+}
+
+export async function saveCharacter(character: Character): Promise<Character> {
+  const response = await fetch(API_BASE_URL + "/characters/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      character,
+    }),
+  });
+
+  const data = await response.json();
+  return data as Character;
 }

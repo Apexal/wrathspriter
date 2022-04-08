@@ -5,6 +5,7 @@ import { AnimationFrame, Action, SchoolProgram, SoundEffect } from ".";
  * are set as the user steps through the character creator.
  */
 export interface Character {
+  id?: string;
   /** The character's name as displayed in the game */
   name: string;
   /** Short backstory of the character */
