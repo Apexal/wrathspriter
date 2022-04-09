@@ -11,12 +11,15 @@ import { defaultFrame } from "../../../constants";
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
 import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
+import { PoseCamera } from "../../../components/PoseCamera/PoseCamera";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isPoseCameraModalOpen, setIsPoseCameraModalOpen] =
+    useState<boolean>(false);
 
   /** Clears the state's animation frames. */
   const handleClearAnimation = () => {
@@ -101,10 +104,35 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     setCharacter(newCharacter);
   };
 
+  function PoseCameraModal() {
+    return (
+      <div className="modal is-active">
+        <div className="modal-background"></div>
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <p className="modal-card-title">Time to Pose!</p>
+          </header>
+          <section className="modal-card-body">
+            <PoseCamera isSkeletonDrawn={true} />
+          </section>
+          <footer className="modal-card-foot">
+            <button
+              className="button"
+              onClick={() => setIsPoseCameraModalOpen(false)}
+            >
+              Done
+            </button>
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
   const frames = character.stateAnimations[state.id];
 
   return (
     <div className="box animation-editor">
+      {isPoseCameraModalOpen && <PoseCameraModal />}
       <h3 className="subtitle is-capitalized">Animation 🎞️</h3>
       {frames.length > 0 && (
         <div className="is-flex">
@@ -146,15 +174,24 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
               type="file"
               accept="image/*"
               className="file-input"
+              // multiple={true}
               disabled={isProcessing}
               onChange={handleImageUpload}
             />
             <span className="file-cta">
               <span className="file-icon">📁</span>
-              <span className="file-label">Upload Image</span>
+              <span className="file-label">Upload Images</span>
             </span>
           </label>
         </div>
+
+        <button
+          className="button is-small"
+          onClick={() => setIsPoseCameraModalOpen(true)}
+        >
+          <span className="icon">📷</span>
+          <span>Take Picture</span>
+        </button>
 
         {frames.length > 0 && (
           <button
