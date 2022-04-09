@@ -1,6 +1,6 @@
 import { Camera } from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { Pose, ResultsListener, POSE_CONNECTIONS } from "@mediapipe/pose";
+import { ResultsListener, POSE_CONNECTIONS } from "@mediapipe/pose";
 import {
   useRef,
   useState,
@@ -8,25 +8,31 @@ import {
   useEffect,
   forwardRef,
   CSSProperties,
+  useImperativeHandle,
 } from "react";
 import { PoseAngle } from "../../interfaces/pose";
-import { checkIsInPose } from "../../utils/posing";
+import { checkIsInPose, poseManager } from "../../utils/posing";
+
+export type PoseCameraRef = {
+  captureScreenshot: () => string | null;
+};
 
 type PoseCameraPropTypes = {
   isSkeletonDrawn: boolean;
   pose?: PoseAngle[];
+  handleInPoseChange?: (isInPose: boolean) => void;
 };
 
-export const PoseCamera = forwardRef<HTMLVideoElement, PoseCameraPropTypes>(
-  ({ pose, isSkeletonDrawn }, ref) => {
+export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
+  ({ pose, isSkeletonDrawn, handleInPoseChange }, ref) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const poseRef = useRef<Pose | null>(null);
     const cameraRef = useRef<Camera | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const screenshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const [isInPose, setIsInPose] = useState<boolean>(false);
 
+    /** Capture a FULL screenshot of the video and return it as a data URL. */
     const captureScreenshot = useCallback(() => {
       if (!videoRef.current) return null;
 
@@ -48,6 +54,11 @@ export const PoseCamera = forwardRef<HTMLVideoElement, PoseCameraPropTypes>(
 
       return screenshotCanvasRef.current.toDataURL("image/png");
     }, []);
+
+    // Expose the captureScreenshot method to parents via ref
+    useImperativeHandle(ref, () => ({
+      captureScreenshot,
+    }));
 
     /** Callback that draws the silhouette of the user in the camera onto the canvas, with optional pose skeleton. */
     const handleResults = useCallback<ResultsListener>(
@@ -107,6 +118,8 @@ export const PoseCamera = forwardRef<HTMLVideoElement, PoseCameraPropTypes>(
               setIsInPose(true);
               canvasCtx.font = "30px sans-serif";
               canvasCtx.fillText("IN POSE", 10, 60);
+            } else {
+              setIsInPose(false);
             }
           } else {
             setIsInPose(false);
@@ -119,43 +132,16 @@ export const PoseCamera = forwardRef<HTMLVideoElement, PoseCameraPropTypes>(
     );
 
     useEffect(() => {
-      if (!ref) return;
-      if (typeof ref === "function") {
-        ref(videoRef.current);
-      } else {
-        ref.current = videoRef.current;
+      if (handleInPoseChange) {
+        handleInPoseChange(isInPose);
       }
-    }, [ref]);
-
-    /** Create the pose object once. */
-    useEffect(() => {
-      const pose = new Pose({
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
-        },
-      });
-
-      pose.setOptions({
-        modelComplexity: 1,
-        smoothLandmarks: true,
-        enableSegmentation: true,
-        smoothSegmentation: true,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
-      poseRef.current = pose;
-
-      return () => {
-        poseRef.current?.close();
-        poseRef.current = null;
-      };
-    }, []);
+    }, [handleInPoseChange, isInPose]);
 
     /** Update the results handler anytime it changes. */
     useEffect(() => {
-      if (!poseRef.current) return;
-      poseRef.current.onResults(handleResults);
-    }, [poseRef, handleResults]);
+      if (!poseManager) return;
+      poseManager.onResults(handleResults);
+    }, [handleResults]);
 
     /** Create the camera and keep it connected to the video element. */
     useEffect(() => {
@@ -163,7 +149,7 @@ export const PoseCamera = forwardRef<HTMLVideoElement, PoseCameraPropTypes>(
         const camera = new Camera(videoRef.current, {
           onFrame: async () => {
             // @ts-expect-error
-            await poseRef.current?.send({ image: videoRef.current });
+            await poseManager.send({ image: videoRef.current });
           },
           width: 400,
           height: 400,
