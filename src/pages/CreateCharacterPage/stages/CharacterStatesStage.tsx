@@ -6,12 +6,15 @@ import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprit
 import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
-import { defaultFrame } from "../../../constants";
+import { defaultFrame, schoolPrograms } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
 import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
-import { PoseCamera } from "../../../components/PoseCamera/PoseCamera";
+import {
+  PoseCamera,
+  PoseCameraRef,
+} from "../../../components/PoseCamera/PoseCamera";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -32,6 +35,35 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
+  const handleProcessImage = (b64: string) => {
+    setIsProcessing(true);
+    return processImage(b64)
+      .then((processB64) => {
+        setCharacter({
+          ...character,
+          stateAnimations: {
+            ...character.stateAnimations,
+            [state.id]: [
+              ...character.stateAnimations[state.id],
+              {
+                ...defaultFrame,
+                base64EncodedImage: processB64,
+              },
+            ],
+          },
+        });
+      })
+      .catch((err) => {
+        alert(
+          "There was an error uploading and/or processing the image. Please try again later!"
+        );
+        console.error(err);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
   /** Grabs the image file, sends it to the server to process, and then adds it in a new frame to the state animation. */
   const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (
     ev
@@ -41,32 +73,9 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
       fileToBase64Url(file).then((b64Url) => {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
-        setIsProcessing(true);
-        processImage(b64)
-          .then((processB64) => {
-            setCharacter({
-              ...character,
-              stateAnimations: {
-                ...character.stateAnimations,
-                [state.id]: [
-                  ...character.stateAnimations[state.id],
-                  {
-                    ...defaultFrame,
-                    base64EncodedImage: processB64,
-                  },
-                ],
-              },
-            });
-          })
-          .catch((err) => {
-            alert(
-              "There was an error uploading and/or processing the image. Please try again later!"
-            );
-            console.error(err);
-          })
-          .finally(() => {
-            setIsProcessing(false);
-          });
+
+        handleProcessImage(b64);
+        setIsPoseCameraModalOpen(false);
       });
     }
   };
@@ -104,16 +113,37 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     setCharacter(newCharacter);
   };
 
-  function PoseCameraModal() {
+  function PoseCameraModal({ isOpen }: { isOpen: boolean }) {
+    const poseCameraRef = useRef<PoseCameraRef | null>(null);
+
+    const handleInPoseChange = (isInPose: boolean) => {
+      if (!isOpen) return;
+
+      if (isInPose) {
+        const b64Url = poseCameraRef.current?.captureScreenshot();
+        if (!b64Url) return;
+
+        const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
+
+        setIsPoseCameraModalOpen(false);
+        handleProcessImage(b64);
+      }
+    };
+
     return (
-      <div className="modal is-active">
+      <div className={clsx("modal", isOpen && "is-active")}>
         <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
             <p className="modal-card-title">Time to Pose!</p>
           </header>
           <section className="modal-card-body">
-            <PoseCamera isSkeletonDrawn={true} />
+            <PoseCamera
+              ref={poseCameraRef}
+              isSkeletonDrawn={true}
+              pose={schoolPrograms[0].actionTemplates[0].animation[0].pose}
+              handleInPoseChange={handleInPoseChange}
+            />
           </section>
           <footer className="modal-card-foot">
             <button
@@ -132,7 +162,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
   return (
     <div className="box animation-editor">
-      {isPoseCameraModalOpen && <PoseCameraModal />}
+      <PoseCameraModal isOpen={isPoseCameraModalOpen} />
       <h3 className="subtitle is-capitalized">Animation 🎞️</h3>
       {frames.length > 0 && (
         <div className="is-flex">
