@@ -148,8 +148,9 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
       if (videoRef.current) {
         const camera = new Camera(videoRef.current, {
           onFrame: async () => {
-            // @ts-expect-error
-            await poseManager.send({ image: videoRef.current });
+            if (videoRef.current) {
+              await poseManager.send({ image: videoRef.current });
+            }
           },
           width: 400,
           height: 400,
