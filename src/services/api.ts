@@ -3,8 +3,11 @@ import { Character } from "../interfaces";
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ?? "http://127.0.0.1:8000";
 
-export async function processAudio(audioB64: string) {
-  const response = await fetch(API_BASE_URL + "/audio", {
+export async function processAudio(
+  audioB64: string,
+  mimetype: "audio/mpeg" | "audio/ogg" = "audio/mpeg"
+) {
+  const response = await fetch(API_BASE_URL + `/audio?mimetype=${mimetype}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
