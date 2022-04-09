@@ -12,6 +12,7 @@ import { ThemePage } from "./pages/ThemePage/ThemePage";
 import { PoseTestingPage } from "./pages/PoseTestingPage/PoseTesting";
 
 import "./sass/theme.scss";
+import { AudioRecorder } from "./components/AudioRecorder/AudioRecorder";
 
 function App() {
   return (

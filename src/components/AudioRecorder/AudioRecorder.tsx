@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { fileToBase64Url } from "../../utils/download";
 
@@ -11,6 +12,7 @@ export function AudioRecorder(props: AudioRecorderPropTypes) {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
+  const [isRecording, setIsRecording] = useState<boolean>(false);
 
   /** Stores audio data chunks */
   const chunksRef = useRef<BlobPart[]>([]);
@@ -50,24 +52,27 @@ export function AudioRecorder(props: AudioRecorderPropTypes) {
     }
   }, [mediaStream, props.handleRecordingDone]);
 
-  const handleStart = () => {
-    mediaRecorder?.start();
-    console.log("Started recording");
-  };
+  const handleToggleRecord = () => {
+    if (!mediaRecorder) return;
 
-  const handleStop = () => {
-    mediaRecorder?.stop();
-    console.log("Stopped recording");
+    if (mediaRecorder.state !== "recording") {
+      mediaRecorder.start();
+      setIsRecording(true);
+    } else {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
   };
 
   return (
     <div className="audio-recorder">
       <div className="buttons">
-        <button onClick={handleStart} className="button">
-          Record
-        </button>
-        <button onClick={handleStop} className="button">
-          Stop
+        <button
+          onClick={handleToggleRecord}
+          className={clsx("button is-small", isRecording && "is-danger")}
+        >
+          <span className="icon">🎙️</span>
+          {isRecording ? <span>Stop Recording</span> : <span>Record</span>}
         </button>
       </div>
     </div>
