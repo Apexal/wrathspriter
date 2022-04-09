@@ -135,22 +135,37 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         </div>
       )}
 
-      {isProcessing ? (
-        <span>Processing image...</span>
-      ) : (
-        <div className="buttons">
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          {frames.length > 0 && (
-            <button
-              className="button is-small"
-              onClick={handleClearAnimation}
-              disabled={isProcessing}
-            >
-              Clear
-            </button>
-          )}
-        </div>
+      {isProcessing && (
+        <progress className="progress is-small is-dark" max={100} />
       )}
+
+      <div className="buttons">
+        <div className="file is-small mb-2 mr-2">
+          <label className="file-label">
+            <input
+              type="file"
+              accept="image/*"
+              className="file-input"
+              disabled={isProcessing}
+              onChange={handleImageUpload}
+            />
+            <span className="file-cta">
+              <span className="file-icon">📁</span>
+              <span className="file-label">Upload Image</span>
+            </span>
+          </label>
+        </div>
+
+        {frames.length > 0 && (
+          <button
+            className="button is-small"
+            onClick={handleClearAnimation}
+            disabled={isProcessing}
+          >
+            Clear
+          </button>
+        )}
+      </div>
     </div>
   );
 }
