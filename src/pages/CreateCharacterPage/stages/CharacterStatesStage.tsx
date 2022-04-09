@@ -10,6 +10,7 @@ import { defaultFrame } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
+import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -165,6 +166,47 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
     return null;
   }
 
+  const handleProcessAudio = (
+    b64: string,
+    sfxName: string,
+    mimetype: "audio/mpeg" | "audio/ogg"
+  ) => {
+    setIsProcessing(true);
+    processAudio(b64, mimetype)
+      .then((processB64) => {
+        setCharacter({
+          ...character,
+          stateSoundEffects: {
+            ...character.stateSoundEffects,
+            [state.id]: [
+              {
+                name: sfxName.trim(),
+                base64EncodedAudio: processB64,
+              },
+            ],
+          },
+        });
+      })
+      .catch((err) => {
+        alert(
+          "There was an error uploading and/or processing the audio. Please try again later!"
+        );
+        console.error(err);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
+  const handleSfxRecorded = (b64Url: string) => {
+    const sfxName = prompt("What's the name of the sound effect?");
+    if (!sfxName) return;
+
+    const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
+
+    handleProcessAudio(b64, sfxName, "audio/ogg");
+  };
+
   const handleSfxUpload: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
@@ -180,31 +222,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
 
-        setIsProcessing(true);
-        processAudio(b64)
-          .then((processB64) => {
-            setCharacter({
-              ...character,
-              stateSoundEffects: {
-                ...character.stateSoundEffects,
-                [state.id]: [
-                  {
-                    name: sfxName.trim(),
-                    base64EncodedAudio: processB64,
-                  },
-                ],
-              },
-            });
-          })
-          .catch((err) => {
-            alert(
-              "There was an error uploading and/or processing the audio. Please try again later!"
-            );
-            console.error(err);
-          })
-          .finally(() => {
-            setIsProcessing(false);
-          });
+        handleProcessAudio(b64, sfxName, "audio/mpeg");
       });
     }
   };
@@ -227,7 +245,7 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 
   return (
     <div className="box">
-      <h3 className="subtitle is-capitalized">Sound Effects 🎙️</h3>
+      <h3 className="subtitle is-capitalized">Sound Effects 🔊</h3>
       {sfx.map((soundEffect: SoundEffect, index: number) => (
         <div key={index}>
           <audio
@@ -238,28 +256,43 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
         </div>
       ))}
 
-      {isProcessing ? (
-        <span>Processing audio...</span>
-      ) : (
-        <div className="buttons">
-          <input
-            ref={audioInputRef}
-            type="file"
-            accept="audio/mpeg"
-            capture="user"
-            onChange={handleSfxUpload}
-          />
-          {sfx.length > 0 && (
-            <button
-              className="button is-small"
-              onClick={handleClearSfx}
-              disabled={isProcessing}
-            >
-              Clear
-            </button>
-          )}
-        </div>
+      {isProcessing && (
+        <progress className="progress is-small is-dark" max={100} />
       )}
+
+      <div className="buttons">
+        <div className="file is-small mb-2 mr-2">
+          <label className="file-label">
+            <input
+              ref={audioInputRef}
+              className="file-input"
+              type="file"
+              accept="audio/mpeg"
+              capture="user"
+              onChange={handleSfxUpload}
+              disabled={isProcessing}
+            />
+            <span className="file-cta">
+              <span className="file-icon">📁</span>
+              <span className="file-label">Upload MP3</span>
+            </span>
+          </label>
+        </div>
+
+        <AudioRecorder
+          disabled={isProcessing}
+          handleRecordingDone={handleSfxRecorded}
+        />
+        {sfx.length > 0 && (
+          <button
+            className="button is-small"
+            onClick={handleClearSfx}
+            disabled={isProcessing}
+          >
+            Clear
+          </button>
+        )}
+      </div>
     </div>
   );
 }
