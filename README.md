@@ -13,12 +13,13 @@ https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/
 ## Current and Planned Features
 
 - [x] Homepage
-- [ ] View saved characters
+- [x] View saved characters
   - [ ] Edit saved characters
+  - [x] Play saved characters
 - [ ] Delete saved characters
 - [ ] Create new characters
   - [x] Input character details
-  - [ ] Select character major/minor
+  - [x] Select character major/minor
   - [x] Add character state sound effects
   - [x] Add character state animations
   - [ ] Select character actions
@@ -26,8 +27,8 @@ https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/
   - [ ] Add character action animations
   - [x] Send images and audio to server for processing
   - [x] Export to JSON file
-  - [ ] Save to server
-- [ ] Animation editor
+  - [x] Save to server
+- [x] Animation editor
 - [ ] Pose webcam overlay
 
 ## Current Maintainers

@@ -36,15 +36,15 @@ export async function processImage(imageB64: string) {
   return data.base64EncodedImage;
 }
 
-export async function saveCharacter(character: Character): Promise<Character> {
+export async function sendCharacterToServer(
+  character: Character
+): Promise<Character> {
   const response = await fetch(API_BASE_URL + "/characters/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      character,
-    }),
+    body: JSON.stringify(character),
   });
 
   const data = await response.json();

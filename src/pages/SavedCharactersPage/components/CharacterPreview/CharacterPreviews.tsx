@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
 import { Character } from "../../../../interfaces";
+import { sendCharacterToServer } from "../../../../services/api";
 
 type CharacterPreviewPropTypes = {
   character: Character;
@@ -14,8 +16,42 @@ export function CharacterPreview({
   character,
   animationName = "walk",
 }: CharacterPreviewPropTypes) {
+  const [characterId, setCharacterId] = useState<string | null>(null);
+
+  /** Attempt to send character to Wrathserver. */
+  const handleUseCharacter = async () => {
+    try {
+      const storedCharacter = await sendCharacterToServer(character);
+      if (storedCharacter.id) {
+        setCharacterId(storedCharacter.id);
+      } else {
+        throw Error();
+      }
+    } catch (err) {
+      alert("Something went wrong! Please try again later...");
+    }
+  };
+
   return (
     <div className="character-preview has-text-centered box">
+      {characterId && (
+        <div className="modal is-active">
+          <div className="modal-background"></div>
+          <div className="modal-content">
+            <div className="box">
+              {character.name} is ready to fight! Simply enter in code{" "}
+              <code>{characterId}</code> into Wrathskeller within the next 5
+              minutes!
+            </div>
+          </div>
+          <button
+            onClick={() => setCharacterId(null)}
+            className="modal-close is-large"
+            aria-label="close"
+          ></button>
+        </div>
+      )}
+
       <h6 className="title is-size-4 mb-2 character-name">{character.name}</h6>
       <figure className="image is-square m-auto my-2 character-animations">
         <AnimatedSprite
@@ -43,7 +79,7 @@ export function CharacterPreview({
         <div className="buttons">
           <button
             className="button is-flex-grow-1 is-small is-primary is-outlined"
-            disabled
+            onClick={handleUseCharacter}
           >
             Use
           </button>
