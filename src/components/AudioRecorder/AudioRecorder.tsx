@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { fileToBase64Url } from "../../utils/download";
 
 type AudioRecorderPropTypes = {
+  disabled?: boolean;
   handleRecordingDone: (b64Url: string) => void;
 };
 
@@ -65,16 +66,16 @@ export function AudioRecorder(props: AudioRecorderPropTypes) {
   };
 
   return (
-    <div className="audio-recorder">
-      <div className="buttons">
-        <button
-          onClick={handleToggleRecord}
-          className={clsx("button is-small", isRecording && "is-danger")}
-        >
-          <span className="icon">🎙️</span>
-          {isRecording ? <span>Stop Recording</span> : <span>Record</span>}
-        </button>
-      </div>
-    </div>
+    <button
+      onClick={handleToggleRecord}
+      className={clsx(
+        "audio-recorder button is-small",
+        isRecording && "is-danger"
+      )}
+      disabled={props.disabled}
+    >
+      <span className="icon">🎙️</span>
+      {isRecording ? <span>Stop Recording</span> : <span>Record</span>}
+    </button>
   );
 }
