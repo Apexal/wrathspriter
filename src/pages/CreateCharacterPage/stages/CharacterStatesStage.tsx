@@ -15,6 +15,7 @@ import {
   PoseCamera,
   PoseCameraRef,
 } from "../../../components/PoseCamera/PoseCamera";
+import { PoseAngle } from "../../../interfaces/pose";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -35,9 +36,9 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
-  const handleProcessImage = (b64: string) => {
+  const handleProcessImage = (b64: string, pose?: PoseAngle[]) => {
     setIsProcessing(true);
-    return processImage(b64)
+    return processImage(b64, pose)
       .then((processB64) => {
         setCharacter({
           ...character,

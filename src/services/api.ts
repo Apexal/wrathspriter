@@ -1,4 +1,5 @@
 import { Character } from "../interfaces";
+import { PoseAngle } from "../interfaces/pose";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -21,13 +22,14 @@ export async function processAudio(
   return data.base64EncodedAudio;
 }
 
-export async function processImage(imageB64: string) {
+export async function processImage(imageB64: string, pose?: PoseAngle[]) {
   const response = await fetch(API_BASE_URL + "/image", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      pose,
       base64EncodedImage: imageB64,
     }),
   });
