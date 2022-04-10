@@ -11,7 +11,8 @@ export function PoseTestingPage() {
   const handleCapture = () => {
     if (poseCameraRef.current?.captureScreenshot) {
       const screenshot = poseCameraRef.current?.captureScreenshot();
-      console.log(screenshot);
+      // console.log(screenshot);
+      console.log(poseCameraRef.current.actualPose);
     }
   };
 

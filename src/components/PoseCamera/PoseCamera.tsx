@@ -1,6 +1,10 @@
 import { Camera } from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { ResultsListener, POSE_CONNECTIONS } from "@mediapipe/pose";
+import {
+  ResultsListener,
+  POSE_CONNECTIONS,
+  NormalizedLandmarkList,
+} from "@mediapipe/pose";
 import {
   useRef,
   useState,
@@ -14,6 +18,7 @@ import { PoseAngle } from "../../interfaces/pose";
 import { checkIsInPose, poseManager } from "../../utils/posing";
 
 export type PoseCameraRef = {
+  actualPose: NormalizedLandmarkList | null;
   captureScreenshot: () => string | null;
 };
 
@@ -30,6 +35,7 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const screenshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
+    const actualPoseRef = useRef<NormalizedLandmarkList | null>([]);
     const [isInPose, setIsInPose] = useState<boolean>(false);
 
     /** Capture a FULL screenshot of the video and return it as a data URL. */
@@ -58,6 +64,7 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
     // Expose the captureScreenshot method to parents via ref
     useImperativeHandle(ref, () => ({
       captureScreenshot,
+      actualPose: actualPoseRef.current,
     }));
 
     /** Callback that draws the silhouette of the user in the camera onto the canvas, with optional pose skeleton. */
@@ -112,6 +119,8 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
           }
 
           canvasCtx.restore();
+
+          actualPoseRef.current = results.poseLandmarks;
 
           if (pose) {
             if (checkIsInPose(results.poseLandmarks, pose)) {
