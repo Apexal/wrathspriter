@@ -47,6 +47,16 @@ export function checkIsPoseAngleWithinRange(
   return angle >= poseAngle.angleMin && angle <= poseAngle.angleMax;
 }
 
+/** Checks whether every pose landmark is visible, which would mean the person is fully in frame. */
+export function checkIsFullyInFrame(
+  landmarks: LandmarkList,
+  visibilityCutoff: number = 0.4
+): boolean {
+  return !landmarks.some(
+    (l) => l.visibility && l.visibility < visibilityCutoff
+  );
+}
+
 /** Given a list of pose landmarks and pose angles, returns true if every desired angle is matched. */
 export function checkIsInPose(
   landmarks: LandmarkList,
