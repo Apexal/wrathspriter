@@ -8,11 +8,6 @@ export function useCountdown(
   const [secondsLeft, setSecondsLeft] = useState<number>(seconds);
   const intervalRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    setSecondsLeft(seconds);
-    setIsCountingDown(false);
-  }, [seconds]);
-
   const tick = useCallback(() => {
     setSecondsLeft(secondsLeft - 1);
 
@@ -40,11 +35,15 @@ export function useCountdown(
         clearInterval(interval);
       }
     };
-  }, [isCountingDown, seconds, tick]);
+  }, [isCountingDown, tick]);
 
   const startCountdown = () => {
-    setSecondsLeft(seconds);
-    setIsCountingDown(true);
+    if (!isCountingDown) {
+      setSecondsLeft(seconds);
+      setIsCountingDown(true);
+    } else {
+      console.warn("Attempted to start already running countdown");
+    }
   };
 
   const endCountdown = () => {
