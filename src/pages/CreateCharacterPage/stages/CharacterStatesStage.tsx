@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
@@ -16,6 +16,8 @@ import {
   PoseCameraRef,
 } from "../../../components/PoseCamera/PoseCamera";
 import { NormalizedLandmarkList } from "@mediapipe/pose";
+import { useCountdown } from "../../../utils/hooks";
+import { checkIsFullyInFrame } from "../../../utils/posing";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -79,7 +81,6 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
 
         handleProcessImage(b64);
-        setIsPoseCameraModalOpen(false);
       });
     }
   };
@@ -119,20 +120,36 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
   function PoseCameraModal({ isOpen }: { isOpen: boolean }) {
     const poseCameraRef = useRef<PoseCameraRef | null>(null);
+    const [isFullyInFrame, setIsFullyInFrame] = useState<boolean>(false);
+    const [isWaitingToScreenshot, setIsWaitingToScreenshot] =
+      useState<boolean>(false);
 
-    const handleInPoseChange = (isInPose: boolean) => {
-      if (!isOpen) return;
+    const takeScreenshot = () => {
+      if (!poseCameraRef.current?.actualPose) return;
 
-      if (isInPose) {
-        const b64Url = poseCameraRef.current?.captureScreenshot();
-        if (!b64Url) return;
-
-        const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
-
-        setIsPoseCameraModalOpen(false);
-        handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
+      if (!checkIsFullyInFrame(poseCameraRef.current.actualPose)) {
+        window.alert("Your whole body was not in the frame!");
+        return;
       }
+
+      const b64Url = poseCameraRef.current?.captureScreenshot();
+      if (!b64Url) return;
+
+      const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
+
+      handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
     };
+
+    const [isCountingDown, secondsLeft, startCountdown, endCountdown] =
+      useCountdown(5, takeScreenshot);
+
+    useEffect(() => {
+      if (isWaitingToScreenshot && isFullyInFrame) {
+        startCountdown();
+      } else if (isWaitingToScreenshot && !isFullyInFrame) {
+        endCountdown();
+      }
+    }, [endCountdown, isFullyInFrame, isWaitingToScreenshot, startCountdown]);
 
     return (
       <div className={clsx("modal", isOpen && "is-active")}>
@@ -142,12 +159,44 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
             <p className="modal-card-title">Time to Pose!</p>
           </header>
           <section className="modal-card-body">
-            <PoseCamera
-              ref={poseCameraRef}
-              isSkeletonDrawn={true}
-              pose={schoolPrograms[0].actionTemplates[0].animation[0].pose}
-              handleInPoseChange={handleInPoseChange}
-            />
+            <div className="columns is-vcentered">
+              <div className="column is-narrow">
+                <PoseCamera
+                  ref={poseCameraRef}
+                  isSkeletonDrawn={true}
+                  handleFullyInFrameChange={setIsFullyInFrame}
+                />
+              </div>
+              <div className="column has-text-centered">
+                {isCountingDown ? (
+                  <div>
+                    <span className="is-size-1">{secondsLeft}</span>
+                    <progress
+                      max={5}
+                      value={secondsLeft}
+                      className="progress is-small is-primary"
+                    />
+                  </div>
+                ) : isWaitingToScreenshot ? (
+                  <div>
+                    <p className="is-size-4">Get fully into the frame!</p>
+                    <progress className="progress is-primary" />
+                  </div>
+                ) : (
+                  <div>
+                    <p className="is-size-4 mb-5">
+                      Click to start countdown, then quick get into position!
+                    </p>
+                    <button
+                      className="button is-primary is-large"
+                      onClick={() => setIsWaitingToScreenshot(true)}
+                    >
+                      Start
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </section>
           <footer className="modal-card-foot">
             <button
