@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { CountdownButton } from "../../components/CountdownButton/CountdownButton";
 import {
   PoseCamera,
   PoseCameraRef,
@@ -7,12 +8,15 @@ import { schoolPrograms } from "../../constants";
 
 export function PoseTestingPage() {
   const poseCameraRef = useRef<PoseCameraRef | null>(null);
+  const [screenshots, setScreenshots] = useState<string[]>([]);
 
   const handleCapture = () => {
     if (poseCameraRef.current?.captureScreenshot) {
       const screenshot = poseCameraRef.current?.captureScreenshot();
-      // console.log(screenshot);
-      console.log(poseCameraRef.current.actualPose);
+      console.log(screenshot);
+      if (screenshot) {
+        setScreenshots([...screenshots, screenshot]);
+      }
     }
   };
 
@@ -24,9 +28,15 @@ export function PoseTestingPage() {
           pose={schoolPrograms[0].actionTemplates[0].animation[0].pose}
           isSkeletonDrawn={true}
         />
-        <button className="button" onClick={handleCapture}>
+        <CountdownButton seconds={2} onExecute={handleCapture}>
           Capture
-        </button>
+        </CountdownButton>
+
+        <div>
+          {screenshots.map((screenshot, i) => (
+            <img src={screenshot} key={i} />
+          ))}
+        </div>
       </div>
     </div>
   );

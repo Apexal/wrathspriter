@@ -8,7 +8,7 @@ type CountdownButtonPropTypes = {
 
 export function CountdownButton(props: CountdownButtonPropTypes) {
   const [isCountingDown, secondsLeft, startCountdown, endCountdown] =
-    useCountdown(props.seconds, () => window.alert("DONE"));
+    useCountdown(props.seconds, props.onExecute);
 
   const handleClick = () => {
     if (isCountingDown) {
