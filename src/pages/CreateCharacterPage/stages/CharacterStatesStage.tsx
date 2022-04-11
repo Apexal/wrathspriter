@@ -15,7 +15,7 @@ import {
   PoseCamera,
   PoseCameraRef,
 } from "../../../components/PoseCamera/PoseCamera";
-import { PoseAngle } from "../../../interfaces/pose";
+import { NormalizedLandmarkList } from "@mediapipe/pose";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
@@ -36,9 +36,12 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
-  const handleProcessImage = (b64: string, pose?: PoseAngle[]) => {
+  const handleProcessImage = (
+    b64: string,
+    poseLandmarks?: NormalizedLandmarkList
+  ) => {
     setIsProcessing(true);
-    return processImage(b64, pose)
+    return processImage(b64, poseLandmarks)
       .then((processB64) => {
         setCharacter({
           ...character,
@@ -127,7 +130,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
 
         setIsPoseCameraModalOpen(false);
-        handleProcessImage(b64);
+        handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
       }
     };
 
