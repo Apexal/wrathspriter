@@ -21,6 +21,8 @@ import {
   poseManager,
 } from "../../utils/posing";
 
+import "./PoseCamera.scss";
+
 export type PoseCameraRef = {
   actualPose: NormalizedLandmarkList | null;
   captureScreenshot: () => string | null;
@@ -139,9 +141,6 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
                 setIsInPose(false);
               }
             } else {
-              canvasCtx.font = "30px sans-serif";
-              canvasCtx.fillText("WHERE'S YOUR BODY??", 10, 100);
-
               setIsFullyInFrame(false);
               setIsInPose(false);
             }
@@ -194,10 +193,20 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
     }
 
     return (
-      <>
+      <div className="pose-camera-wrapper">
         <video ref={videoRef} className="is-hidden" />
         <canvas style={style} ref={canvasRef} width="400px" height="400px" />
-      </>
+        <div className="tags">
+          {!isFullyInFrame && (
+            <span className="tag is-large is-danger out-of-frame">
+              🧍 NOT IN FRAME
+            </span>
+          )}
+          {isInPose && (
+            <span className="tag is-large is-success in-pose">🧍 IN POSE</span>
+          )}
+        </div>
+      </div>
     );
   }
 );
