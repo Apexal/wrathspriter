@@ -15,7 +15,11 @@ import {
   useImperativeHandle,
 } from "react";
 import { PoseAngle } from "../../interfaces/pose";
-import { checkIsInPose, poseManager } from "../../utils/posing";
+import {
+  checkIsFullyInFrame,
+  checkIsInPose,
+  poseManager,
+} from "../../utils/posing";
 
 export type PoseCameraRef = {
   actualPose: NormalizedLandmarkList | null;
@@ -37,6 +41,7 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
 
     const actualPoseRef = useRef<NormalizedLandmarkList | null>([]);
     const [isInPose, setIsInPose] = useState<boolean>(false);
+    const [isFullyInFrame, setIsFullyInFrame] = useState<boolean>(false);
 
     /** Capture a FULL screenshot of the video and return it as a data URL. */
     const captureScreenshot = useCallback(() => {
@@ -123,11 +128,21 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
           actualPoseRef.current = results.poseLandmarks;
 
           if (pose) {
-            if (checkIsInPose(results.poseLandmarks, pose)) {
-              setIsInPose(true);
-              canvasCtx.font = "30px sans-serif";
-              canvasCtx.fillText("IN POSE", 10, 60);
+            if (checkIsFullyInFrame(results.poseLandmarks)) {
+              setIsFullyInFrame(true);
+
+              if (checkIsInPose(results.poseLandmarks, pose)) {
+                setIsInPose(true);
+                canvasCtx.font = "30px sans-serif";
+                canvasCtx.fillText("IN POSE", 10, 60);
+              } else {
+                setIsInPose(false);
+              }
             } else {
+              canvasCtx.font = "30px sans-serif";
+              canvasCtx.fillText("WHERE'S YOUR BODY??", 10, 100);
+
+              setIsFullyInFrame(false);
               setIsInPose(false);
             }
           } else {
