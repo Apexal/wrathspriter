@@ -31,11 +31,15 @@ export type PoseCameraRef = {
 type PoseCameraPropTypes = {
   isSkeletonDrawn: boolean;
   pose?: PoseAngle[];
+  handleFullyInFrameChange?: (isFullyInFrame: boolean) => void;
   handleInPoseChange?: (isInPose: boolean) => void;
 };
 
 export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
-  ({ pose, isSkeletonDrawn, handleInPoseChange }, ref) => {
+  (
+    { pose, isSkeletonDrawn, handleInPoseChange, handleFullyInFrameChange },
+    ref
+  ) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const cameraRef = useRef<Camera | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -129,22 +133,18 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
 
           actualPoseRef.current = results.poseLandmarks;
 
-          if (pose) {
-            if (checkIsFullyInFrame(results.poseLandmarks)) {
-              setIsFullyInFrame(true);
+          if (checkIsFullyInFrame(results.poseLandmarks)) {
+            setIsFullyInFrame(true);
 
-              if (checkIsInPose(results.poseLandmarks, pose)) {
-                setIsInPose(true);
-                canvasCtx.font = "30px sans-serif";
-                canvasCtx.fillText("IN POSE", 10, 60);
-              } else {
-                setIsInPose(false);
-              }
+            if (pose && checkIsInPose(results.poseLandmarks, pose)) {
+              setIsInPose(true);
+              canvasCtx.font = "30px sans-serif";
+              canvasCtx.fillText("IN POSE", 10, 60);
             } else {
-              setIsFullyInFrame(false);
               setIsInPose(false);
             }
           } else {
+            setIsFullyInFrame(false);
             setIsInPose(false);
           }
         } catch (error) {
@@ -159,6 +159,12 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
         handleInPoseChange(isInPose);
       }
     }, [handleInPoseChange, isInPose]);
+
+    useEffect(() => {
+      if (handleFullyInFrameChange) {
+        handleFullyInFrameChange(isFullyInFrame);
+      }
+    }, [handleFullyInFrameChange, isFullyInFrame]);
 
     /** Update the results handler anytime it changes. */
     useEffect(() => {
@@ -189,7 +195,7 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
 
     const style: CSSProperties = {};
     if (isInPose) {
-      style.border = "1px solid green";
+      // style.border = "1px solid green";
     }
 
     return (
