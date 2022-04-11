@@ -148,8 +148,16 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         startCountdown();
       } else if (isWaitingToScreenshot && !isFullyInFrame) {
         endCountdown();
+      } else if (isCountingDown && !isFullyInFrame) {
+        endCountdown();
       }
-    }, [endCountdown, isFullyInFrame, isWaitingToScreenshot, startCountdown]);
+    }, [
+      endCountdown,
+      isCountingDown,
+      isFullyInFrame,
+      isWaitingToScreenshot,
+      startCountdown,
+    ]);
 
     return (
       <div className={clsx("modal", isOpen && "is-active")}>
