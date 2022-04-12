@@ -6,22 +6,17 @@ import testCharacter from "../../constants/character.json";
 import { Character } from "../../interfaces";
 import { GetAllCharacters } from "../../utils/db";
 
-import { useState } from "react"
+import { useEffect, useState } from "react";
 
 /**
  * Page that lists all saved characters from the user's browser.
  */
 export function SavedCharactersPage() {
-
   const [savedCharacters, setSavedCharacters] = useState<Character[]>();
-  const [run, setRun] = useState(0);
 
-  async function GetSavedCharacters() {
-    setRun(1);
-    setSavedCharacters(await GetAllCharacters());
-  }
-
-  if (run == 0) GetSavedCharacters();
+  useEffect(() => {
+    GetAllCharacters().then(setSavedCharacters);
+  }, []);
 
   return (
     <section id="saved-characters-page" className="section page">
@@ -38,20 +33,20 @@ export function SavedCharactersPage() {
 
         <div className="columns is-multiline">
           {savedCharacters?.map((character) => (
-            <div className = "column is-3">
-              <CharacterPreview character = { character as Character } />
+            <div className="column is-3">
+              <CharacterPreview character={character as Character} />
             </div>
           ))}
-           <div className="column is-3">
-            <CharacterPreview character={testCharacter as Character} />
-          </div>
           <div className="column is-3">
             <CharacterPreview character={testCharacter as Character} />
           </div>
           <div className="column is-3">
             <CharacterPreview character={testCharacter as Character} />
           </div>
-      </div>
+          <div className="column is-3">
+            <CharacterPreview character={testCharacter as Character} />
+          </div>
+        </div>
 
         <hr />
         <Link to="/" className="button">
