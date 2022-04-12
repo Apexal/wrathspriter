@@ -1,5 +1,20 @@
-import { LandmarkList } from "@mediapipe/pose";
+import { LandmarkList, Pose } from "@mediapipe/pose";
 import { PoseAngle } from "../interfaces/pose";
+
+export const poseManager = new Pose({
+  locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+  },
+});
+
+poseManager.setOptions({
+  modelComplexity: 1,
+  smoothLandmarks: true,
+  enableSegmentation: true,
+  smoothSegmentation: true,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5,
+});
 
 /** Given a landmark list and a pose angle, calculates the absolute value of the angle. */
 export function calculatePoseAngle(
@@ -30,6 +45,16 @@ export function checkIsPoseAngleWithinRange(
 ): boolean {
   const angle = calculatePoseAngle(landmarks, poseAngle);
   return angle >= poseAngle.angleMin && angle <= poseAngle.angleMax;
+}
+
+/** Checks whether every pose landmark is visible, which would mean the person is fully in frame. */
+export function checkIsFullyInFrame(
+  landmarks: LandmarkList,
+  visibilityCutoff: number = 0.4
+): boolean {
+  return !landmarks.some(
+    (l) => l.visibility && l.visibility < visibilityCutoff
+  );
 }
 
 /** Given a list of pose landmarks and pose angles, returns true if every desired angle is matched. */

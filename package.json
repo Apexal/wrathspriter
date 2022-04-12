@@ -1,6 +1,6 @@
 {
   "name": "wrathspriter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1640029074",

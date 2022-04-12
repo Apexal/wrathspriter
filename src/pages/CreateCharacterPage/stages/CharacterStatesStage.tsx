@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
@@ -6,17 +6,26 @@ import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprit
 import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
-import { defaultFrame } from "../../../constants";
+import { defaultFrame, schoolPrograms } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
 import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
+import {
+  PoseCamera,
+  PoseCameraRef,
+} from "../../../components/PoseCamera/PoseCamera";
+import { NormalizedLandmarkList } from "@mediapipe/pose";
+import { useCountdown } from "../../../utils/hooks";
+import { checkIsFullyInFrame } from "../../../utils/posing";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
   const { character, setCharacter } = useContext(CharacterContext);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isPoseCameraModalOpen, setIsPoseCameraModalOpen] =
+    useState<boolean>(false);
 
   /** Clears the state's animation frames. */
   const handleClearAnimation = () => {
@@ -29,6 +38,38 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
+  const handleProcessImage = (
+    b64: string,
+    poseLandmarks?: NormalizedLandmarkList
+  ) => {
+    setIsProcessing(true);
+    return processImage(b64, poseLandmarks)
+      .then((processB64) => {
+        setCharacter({
+          ...character,
+          stateAnimations: {
+            ...character.stateAnimations,
+            [state.id]: [
+              ...character.stateAnimations[state.id],
+              {
+                ...defaultFrame,
+                base64EncodedImage: processB64,
+              },
+            ],
+          },
+        });
+      })
+      .catch((err) => {
+        alert(
+          "There was an error uploading and/or processing the image. Please try again later!"
+        );
+        console.error(err);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
   /** Grabs the image file, sends it to the server to process, and then adds it in a new frame to the state animation. */
   const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (
     ev
@@ -38,32 +79,8 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
       fileToBase64Url(file).then((b64Url) => {
         const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
-        setIsProcessing(true);
-        processImage(b64)
-          .then((processB64) => {
-            setCharacter({
-              ...character,
-              stateAnimations: {
-                ...character.stateAnimations,
-                [state.id]: [
-                  ...character.stateAnimations[state.id],
-                  {
-                    ...defaultFrame,
-                    base64EncodedImage: processB64,
-                  },
-                ],
-              },
-            });
-          })
-          .catch((err) => {
-            alert(
-              "There was an error uploading and/or processing the image. Please try again later!"
-            );
-            console.error(err);
-          })
-          .finally(() => {
-            setIsProcessing(false);
-          });
+
+        handleProcessImage(b64);
       });
     }
   };
@@ -101,10 +118,112 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     setCharacter(newCharacter);
   };
 
+  function PoseCameraModal({ isOpen }: { isOpen: boolean }) {
+    const poseCameraRef = useRef<PoseCameraRef | null>(null);
+    const [isFullyInFrame, setIsFullyInFrame] = useState<boolean>(false);
+    const [isWaitingToScreenshot, setIsWaitingToScreenshot] =
+      useState<boolean>(false);
+
+    const takeScreenshot = () => {
+      if (!poseCameraRef.current?.actualPose) return;
+
+      if (!checkIsFullyInFrame(poseCameraRef.current.actualPose)) {
+        window.alert("Your whole body was not in the frame!");
+        return;
+      }
+
+      const b64Url = poseCameraRef.current?.captureScreenshot();
+      if (!b64Url) return;
+
+      const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
+
+      handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
+    };
+
+    const [isCountingDown, secondsLeft, startCountdown, endCountdown] =
+      useCountdown(5, takeScreenshot);
+
+    useEffect(() => {
+      if (isWaitingToScreenshot && isFullyInFrame) {
+        startCountdown();
+      } else if (isWaitingToScreenshot && !isFullyInFrame) {
+        endCountdown();
+      } else if (isCountingDown && !isFullyInFrame) {
+        endCountdown();
+      }
+    }, [
+      endCountdown,
+      isCountingDown,
+      isFullyInFrame,
+      isWaitingToScreenshot,
+      startCountdown,
+    ]);
+
+    return (
+      <div className={clsx("modal", isOpen && "is-active")}>
+        <div className="modal-background"></div>
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <p className="modal-card-title">Time to Pose!</p>
+          </header>
+          <section className="modal-card-body">
+            <div className="columns is-vcentered">
+              <div className="column is-narrow">
+                <PoseCamera
+                  ref={poseCameraRef}
+                  isSkeletonDrawn={true}
+                  handleFullyInFrameChange={setIsFullyInFrame}
+                />
+              </div>
+              <div className="column has-text-centered">
+                {isCountingDown ? (
+                  <div>
+                    <span className="is-size-1">{secondsLeft}</span>
+                    <progress
+                      max={5}
+                      value={secondsLeft}
+                      className="progress is-small is-primary"
+                    />
+                  </div>
+                ) : isWaitingToScreenshot ? (
+                  <div>
+                    <p className="is-size-4">Get fully into the frame!</p>
+                    <progress className="progress is-primary" />
+                  </div>
+                ) : (
+                  <div>
+                    <p className="is-size-4 mb-5">
+                      Click to start countdown, then quick get into position!
+                    </p>
+                    <button
+                      className="button is-primary is-large"
+                      onClick={() => setIsWaitingToScreenshot(true)}
+                    >
+                      Start
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+          <footer className="modal-card-foot">
+            <button
+              className="button"
+              onClick={() => setIsPoseCameraModalOpen(false)}
+            >
+              Done
+            </button>
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
   const frames = character.stateAnimations[state.id];
 
   return (
     <div className="box animation-editor">
+      <PoseCameraModal isOpen={isPoseCameraModalOpen} />
       <h3 className="subtitle is-capitalized">Animation 🎞️</h3>
       {frames.length > 0 && (
         <div className="is-flex">
@@ -135,22 +254,46 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
         </div>
       )}
 
-      {isProcessing ? (
-        <span>Processing image...</span>
-      ) : (
-        <div className="buttons">
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          {frames.length > 0 && (
-            <button
-              className="button is-small"
-              onClick={handleClearAnimation}
-              disabled={isProcessing}
-            >
-              Clear
-            </button>
-          )}
-        </div>
+      {isProcessing && (
+        <progress className="progress is-small is-dark" max={100} />
       )}
+
+      <div className="buttons">
+        <div className="file is-small mb-2 mr-2">
+          <label className="file-label">
+            <input
+              type="file"
+              accept="image/*"
+              className="file-input"
+              // multiple={true}
+              disabled={isProcessing}
+              onChange={handleImageUpload}
+            />
+            <span className="file-cta">
+              <span className="file-icon">📁</span>
+              <span className="file-label">Upload Images</span>
+            </span>
+          </label>
+        </div>
+
+        <button
+          className="button is-small"
+          onClick={() => setIsPoseCameraModalOpen(true)}
+        >
+          <span className="icon">📷</span>
+          <span>Take Picture</span>
+        </button>
+
+        {frames.length > 0 && (
+          <button
+            className="button is-small"
+            onClick={handleClearAnimation}
+            disabled={isProcessing}
+          >
+            Clear
+          </button>
+        )}
+      </div>
     </div>
   );
 }

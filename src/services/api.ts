@@ -1,3 +1,4 @@
+import { NormalizedLandmarkList } from "@mediapipe/pose";
 import { Character } from "../interfaces";
 
 const API_BASE_URL =
@@ -21,13 +22,17 @@ export async function processAudio(
   return data.base64EncodedAudio;
 }
 
-export async function processImage(imageB64: string) {
+export async function processImage(
+  imageB64: string,
+  normalizedPoseLandmarks?: NormalizedLandmarkList
+) {
   const response = await fetch(API_BASE_URL + "/image", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      normalizedPoseLandmarks,
       base64EncodedImage: imageB64,
     }),
   });
