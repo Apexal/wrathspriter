@@ -76,7 +76,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "cs",
     backstory:
-      "Something something something something something something something something ",
+      "CS uses BIG DATA and AI and MACHINE LEARNING and PACMAN to defeat their opponents.",
     name: "Computer Science",
     coverImageURL:
       "https://science.rpi.edu/sites/default/files/HackRPI-2019-b.jpg",
@@ -107,7 +107,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "math",
     backstory:
-      "Something something something something something something something something ",
+      "Math uses BIG NUMBERS and INFINITY and WOLFRAM ALPHA to overcome their opponents.",
     name: "Mathematics",
     actionTemplates: [],
     coverImageURL:
@@ -116,7 +116,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "itws",
     backstory:
-      "Something something something something something something something something ",
+      "ITWS uses BIG DATA and TERRIBLE TEAM MEMBERS and BASIC PROGRAMMING to conquer their opponents.",
     name: "Information Technology and Web Science",
     actionTemplates: [],
     coverImageURL: "https://science.rpi.edu/sites/default/files/banner_1.jpg",
@@ -124,7 +124,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "gsas",
     backstory:
-      "Something something something something something something something something ",
+      "Letting game developers play a competitive video game??? Who's idea was this?",
     name: "Games and Simulations Arts and Sciences",
     actionTemplates: [],
     coverImageURL:
@@ -133,7 +133,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "phys",
     backstory:
-      "Something something something something something something something something ",
+      "Physics uses QUANTUM PHYSICS and the THEORY OF EVERYTHING to explain why they are smarter than their opponents. I mean, uh, defeat their opponents.",
     name: "Physics",
     actionTemplates: [],
     coverImageURL: "https://science.rpi.edu/sites/default/files/banner.jpg",
