@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
 import { Character } from "../../../../interfaces";
 import { sendCharacterToServer } from "../../../../services/api";
@@ -83,9 +84,13 @@ export function CharacterPreview({
           >
             Use
           </button>
-          <button className="button is-small is-warning is-outlined" disabled>
+          <Link
+            to="/create"
+            state={{}}
+            className="button is-small is-warning is-outlined"
+          >
             Edit
-          </button>
+          </Link>
           <button className="button is-small is-danger is-outlined" disabled>
             Remove
           </button>
