@@ -5,6 +5,7 @@ import { Character } from "../../../../interfaces";
 import { sendCharacterToServer } from "../../../../services/api";
 
 type CharacterPreviewPropTypes = {
+  dbId?: number;
   character: Character;
   animationName?: keyof Character["stateAnimations"];
 };
@@ -14,6 +15,7 @@ type CharacterPreviewPropTypes = {
  * Should be used to give a quick preview of a character.
  **/
 export function CharacterPreview({
+  dbId,
   character,
   animationName = "walk",
 }: CharacterPreviewPropTypes) {
@@ -86,7 +88,7 @@ export function CharacterPreview({
           </button>
           <Link
             to="/create"
-            state={{}}
+            state={{ dbId }}
             className="button is-small is-warning is-outlined"
           >
             Edit

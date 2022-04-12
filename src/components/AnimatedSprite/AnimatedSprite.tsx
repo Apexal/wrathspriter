@@ -19,7 +19,7 @@ export function AnimatedSprite(props: AnimatedSpritePropTypes) {
     "data:image/png;base64," + props.animation[frameIndex]?.base64EncodedImage;
 
   const draw = useCallback(() => {
-    if (props.isPlaying) {
+    if (props.isPlaying && props.animation.length > 0) {
       timeoutRef.current = window.setTimeout(() => {
         setFrameIndex((f) => (f + 1) % props.animation.length);
       }, props.animation[frameIndex].durationInS * 1000);

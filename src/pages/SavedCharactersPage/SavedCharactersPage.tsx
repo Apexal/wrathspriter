@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
  * Page that lists all saved characters from the user's browser.
  */
 export function SavedCharactersPage() {
-  const [savedCharacters, setSavedCharacters] = useState<Character[]>([]);
+  const [savedCharacters, setSavedCharacters] = useState<{
+    [id: number]: Character;
+  }>({});
 
   useEffect(() => {
     GetAllCharacters().then(setSavedCharacters);
@@ -30,11 +32,11 @@ export function SavedCharactersPage() {
       <div className="container">
         <h1 className="title">Saved Characters</h1>
 
-        {savedCharacters.length > 0 ? (
+        {Object.keys(savedCharacters).length > 0 ? (
           <div className="columns is-multiline">
-            {savedCharacters.map((character) => (
-              <div className="column is-3">
-                <CharacterPreview character={character as Character} />
+            {Object.entries(savedCharacters).map(([id, character]) => (
+              <div key={id} className="column is-3">
+                <CharacterPreview dbId={+id} character={character} />
               </div>
             ))}
           </div>

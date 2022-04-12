@@ -2,6 +2,7 @@ import Dexie, { Table } from "dexie";
 import { Character } from "../interfaces/character";
 
 export interface DBProps {
+  id?: number;
   character: Character;
 }
 
@@ -32,7 +33,7 @@ export function AddCharacterForm(props: DBProps) {
 }
 
 export async function GetAllCharacters() {
-  let characters: Character[] = [];
+  let characters: { [id: number]: Character } = {};
 
   // Gets all entries from the database and then makes sure it is a valid character
   // Error checking is done here instead of on-site
@@ -40,7 +41,8 @@ export async function GetAllCharacters() {
     let dbprops = await db.characters.toArray();
     for (let i = 0; i < dbprops.length; i++) {
       if ((dbprops[i].character as Character) === undefined) continue;
-      characters.push(dbprops[i].character);
+      if (!dbprops[i].id) continue;
+      characters[dbprops[i].id!] = dbprops[i].character;
     }
   }
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { emptyCharacter } from "../../constants";
@@ -6,6 +6,7 @@ import { Character } from "../../interfaces";
 import { CharacterContext, CharacterContextType } from "../../state";
 import { downloadCharacter } from "../../utils/download";
 import HelpButton from "../../components/HelpButton";
+import { AddCharacterForm, db } from "../../utils/db";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -25,8 +26,26 @@ export function CreateCharacterPage() {
     [character, setCharacter]
   );
 
+  useEffect(() => {
+    if (!location.state) return;
+    const dbId = (location.state as { dbId?: number }).dbId;
+
+    if (location.state && dbId) {
+      db.characters.get(dbId).then((characterWrapper) => {
+        if (characterWrapper?.character) {
+          setCharacter(characterWrapper.character);
+        }
+      });
+    }
+  }, [location.state]);
+
+  const handleSave = () => {
+    AddCharacterForm({
+      character,
+    });
+  };
+
   return (
-    
     <CharacterContext.Provider value={characterContextValue}>
       <progress
         className="progress is-success"
@@ -34,16 +53,17 @@ export function CreateCharacterPage() {
         max={stages.length}
       />
 
-      <HelpButton heading="Create a Character" className="is-pulled-right content">
+      <HelpButton
+        heading="Create a Character"
+        className="is-pulled-right content"
+      >
         <p>
-          Here's where the fun starts! Use this process to create a character of your own, complete 
-          with animations and sound effects.
+          Here's where the fun starts! Use this process to create a character of
+          your own, complete with animations and sound effects.
         </p>
-        <br/>
-        <p>
-          Here's the breakdown:
-        </p>
-        <br/>
+        <br />
+        <p>Here's the breakdown:</p>
+        <br />
         <ul>
           <li>Choose your character's name and write their backstory</li>
           <li>Select your character's major and minor</li>
@@ -79,6 +99,9 @@ export function CreateCharacterPage() {
               onClick={() => downloadCharacter(character)}
             >
               Download
+            </button>
+            <button className="button is-danger" onClick={handleSave}>
+              Save
             </button>
           </div>
         </div>
