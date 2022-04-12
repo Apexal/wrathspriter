@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
 import HelpButton from "../../components/HelpButton";
 
-import testCharacter from "../../constants/character.json";
 import { Character } from "../../interfaces";
 import { GetAllCharacters } from "../../utils/db";
 
