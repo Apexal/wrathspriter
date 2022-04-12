@@ -10,4 +10,6 @@ export interface SchoolProgram {
   backstory: string;
   /** Actions that this program provides */
   actionTemplates: Action[];
+  /** Image to display on card for selection screen. */
+  coverImageURL?: string;
 }
