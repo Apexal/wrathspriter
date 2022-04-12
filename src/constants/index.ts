@@ -116,7 +116,7 @@ export const schoolPrograms: SchoolProgram[] = [
   {
     id: "itws",
     backstory:
-      "ITWS uses BIG DATA and TERRIBLE TEAM MEMBERS and BASIC PROGRAMMING to conquer their opponents.",
+      "ITWS uses BIG DATA and TERRIBLE TEAM MEMBERS and TERRIBLE JAVASCRIPT to conquer their opponents.",
     name: "Information Technology and Web Science",
     actionTemplates: [],
     coverImageURL: "https://science.rpi.edu/sites/default/files/banner_1.jpg",

@@ -9,3 +9,8 @@ $primary: #8a4d76;
 // ----------------
 
 @import "~bulma/bulma"; // This must be at the very end!
+
+.is-sticky {
+    position: sticky;
+    top: 1.5em;
+}

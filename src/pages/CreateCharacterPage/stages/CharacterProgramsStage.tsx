@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useContext } from "react";
 import { schoolPrograms } from "../../../constants";
 import { CharacterContext } from "../../../state";
@@ -5,59 +6,73 @@ import { CharacterContext } from "../../../state";
 export function CharacterProgramsStage() {
   const { character, setCharacter } = useContext(CharacterContext);
 
+  const majorActions =
+    character.major?.actionTemplates.filter(
+      (act) => act.type === "special" || act.type === "heavy_special"
+    ) ?? [];
+  const minorActions =
+    character.minor?.actionTemplates.filter(
+      (act) => act.type === "light_punch" || act.type === "light_kick"
+    ) ?? [];
+  const totalActions = majorActions.concat(minorActions);
+
   return (
     <section id="character-programs-stage" className="section stage">
       <div className="container">
         <h1 className="title">Select {character.name}'s Major and Minor</h1>
+        <h2 className="subtitle">
+          Your character's major and minor will determine the attacks it can
+          make. Special moves come from your major. Light moves come from your
+          minor.
+        </h2>
 
-        <div className="columns is-multiline">
-          {schoolPrograms.map((program) => (
-            <div key={program.id} className="column is-half">
+        <div className="columns">
+          <div className="column is-half">
+            {schoolPrograms.map((program) => (
               <div
+                key={program.id}
                 id={program.id}
-                className={
-                  (character.major != null && character.major.id === program.id
-                    ? "card card-major-selected "
-                    : "card") +
-                  (character.minor != null && character.minor.id === program.id
-                    ? " card card-minor-selected"
-                    : " card")
-                }
+                className={clsx(
+                  "card",
+                  "mb-5",
+                  character.major?.id === program.id && "card-major-selected",
+                  character.minor?.id === program.id && "card-minor-selected"
+                )}
               >
                 <div className="card-header">
                   <p className="card-header-title">{program.name}</p>
                   <div className="selected-text-container">
-                    {character.major != null &&
-                    character.major.id === program.id ? (
+                    {character.major?.id === program.id && (
                       <p className="card-header-title selected-text major-selected-text tag is-primary">
                         Major
                       </p>
-                    ) : (
-                      ""
                     )}
-                    {character.minor != null &&
-                    character.minor.id === program.id ? (
+                    {character.minor?.id === program.id && (
                       <p className="card-header-title selected-text minor-selected-text tag is-info">
                         Minor
                       </p>
-                    ) : (
-                      ""
                     )}
                   </div>
                 </div>
+
+                <div className="card-image">
+                  <figure className="image">
+                    <img
+                      src={program.coverImageURL ?? ""}
+                      alt="Cover for program"
+                    />
+                  </figure>
+                </div>
                 <div className="card-content">
-                  <div className="columns">
+                  <div className="columns is-vcentered">
                     <div className="column">
-                      <figure className="image is-square">
+                      <figure className="image is-128x128">
                         <img
                           src="https://media0.giphy.com/media/FopJy18z4t5hHlViZn/giphy.gif?cid=ecf05e478diube0770ny2jf9vye3fr4eefefgwvke6vk6ql3&rid=giphy.gif&ct=s"
                           alt="Placeholder"
                         />
                       </figure>
-                    </div>
-                    <div className="column">
-                      <strong>Actions</strong>
-                      <br />
+
                       <div className="select">
                         <select>
                           {program.actionTemplates.map((template, index) => (
@@ -68,13 +83,11 @@ export function CharacterProgramsStage() {
                         </select>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="content">
-                    <strong>Backstory</strong>
-                    <blockquote>
-                      <p>{program.backstory}</p>
-                    </blockquote>
+                    <div className="column">
+                      <em>
+                        <p>"{program.backstory}"</p>
+                      </em>
+                    </div>
                   </div>
                 </div>
                 <div className="card-footer">
@@ -102,8 +115,42 @@ export function CharacterProgramsStage() {
                   </button>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="column is-half">
+            <div className="box is-sticky">
+              <h1 className="is-size-4">Your Selected Programs & Moves</h1>
+              {character.major ? (
+                <div className="content">
+                  <p>
+                    {character.name} will be a{" "}
+                    <strong>{character.major.name}</strong> major
+                    {character.minor ? (
+                      <span>
+                        {" "}
+                        and a <strong>{character.minor.name}</strong> minor
+                      </span>
+                    ) : (
+                      "."
+                    )}
+                  </p>
+                  <p>They will have the following actions:</p>
+                  <ul>
+                    {totalActions.map((actionTemplate) => (
+                      <li>
+                        {actionTemplate.name} ({actionTemplate.type})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p className="has-text-grey">
+                  Select a <strong>major</strong> and (optionally) a{" "}
+                  <strong>minor</strong>!
+                </p>
+              )}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
