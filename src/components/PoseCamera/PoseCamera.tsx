@@ -181,6 +181,7 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
           },
           width: 400,
           height: 400,
+          facingMode: "user",
         });
 
         cameraRef.current = camera;

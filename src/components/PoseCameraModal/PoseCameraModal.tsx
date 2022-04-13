@@ -8,6 +8,7 @@ import { PoseCameraRef, PoseCamera } from "../PoseCamera/PoseCamera";
 type PoseCameraModalPropTypes = {
   isOpen: boolean;
   close: () => void;
+  isProcessing: boolean;
   handleProcessImage: (
     b64: string,
     poseLandmarks?: NormalizedLandmarkList | undefined
@@ -17,6 +18,7 @@ type PoseCameraModalPropTypes = {
 export function PoseCameraModal({
   isOpen,
   close,
+  isProcessing,
   handleProcessImage,
 }: PoseCameraModalPropTypes) {
   const poseCameraRef = useRef<PoseCameraRef | null>(null);
@@ -46,7 +48,9 @@ export function PoseCameraModal({
     useCountdown(5, takeScreenshot);
 
   useEffect(() => {
-    if (isWaitingToScreenshot && isFullyInFrame) {
+    if (isProcessing) {
+      endCountdown();
+    } else if (isWaitingToScreenshot && isFullyInFrame) {
       startCountdown();
     } else if (isWaitingToScreenshot && !isFullyInFrame) {
       endCountdown();
@@ -59,6 +63,7 @@ export function PoseCameraModal({
     isFullyInFrame,
     isWaitingToScreenshot,
     startCountdown,
+    isProcessing,
   ]);
 
   const handleClose = () => {
@@ -66,6 +71,49 @@ export function PoseCameraModal({
     endCountdown();
     close();
   };
+
+  let columnBody: JSX.Element | null = null;
+
+  if (isProcessing) {
+    columnBody = (
+      <div>
+        <p>Processing image!</p>
+        <progress className="progress is-success" />
+      </div>
+    );
+  } else if (isCountingDown) {
+    columnBody = (
+      <div>
+        <span className="is-size-1">{secondsLeft}</span>
+        <progress
+          max={5}
+          value={secondsLeft}
+          className="progress is-small is-primary"
+        />
+      </div>
+    );
+  } else if (isWaitingToScreenshot) {
+    columnBody = (
+      <div>
+        <p className="is-size-4">Get fully into the frame!</p>
+        <progress className="progress is-primary" />
+      </div>
+    );
+  } else {
+    columnBody = (
+      <div>
+        <p className="is-size-4 mb-5">
+          Click to start countdown, then quick get into position!
+        </p>
+        <button
+          className="button is-primary is-large"
+          onClick={() => setIsWaitingToScreenshot(true)}
+        >
+          Start
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={clsx("modal", isOpen && "is-active")}>
@@ -83,35 +131,7 @@ export function PoseCameraModal({
                 handleFullyInFrameChange={setIsFullyInFrame}
               />
             </div>
-            <div className="column has-text-centered">
-              {isCountingDown ? (
-                <div>
-                  <span className="is-size-1">{secondsLeft}</span>
-                  <progress
-                    max={5}
-                    value={secondsLeft}
-                    className="progress is-small is-primary"
-                  />
-                </div>
-              ) : isWaitingToScreenshot ? (
-                <div>
-                  <p className="is-size-4">Get fully into the frame!</p>
-                  <progress className="progress is-primary" />
-                </div>
-              ) : (
-                <div>
-                  <p className="is-size-4 mb-5">
-                    Click to start countdown, then quick get into position!
-                  </p>
-                  <button
-                    className="button is-primary is-large"
-                    onClick={() => setIsWaitingToScreenshot(true)}
-                  >
-                    Start
-                  </button>
-                </div>
-              )}
-            </div>
+            <div className="column has-text-centered">{columnBody}</div>
           </div>
         </section>
         <footer className="modal-card-foot">

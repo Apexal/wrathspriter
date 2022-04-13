@@ -132,6 +132,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
       <PoseCameraModal
         handleProcessImage={handleProcessImage}
         isOpen={isPoseCameraModalOpen}
+        isProcessing={isProcessing}
         close={() => setIsPoseCameraModalOpen(false)}
       />
       <h3 className="subtitle is-capitalized">Animation 🎞️</h3>
