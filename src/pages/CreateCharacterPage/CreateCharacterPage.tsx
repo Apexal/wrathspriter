@@ -4,9 +4,8 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
 import { CharacterContext, CharacterContextType } from "../../state";
-import { downloadCharacter } from "../../utils/download";
 import HelpButton from "../../components/HelpButton";
-import { AddCharacterForm, db } from "../../utils/db";
+import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -17,6 +16,7 @@ export function CreateCharacterPage() {
     location.pathname.replace("/create", "").replace("/", "")
   );
 
+  const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const characterContextValue = useMemo<CharacterContextType>(
     () => ({
@@ -33,16 +33,34 @@ export function CreateCharacterPage() {
     if (location.state && dbId) {
       db.characters.get(dbId).then((characterWrapper) => {
         if (characterWrapper?.character) {
+          setDbId(dbId);
           setCharacter(characterWrapper.character);
         }
       });
     }
   }, [location.state]);
 
-  const handleSave = () => {
-    AddCharacterForm({
-      character,
-    });
+  const save = () => {
+    if (dbId) {
+      UpdateCharacter(dbId, character)
+        .then(() => {
+          console.log(`Updated character ${dbId}`);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      AddCharacterForm({
+        character,
+      })
+        .then((dbId) => {
+          setDbId(+dbId);
+          console.log("Saved new character");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   return (
@@ -78,29 +96,29 @@ export function CreateCharacterPage() {
 
       <section className="section">
         <div className="container">
-          {/* <pre>
-            <code>
-              {routeIndex} | {JSON.stringify(location)}
-            </code>
-          </pre> */}
           <div className="buttons">
-            {routeIndex - 1 >= 0 && (
-              <Link to={stages[routeIndex - 1]} className="button is-warning">
-                Back
-              </Link>
-            )}
+            <Link
+              to={routeIndex - 1 > 0 ? stages[routeIndex - 1] : "/"}
+              className="button"
+            >
+              Back
+            </Link>
             {routeIndex + 1 < stages.length && (
-              <Link to={stages[routeIndex + 1]} className="button is-primary">
+              <Link
+                to={stages[routeIndex + 1]}
+                className="button is-primary"
+                onClick={save}
+              >
                 Next
               </Link>
             )}
-            <button
+            {/* <button
               className="button is-info"
               onClick={() => downloadCharacter(character)}
             >
               Download
-            </button>
-            <button className="button is-danger" onClick={handleSave}>
+            </button> */}
+            <button className="button is-danger" onClick={save}>
               Save
             </button>
           </div>
