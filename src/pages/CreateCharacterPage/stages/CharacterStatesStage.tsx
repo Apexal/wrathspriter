@@ -6,7 +6,7 @@ import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprit
 import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
-import { defaultFrame, schoolPrograms } from "../../../constants";
+import { defaultFrame } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";

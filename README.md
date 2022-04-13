@@ -14,9 +14,9 @@ https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/
 
 - [x] Homepage
 - [x] View saved characters
-  - [ ] Edit saved characters
+  - [x] Edit saved characters
   - [x] Play saved characters
-- [ ] Delete saved characters
+- [x] Delete saved characters
 - [ ] Create new characters
   - [x] Input character details
   - [x] Select character major/minor
@@ -29,7 +29,7 @@ https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/
   - [x] Export to JSON file
   - [x] Save to server
 - [x] Animation editor
-- [ ] Pose webcam overlay
+- [x] Pose webcam overlay
 
 ## Current Maintainers
 
