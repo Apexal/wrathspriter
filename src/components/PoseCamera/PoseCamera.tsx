@@ -138,8 +138,6 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
 
             if (pose && checkIsInPose(results.poseLandmarks, pose)) {
               setIsInPose(true);
-              canvasCtx.font = "30px sans-serif";
-              canvasCtx.fillText("IN POSE", 10, 60);
             } else {
               setIsInPose(false);
             }
