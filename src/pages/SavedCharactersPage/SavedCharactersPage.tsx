@@ -2,22 +2,14 @@ import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
 import HelpButton from "../../components/HelpButton";
 
-import { Character } from "../../interfaces";
-import { GetAllCharacters } from "../../utils/db";
-
-import { useEffect, useState } from "react";
+import { db } from "../../utils/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 /**
  * Page that lists all saved characters from the user's browser.
  */
 export function SavedCharactersPage() {
-  const [savedCharacters, setSavedCharacters] = useState<{
-    [id: number]: Character;
-  }>({});
-
-  useEffect(() => {
-    GetAllCharacters().then(setSavedCharacters);
-  }, []);
+  const savedCharacters = useLiveQuery(() => db.characters.toArray());
 
   return (
     <section id="saved-characters-page" className="section page">
@@ -32,11 +24,14 @@ export function SavedCharactersPage() {
       <div className="container">
         <h1 className="title">Saved Characters</h1>
 
-        {Object.keys(savedCharacters).length > 0 ? (
+        {savedCharacters && savedCharacters.length > 0 ? (
           <div className="columns is-multiline">
-            {Object.entries(savedCharacters).map(([id, character]) => (
-              <div key={id} className="column is-3">
-                <CharacterPreview dbId={+id} character={character} />
+            {savedCharacters.map((characterWrapper) => (
+              <div key={characterWrapper.id} className="column is-3">
+                <CharacterPreview
+                  dbId={characterWrapper.id!}
+                  character={characterWrapper.character}
+                />
               </div>
             ))}
           </div>

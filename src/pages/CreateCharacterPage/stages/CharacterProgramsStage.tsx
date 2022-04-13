@@ -76,7 +76,7 @@ export function CharacterProgramsStage() {
                       <div className="select">
                         <select>
                           {program.actionTemplates.map((template, index) => (
-                            <option value={index}>
+                            <option key={index} value={index}>
                               {template.name} ({template.type})
                             </option>
                           ))}
@@ -137,7 +137,7 @@ export function CharacterProgramsStage() {
                   <p>They will have the following actions:</p>
                   <ul>
                     {totalActions.map((actionTemplate) => (
-                      <li>
+                      <li key={actionTemplate.type}>
                         {actionTemplate.name} ({actionTemplate.type})
                       </li>
                     ))}

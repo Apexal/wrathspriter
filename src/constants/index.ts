@@ -1,8 +1,4 @@
-import {
-  POSE_LANDMARKS,
-  POSE_LANDMARKS_LEFT,
-  POSE_LANDMARKS_RIGHT,
-} from "@mediapipe/pose";
+import { POSE_LANDMARKS } from "@mediapipe/pose";
 import { AnimationFrame, Character, SchoolProgram } from "../interfaces";
 
 export const defaultColliders = {
