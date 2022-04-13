@@ -21,15 +21,11 @@ export const db = new DexieDatabase();
 
 export function AddCharacterForm(props: DBProps) {
   if (!db.isOpen()) db.open();
-  async function addCharacter() {
-    try {
-      await db.characters.add(props);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  return db.characters.add(props);
+}
 
-  addCharacter();
+export function UpdateCharacter(dbId: number, character: Character) {
+  return db.characters.update(dbId, { id: dbId, character });
 }
 
 export async function GetAllCharacters() {
@@ -39,6 +35,7 @@ export async function GetAllCharacters() {
   // Error checking is done here instead of on-site
   async function getCharacters() {
     let dbprops = await db.characters.toArray();
+
     for (let i = 0; i < dbprops.length; i++) {
       if ((dbprops[i].character as Character) === undefined) continue;
       if (!dbprops[i].id) continue;
@@ -48,6 +45,5 @@ export async function GetAllCharacters() {
 
   await getCharacters();
 
-  console.log(characters);
   return characters;
 }
