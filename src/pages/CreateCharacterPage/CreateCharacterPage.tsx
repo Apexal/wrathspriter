@@ -100,6 +100,7 @@ export function CreateCharacterPage() {
             <Link
               to={routeIndex - 1 > 0 ? stages[routeIndex - 1] : "/"}
               className="button"
+              onClick={routeIndex - 1 > 0 ? save : undefined}
             >
               Back
             </Link>
