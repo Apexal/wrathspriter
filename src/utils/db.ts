@@ -47,3 +47,7 @@ export async function GetAllCharacters() {
 
   return characters;
 }
+
+export function DeleteCharacter(dbId: number) {
+  return db.characters.delete(dbId);
+}

@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
 import { Character } from "../../../../interfaces";
 import { sendCharacterToServer } from "../../../../services/api";
+import { DeleteCharacter } from "../../../../utils/db";
 
 type CharacterPreviewPropTypes = {
-  dbId?: number;
+  dbId: number;
   character: Character;
   animationName?: keyof Character["stateAnimations"];
 };
@@ -32,6 +33,18 @@ export function CharacterPreview({
       }
     } catch (err) {
       alert("Something went wrong! Please try again later...");
+    }
+  };
+
+  const handleRemove = () => {
+    if (window.confirm(`Are you sure you want to delete ${character.name}?`)) {
+      DeleteCharacter(dbId)
+        .then(() => {
+          console.log("Deleted character");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
@@ -93,7 +106,10 @@ export function CharacterPreview({
           >
             Edit
           </Link>
-          <button className="button is-small is-danger is-outlined" disabled>
+          <button
+            className="button is-small is-danger is-outlined"
+            onClick={handleRemove}
+          >
             Remove
           </button>
         </div>
