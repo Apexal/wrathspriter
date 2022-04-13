@@ -118,6 +118,18 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     setCharacter(newCharacter);
   };
 
+  const handleFrameClick = (frameIndex: number) => {
+    if (!window.confirm("Remove this frame?")) return;
+
+    const newCharacter = {
+      ...character,
+    };
+
+    newCharacter.stateAnimations[state.id].splice(frameIndex, 1);
+
+    setCharacter(newCharacter);
+  };
+
   function PoseCameraModal({ isOpen }: { isOpen: boolean }) {
     const poseCameraRef = useRef<PoseCameraRef | null>(null);
     const [isFullyInFrame, setIsFullyInFrame] = useState<boolean>(false);
@@ -241,6 +253,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
                   alt=""
                   width={50}
                   height={50}
+                  onClick={() => handleFrameClick(index)}
                 />
                 <p
                   onClick={() => handleFrameDurationClick(index, frame)}
