@@ -5,6 +5,8 @@ import { useCountdown } from "../../utils/hooks";
 import { checkIsFullyInFrame } from "../../utils/posing";
 import { PoseCameraRef, PoseCamera } from "../PoseCamera/PoseCamera";
 
+import cameraShutter from "../../assets/audio/camera_shutter.mp3";
+
 type PoseCameraModalPropTypes = {
   isOpen: boolean;
   close: () => void;
@@ -25,6 +27,7 @@ export function PoseCameraModal({
   const [isFullyInFrame, setIsFullyInFrame] = useState<boolean>(false);
   const [isWaitingToScreenshot, setIsWaitingToScreenshot] =
     useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const takeScreenshot = () => {
     if (!poseCameraRef.current?.actualPose) return;
@@ -38,7 +41,7 @@ export function PoseCameraModal({
     if (!b64Url) return;
 
     const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
-
+    audioRef.current?.play();
     handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
 
     startCountdown();
@@ -77,7 +80,7 @@ export function PoseCameraModal({
   if (isProcessing) {
     columnBody = (
       <div>
-        <p>Processing image!</p>
+        <p className="is-size-4">Processing image!</p>
         <progress className="progress is-success" />
       </div>
     );
@@ -117,6 +120,7 @@ export function PoseCameraModal({
 
   return (
     <div className={clsx("modal", isOpen && "is-active")}>
+      <audio src={cameraShutter} ref={audioRef}></audio>
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">

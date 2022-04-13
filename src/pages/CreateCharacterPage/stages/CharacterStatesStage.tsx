@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
