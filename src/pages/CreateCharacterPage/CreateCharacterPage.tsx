@@ -103,26 +103,32 @@ export function CreateCharacterPage() {
               className="button"
               onClick={routeIndex - 1 > 0 ? save : undefined}
             >
-              Back
+              <span className="icon">⬅️</span>
             </Link>
             {routeIndex + 1 < stages.length && (
               <Link
                 to={stages[routeIndex + 1]}
-                className="button is-primary"
+                className="button"
                 onClick={save}
               >
-                Next
+                <span className="icon">➡️</span>
               </Link>
             )}
-            <button
-              className="button is-info"
-              onClick={() => downloadCharacter(character)}
-            >
-              Download
-            </button>
             <button className="button is-danger" onClick={save}>
-              Save
+              <span className="icon">💾</span>
+              <span>Save</span>
             </button>
+            {routeIndex === stages.length - 1 && (
+              <>
+                <button
+                  className="button is-warning"
+                  onClick={() => downloadCharacter(character)}
+                >
+                  <span className="icon">🎮</span>
+                  <span>Use</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
