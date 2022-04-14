@@ -12,6 +12,7 @@ import { ThemePage } from "./pages/ThemePage/ThemePage";
 import { PoseTestingPage } from "./pages/PoseTestingPage/PoseTesting";
 
 import "./sass/theme.scss";
+import { CharacterReviewStage } from "./pages/CreateCharacterPage/stages/CharacterReviewStage";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route path="programs" element={<CharacterProgramsStage />} />
           <Route path="states" element={<CharacterStatesStage />} />
           <Route path="actions" element={<p>Coming soon!</p>} />
-          <Route path="review" element={<p>Coming soon!</p>} />
+          <Route path="review" element={<CharacterReviewStage />} />
         </Route>
         <Route path="theme" element={<ThemePage />} />
         <Route path="saved" element={<SavedCharactersPage />} />
