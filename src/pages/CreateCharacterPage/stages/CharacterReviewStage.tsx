@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
 import { CharacterContext } from "../../../state";
 
@@ -19,16 +20,25 @@ export function CharacterReviewStage() {
       <section className="section">
         <div className="container" id="details">
           <h1 className="title">Details</h1>
+          <h2 className="subtitle">
+            <Link to="/create">Edit</Link>
+          </h2>
         </div>
       </section>
       <section className="section" id="programs">
         <div className="container">
           <h1 className="title">Programs</h1>
+          <h2 className="subtitle">
+            <Link to="/create/programs">Edit</Link>
+          </h2>
         </div>
       </section>
       <section className="section">
         <div className="container">
           <h1 className="title">States</h1>
+          <h2 className="subtitle">
+            <Link to="/create/states">Edit</Link>
+          </h2>
 
           <div className="columns is-multiline">
             {Object.entries(character.stateAnimations).map(
@@ -51,6 +61,7 @@ export function CharacterReviewStage() {
                     // @ts-ignore
                     character.stateSoundEffects[state].map((soundEffect) => (
                       <span
+                        key={soundEffect.name}
                         style={{
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
