@@ -6,6 +6,7 @@ import { Character } from "../../interfaces";
 import { CharacterContext, CharacterContextType } from "../../state";
 import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
+import { downloadCharacter } from "../../utils/download";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -113,12 +114,12 @@ export function CreateCharacterPage() {
                 Next
               </Link>
             )}
-            {/* <button
+            <button
               className="button is-info"
               onClick={() => downloadCharacter(character)}
             >
               Download
-            </button> */}
+            </button>
             <button className="button is-danger" onClick={save}>
               Save
             </button>
