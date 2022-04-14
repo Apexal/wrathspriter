@@ -7,6 +7,7 @@ import { CharacterContext, CharacterContextType } from "../../state";
 import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 import { downloadCharacter } from "../../utils/download";
+import clsx from "clsx";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -17,6 +18,7 @@ export function CreateCharacterPage() {
     location.pathname.replace("/create", "").replace("/", "")
   );
 
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const characterContextValue = useMemo<CharacterContextType>(
@@ -42,6 +44,9 @@ export function CreateCharacterPage() {
   }, [location.state]);
 
   const save = () => {
+    if (isSaving) return;
+
+    setIsSaving(true);
     if (dbId) {
       UpdateCharacter(dbId, character)
         .then(() => {
@@ -49,7 +54,8 @@ export function CreateCharacterPage() {
         })
         .catch((err) => {
           console.error(err);
-        });
+        })
+        .finally(() => setIsSaving(false));
     } else {
       AddCharacterForm({
         character,
@@ -60,7 +66,8 @@ export function CreateCharacterPage() {
         })
         .catch((err) => {
           console.error(err);
-        });
+        })
+        .finally(() => setIsSaving(false));
     }
   };
 
@@ -114,7 +121,11 @@ export function CreateCharacterPage() {
                 <span className="icon">➡️</span>
               </Link>
             )}
-            <button className="button is-danger" onClick={save}>
+            <button
+              className={clsx("button is-danger", isSaving && "is-loading")}
+              onClick={save}
+              disabled={isSaving}
+            >
               <span className="icon">💾</span>
               <span>Save</span>
             </button>
@@ -123,6 +134,7 @@ export function CreateCharacterPage() {
                 <button
                   className="button is-warning"
                   onClick={() => downloadCharacter(character)}
+                  disabled={isSaving}
                 >
                   <span className="icon">🎮</span>
                   <span>Use</span>
