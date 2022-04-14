@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
 import { CharacterContext } from "../../../state";
+import { ProgramCard } from "./CharacterProgramsStage";
 
 export function CharacterReviewStage() {
   const { character } = useContext(CharacterContext);
@@ -19,23 +20,55 @@ export function CharacterReviewStage() {
       </section>
       <section className="section">
         <div className="container" id="details">
-          <h1 className="title">Details</h1>
+          <h1 className="title">Character Details</h1>
           <h2 className="subtitle">
             <Link to="/create">Edit</Link>
           </h2>
+
+          <div className="columns">
+            <div className="column">
+              <strong>Character Name</strong>
+              <p>{character.name}</p>
+            </div>
+            <div className="column">
+              <strong>Character Backstory</strong>
+              <div className="content">
+                <blockquote>
+                  <p>"{character.backstory}"</p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       <section className="section" id="programs">
         <div className="container">
-          <h1 className="title">Programs</h1>
+          <h1 className="title">Character School Programs</h1>
           <h2 className="subtitle">
             <Link to="/create/programs">Edit</Link>
           </h2>
+
+          <div className="columns">
+            <div className="column">
+              {character.major && (
+                <ProgramCard program={character.major} character={character} />
+              )}
+            </div>
+            <div className="column">
+              {character.minor &&
+                character.major?.id !== character.minor.id && (
+                  <ProgramCard
+                    program={character.minor}
+                    character={character}
+                  />
+                )}
+            </div>
+          </div>
         </div>
       </section>
       <section className="section">
         <div className="container">
-          <h1 className="title">States</h1>
+          <h1 className="title">Character States</h1>
           <h2 className="subtitle">
             <Link to="/create/states">Edit</Link>
           </h2>
@@ -87,6 +120,17 @@ export function CharacterReviewStage() {
               )
             )}
           </div>
+        </div>
+      </section>
+
+      <section className="section" id="actions">
+        <div className="container">
+          <h1 className="title">Character Actions</h1>
+          <h2 className="subtitle">
+            <Link to="/create/actions">Edit</Link>
+          </h2>
+
+          <p className="has-text-grey">Coming soon...</p>
         </div>
       </section>
     </div>
