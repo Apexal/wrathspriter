@@ -266,18 +266,21 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
     if (ev.target.files?.length) {
       const file = ev.target.files[0];
 
-      let sfxName =
-        prompt(
-          `What's the name of the sound effect? (default: ${file.name.replace(
-            ".mp3",
-            ""
-          )})`
-        ) ?? file.name.replace(".mp3", "");
+      let sfxName = prompt(
+        `What's the name of the sound effect? (default: ${file.name.replace(
+          ".mp3",
+          ""
+        )})`
+      );
+
+      if (!sfxName || sfxName.trim().length === 0) {
+        sfxName = file.name.replace(".mp3", "");
+      }
 
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
 
-        handleProcessAudio(b64, sfxName, "audio/mpeg");
+        handleProcessAudio(b64, sfxName!, "audio/mpeg");
       });
     }
   };
