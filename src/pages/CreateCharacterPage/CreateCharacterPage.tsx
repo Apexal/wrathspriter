@@ -6,6 +6,8 @@ import { Character } from "../../interfaces";
 import { CharacterContext, CharacterContextType } from "../../state";
 import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
+import { downloadCharacter } from "../../utils/download";
+import clsx from "clsx";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -16,6 +18,7 @@ export function CreateCharacterPage() {
     location.pathname.replace("/create", "").replace("/", "")
   );
 
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const characterContextValue = useMemo<CharacterContextType>(
@@ -41,6 +44,9 @@ export function CreateCharacterPage() {
   }, [location.state]);
 
   const save = () => {
+    if (isSaving) return;
+
+    setIsSaving(true);
     if (dbId) {
       UpdateCharacter(dbId, character)
         .then(() => {
@@ -48,7 +54,8 @@ export function CreateCharacterPage() {
         })
         .catch((err) => {
           console.error(err);
-        });
+        })
+        .finally(() => setIsSaving(false));
     } else {
       AddCharacterForm({
         character,
@@ -59,7 +66,8 @@ export function CreateCharacterPage() {
         })
         .catch((err) => {
           console.error(err);
-        });
+        })
+        .finally(() => setIsSaving(false));
     }
   };
 
@@ -102,26 +110,37 @@ export function CreateCharacterPage() {
               className="button"
               onClick={routeIndex - 1 > 0 ? save : undefined}
             >
-              Back
+              <span className="icon">⬅️</span>
             </Link>
             {routeIndex + 1 < stages.length && (
               <Link
                 to={stages[routeIndex + 1]}
-                className="button is-primary"
+                className="button"
                 onClick={save}
               >
-                Next
+                <span className="icon">➡️</span>
               </Link>
             )}
-            {/* <button
-              className="button is-info"
-              onClick={() => downloadCharacter(character)}
+            <button
+              className={clsx("button is-danger", isSaving && "is-loading")}
+              onClick={save}
+              disabled={isSaving}
             >
-              Download
-            </button> */}
-            <button className="button is-danger" onClick={save}>
-              Save
+              <span className="icon">💾</span>
+              <span>Save</span>
             </button>
+            {routeIndex === stages.length - 1 && (
+              <>
+                <button
+                  className="button is-warning"
+                  onClick={() => downloadCharacter(character)}
+                  disabled={isSaving}
+                >
+                  <span className="icon">🎮</span>
+                  <span>Use</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
