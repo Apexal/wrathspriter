@@ -132,7 +132,7 @@ export function CreateCharacterPage() {
         <div className="container">
           <div className="buttons">
             <Link
-              to={routeIndex - 1 > 0 ? stages[routeIndex - 1] : "/"}
+              to={routeIndex - 1 >= 0 ? stages[routeIndex - 1] : "/"}
               className="button"
               onClick={routeIndex - 1 > 0 ? save : undefined}
             >
