@@ -4,12 +4,42 @@ import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSp
 import { Character } from "../../../../interfaces";
 import { sendCharacterToServer } from "../../../../services/api";
 import { DeleteCharacter } from "../../../../utils/db";
+import { downloadCharacter } from "../../../../utils/download";
 
 type CharacterPreviewPropTypes = {
   dbId: number;
   character: Character;
   animationName?: keyof Character["stateAnimations"];
 };
+
+type CharacterCodeModalPropTypes = {
+  characterId: string;
+  character: Character;
+  close: () => void;
+};
+export function CharacterCodeModal({
+  characterId,
+  character,
+  close,
+}: CharacterCodeModalPropTypes) {
+  return (
+    <div className="modal is-active">
+      <div className="modal-background"></div>
+      <div className="modal-content">
+        <div className="box">
+          {character.name} is ready to fight! Simply enter in code{" "}
+          <code>{characterId}</code> into Wrathskeller within the next 5
+          minutes!
+        </div>
+      </div>
+      <button
+        onClick={close}
+        className="modal-close is-large"
+        aria-label="close"
+      ></button>
+    </div>
+  );
+}
 
 /**
  * Small box that displays character name and a random animation on hover.
@@ -32,7 +62,8 @@ export function CharacterPreview({
         throw Error();
       }
     } catch (err) {
-      alert("Something went wrong! Please try again later...");
+      alert("Something went wrong! Here's the character download instead.");
+      downloadCharacter(character);
     }
   };
 
@@ -62,21 +93,11 @@ export function CharacterPreview({
   return (
     <div className="character-preview has-text-centered box">
       {characterId && (
-        <div className="modal is-active">
-          <div className="modal-background"></div>
-          <div className="modal-content">
-            <div className="box">
-              {character.name} is ready to fight! Simply enter in code{" "}
-              <code>{characterId}</code> into Wrathskeller within the next 5
-              minutes!
-            </div>
-          </div>
-          <button
-            onClick={() => setCharacterId(null)}
-            className="modal-close is-large"
-            aria-label="close"
-          ></button>
-        </div>
+        <CharacterCodeModal
+          character={character}
+          characterId={characterId}
+          close={() => setCharacterId(null)}
+        />
       )}
 
       <h6 className="title is-size-4 mb-2 character-name">{character.name}</h6>

@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { schoolPrograms } from "../../../constants";
 import { Character, SchoolProgram } from "../../../interfaces";
 import { CharacterContext } from "../../../state";
+import { determineCharacterActions } from "../../../utils/actions";
 
 type ProgramCardPropTypes = {
   program: SchoolProgram;
@@ -106,15 +107,12 @@ export function ProgramCard({
 export function CharacterProgramsStage() {
   const { character, setCharacter } = useContext(CharacterContext);
 
-  const majorActions =
-    character.major?.actionTemplates.filter(
-      (act) => act.type === "special" || act.type === "heavy_special"
-    ) ?? [];
-  const minorActions =
-    character.minor?.actionTemplates.filter(
-      (act) => act.type === "light_punch" || act.type === "light_kick"
-    ) ?? [];
-  const totalActions = majorActions.concat(minorActions);
+  useEffect(() => {
+    setCharacter((oldCharacter) => ({
+      ...oldCharacter,
+      actions: determineCharacterActions(oldCharacter),
+    }));
+  }, [character.major, character.minor, setCharacter]);
 
   return (
     <section id="character-programs-stage" className="section stage">
@@ -130,6 +128,7 @@ export function CharacterProgramsStage() {
           <div className="column is-half">
             {schoolPrograms.map((program) => (
               <ProgramCard
+                key={program.id}
                 program={program}
                 character={character}
                 setCharacter={setCharacter}
@@ -155,7 +154,7 @@ export function CharacterProgramsStage() {
                   </p>
                   <p>They will have the following actions:</p>
                   <ul>
-                    {totalActions.map((actionTemplate) => (
+                    {character.actions.map((actionTemplate) => (
                       <li key={actionTemplate.type}>
                         {actionTemplate.name} ({actionTemplate.type})
                       </li>

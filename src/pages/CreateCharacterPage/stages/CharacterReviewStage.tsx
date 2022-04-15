@@ -34,7 +34,11 @@ export function CharacterReviewStage() {
               <strong>Character Backstory</strong>
               <div className="content">
                 <blockquote>
-                  <p>"{character.backstory}"</p>
+                  <p>
+                    {character.backstory.length > 0
+                      ? character.backstory
+                      : "None given..."}
+                  </p>
                 </blockquote>
               </div>
             </div>
@@ -76,7 +80,7 @@ export function CharacterReviewStage() {
           <div className="columns is-multiline">
             {Object.entries(character.stateAnimations).map(
               ([state, animation]) => (
-                <div key={state} className="column is-2">
+                <div key={state} className="column is-2 has-text-centered">
                   {animation.length > 0 ? (
                     <AnimatedSprite
                       animation={animation}
