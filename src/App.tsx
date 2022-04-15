@@ -13,6 +13,7 @@ import { PoseTestingPage } from "./pages/PoseTestingPage/PoseTesting";
 
 import "./sass/theme.scss";
 import { CharacterReviewStage } from "./pages/CreateCharacterPage/stages/CharacterReviewStage";
+import { CharacterActionsStage } from "./pages/CreateCharacterPage/stages/CharacterActionsStage";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route index element={<CharacterDetailsStage />} />
           <Route path="programs" element={<CharacterProgramsStage />} />
           <Route path="states" element={<CharacterStatesStage />} />
-          <Route path="actions" element={<p>Coming soon!</p>} />
+          <Route path="actions" element={<CharacterActionsStage />} />
           <Route path="review" element={<CharacterReviewStage />} />
         </Route>
         <Route path="theme" element={<ThemePage />} />
