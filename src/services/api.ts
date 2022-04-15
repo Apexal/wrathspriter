@@ -49,7 +49,10 @@ export async function sendCharacterToServer(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(character),
+    body: JSON.stringify({
+      ...character,
+      actions: [],
+    }),
   });
 
   const data = await response.json();
