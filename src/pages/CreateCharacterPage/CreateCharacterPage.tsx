@@ -8,6 +8,8 @@ import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 import { downloadCharacter } from "../../utils/download";
 import clsx from "clsx";
+import { sendCharacterToServer } from "../../services/api";
+import { CharacterCodeModal } from "../SavedCharactersPage/components/CharacterPreview/CharacterPreviews";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
@@ -17,6 +19,9 @@ export function CreateCharacterPage() {
   const routeIndex = stages.indexOf(
     location.pathname.replace("/create", "").replace("/", "")
   );
+
+  const [characterId, setCharacterId] = useState<string | null>(null);
+  const [isSendingCharacter, setIsSendingCharacter] = useState<boolean>(false);
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
@@ -71,6 +76,25 @@ export function CreateCharacterPage() {
     }
   };
 
+  /** Attempt to send character to Wrathserver. */
+  const handleUseCharacter = async () => {
+    setIsSendingCharacter(true);
+    try {
+      const storedCharacter = await sendCharacterToServer(character);
+      if (storedCharacter.id) {
+        setCharacterId(storedCharacter.id);
+      } else {
+        throw Error();
+      }
+    } catch (err) {
+      alert(
+        "Something went wrong! Instead, here's a download of the character."
+      );
+      downloadCharacter(character);
+    }
+    setIsSendingCharacter(false);
+  };
+
   return (
     <CharacterContext.Provider value={characterContextValue}>
       <progress
@@ -78,6 +102,14 @@ export function CreateCharacterPage() {
         value={routeIndex + 1}
         max={stages.length}
       />
+
+      {characterId && (
+        <CharacterCodeModal
+          characterId={characterId}
+          character={character}
+          close={() => setCharacterId(null)}
+        />
+      )}
 
       <HelpButton
         heading="Create a Character"
@@ -132,9 +164,12 @@ export function CreateCharacterPage() {
             {routeIndex === stages.length - 1 && (
               <>
                 <button
-                  className="button is-warning"
-                  onClick={() => downloadCharacter(character)}
-                  disabled={isSaving}
+                  className={clsx(
+                    "button is-warning",
+                    isSendingCharacter && "is-loading"
+                  )}
+                  onClick={handleUseCharacter}
+                  disabled={isSaving || isSendingCharacter}
                 >
                   <span className="icon">🎮</span>
                   <span>Use</span>
