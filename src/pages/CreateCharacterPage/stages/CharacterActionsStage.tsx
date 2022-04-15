@@ -14,6 +14,8 @@ export function CharacterActionsStage() {
           Your character can perform different actions to defeat its opponent!
           Each needs pictures and sound effects!
         </h2>
+
+        <p className="has-text-grey">Coming soon...</p>
       </div>
     </section>
   );
