@@ -97,12 +97,6 @@ export function CreateCharacterPage() {
 
   return (
     <CharacterContext.Provider value={characterContextValue}>
-      <progress
-        className="progress is-success"
-        value={routeIndex + 1}
-        max={stages.length}
-      />
-
       {characterId && (
         <CharacterCodeModal
           characterId={characterId}
@@ -182,6 +176,12 @@ export function CreateCharacterPage() {
               </>
             )}
           </div>
+          <hr />
+          <progress
+            className="progress is-success"
+            value={routeIndex + 1}
+            max={stages.length}
+          />
         </div>
       </section>
     </CharacterContext.Provider>
