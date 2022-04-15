@@ -153,14 +153,16 @@ export function CreateCharacterPage() {
                 <span className="icon">➡️</span>
               </Link>
             )}
-            <button
-              className={clsx("button is-danger", isSaving && "is-loading")}
-              onClick={save}
-              disabled={isSaving}
-            >
-              <span className="icon">💾</span>
-              <span>Save</span>
-            </button>
+            {routeIndex !== stages.length - 1 && (
+              <button
+                className={clsx("button is-danger", isSaving && "is-loading")}
+                onClick={save}
+                disabled={isSaving}
+              >
+                <span className="icon">💾</span>
+                <span>Save</span>
+              </button>
+            )}
             {routeIndex === stages.length - 1 && (
               <>
                 <button
@@ -174,6 +176,9 @@ export function CreateCharacterPage() {
                   <span className="icon">🎮</span>
                   <span>Use</span>
                 </button>
+                <Link className="button" to="/">
+                  Home
+                </Link>
               </>
             )}
           </div>
