@@ -128,6 +128,7 @@ export function CharacterProgramsStage() {
           <div className="column is-half">
             {schoolPrograms.map((program) => (
               <ProgramCard
+                key={program.id}
                 program={program}
                 character={character}
                 setCharacter={setCharacter}

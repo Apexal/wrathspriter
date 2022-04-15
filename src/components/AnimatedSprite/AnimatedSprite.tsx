@@ -34,7 +34,13 @@ export function AnimatedSprite(props: AnimatedSpritePropTypes) {
         clearTimeout(timeoutRef.current);
       }
     };
-  });
+  }, [draw]);
+
+  useEffect(() => {
+    if (frameIndex >= props.animation.length) {
+      setFrameIndex(0);
+    }
+  }, [frameIndex, props.animation]);
 
   useEffect(() => {
     if (!props.isPlaying && timeoutRef.current) {
