@@ -18,7 +18,7 @@ type CharacterPreviewPropTypes = {
 export function CharacterPreview({
   dbId,
   character,
-  animationName = "walk",
+  animationName,
 }: CharacterPreviewPropTypes) {
   const [characterId, setCharacterId] = useState<string | null>(null);
 
@@ -48,6 +48,17 @@ export function CharacterPreview({
     }
   };
 
+  if (!animationName) {
+    for (const state in character.stateAnimations) {
+      // @ts-ignore
+      if (character.stateAnimations[state].length) {
+        // @ts-ignore
+        animationName = state;
+        break;
+      }
+    }
+  }
+
   return (
     <div className="character-preview has-text-centered box">
       {characterId && (
@@ -74,7 +85,7 @@ export function CharacterPreview({
           width={100}
           height={100}
           isPlaying={true}
-          animation={character.stateAnimations[animationName]}
+          animation={character.stateAnimations[animationName ?? "walk"]}
         />
       </figure>
       <div className="character-details">
