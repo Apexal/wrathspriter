@@ -1,9 +1,11 @@
 import { NormalizedLandmarkList } from "@mediapipe/pose";
 import { Character } from "../interfaces";
 
+/** The base url of the desired Wrathserver instance. */
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ?? "http://127.0.0.1:8000";
 
+/** Sends base64 encoded MP3 or OGG audio to Wrathserver to be cleaned up. Returns the base64 formatted cleaned up audio in MP3 format. */
 export async function processAudio(
   audioB64: string,
   mimetype: "audio/mpeg" | "audio/ogg" = "audio/mpeg"
@@ -22,10 +24,11 @@ export async function processAudio(
   return data.base64EncodedAudio;
 }
 
+/** Sends base64 encoded PNG to be formatted by Wrathserver. Returns base64 formatted image. */
 export async function processImage(
   imageB64: string,
   normalizedPoseLandmarks?: NormalizedLandmarkList
-) {
+): Promise<string> {
   const response = await fetch(API_BASE_URL + "/image", {
     method: "POST",
     headers: {
@@ -41,6 +44,7 @@ export async function processImage(
   return data.base64EncodedImage;
 }
 
+/** Sends character JSON to Wrathserver to be stored for a short time. Returns the stored character which includes the character code.  */
 export async function sendCharacterToServer(
   character: Character
 ): Promise<Character> {
@@ -51,7 +55,7 @@ export async function sendCharacterToServer(
     },
     body: JSON.stringify({
       ...character,
-      actions: [],
+      actions: [], // Temporarily don't send actions as they aren't properly populated yet
     }),
   });
 
