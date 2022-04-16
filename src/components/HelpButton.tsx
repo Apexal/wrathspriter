@@ -9,11 +9,12 @@ interface HelpProps {
   className?: string;
 }
 
+/** Help button that opens a modal that displays the component children as help text. */
 function HelpButton(props: HelpProps) {
   const [show, setShow] = useState(false);
 
   return (
-    <div>
+    <>
       <div className={clsx("has-text-right", props.className)}>
         <button
           className="button js-modal-trigger"
@@ -27,7 +28,7 @@ function HelpButton(props: HelpProps) {
       <Modal setShow={setShow} show={show} heading={props.heading}>
         {props.children}
       </Modal>
-    </div>
+    </>
   );
 }
 

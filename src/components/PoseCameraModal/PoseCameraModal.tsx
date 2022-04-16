@@ -17,6 +17,7 @@ type PoseCameraModalPropTypes = {
   ) => Promise<void>;
 };
 
+/**  */
 export function PoseCameraModal({
   isOpen,
   close,
@@ -29,6 +30,7 @@ export function PoseCameraModal({
     useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  /** Takes a screenshot IF fully in frame, and then send it to be processed. */
   const takeScreenshot = () => {
     if (!poseCameraRef.current?.actualPose) return;
 
@@ -37,19 +39,26 @@ export function PoseCameraModal({
       return;
     }
 
+    // Actually grab a screenshot
     const b64Url = poseCameraRef.current?.captureScreenshot();
     if (!b64Url) return;
 
+    // Remove prefix of base64 URL
     const b64 = b64Url.slice(b64Url.indexOf("base64,") + 7); // Remove URL prefix
     audioRef.current?.play();
+
+    // Hand off to be processed on server
     handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
 
+    // Restart the timer
     startCountdown();
   };
 
   const [isCountingDown, secondsLeft, startCountdown, endCountdown] =
     useCountdown(5, takeScreenshot);
 
+  // Handle the stopping and starting of the countdown based on whether the person
+  // is in frame and if a current image is not processing
   useEffect(() => {
     if (isProcessing) {
       endCountdown();
@@ -75,6 +84,7 @@ export function PoseCameraModal({
     close();
   };
 
+  /** The content of the modal, based on the state. */
   let columnBody: JSX.Element | null = null;
 
   if (isProcessing) {

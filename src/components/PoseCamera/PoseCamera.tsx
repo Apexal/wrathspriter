@@ -11,7 +11,6 @@ import {
   useCallback,
   useEffect,
   forwardRef,
-  CSSProperties,
   useImperativeHandle,
 } from "react";
 import { PoseAngle } from "../../interfaces/pose";
@@ -23,6 +22,7 @@ import {
 
 import "./PoseCamera.scss";
 
+/** The properties exposed by the PoseCamera component ref. */
 export type PoseCameraRef = {
   actualPose: NormalizedLandmarkList | null;
   captureScreenshot: () => string | null;
@@ -35,6 +35,11 @@ type PoseCameraPropTypes = {
   handleInPoseChange?: (isInPose: boolean) => void;
 };
 
+/**
+ * Camera that displays a detected person and removes the background.
+ * Optionally displays the pose overlaid on the person and also exposes
+ * a screenshot function.
+ **/
 export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
   (
     { pose, isSkeletonDrawn, handleInPoseChange, handleFullyInFrameChange },
@@ -192,15 +197,10 @@ export const PoseCamera = forwardRef<PoseCameraRef, PoseCameraPropTypes>(
       }
     }, [videoRef]);
 
-    const style: CSSProperties = {};
-    if (isInPose) {
-      // style.border = "1px solid green";
-    }
-
     return (
       <div className="pose-camera-wrapper">
         <video ref={videoRef} className="is-hidden" />
-        <canvas style={style} ref={canvasRef} width="400px" height="400px" />
+        <canvas ref={canvasRef} width="400px" height="400px" />
         <div className="tags">
           {!isFullyInFrame && (
             <span className="tag is-large is-danger out-of-frame">
