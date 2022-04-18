@@ -1,3 +1,4 @@
+/** Global footer shown on every page. */
 function Footer() {
   return (
     <footer className="footer">

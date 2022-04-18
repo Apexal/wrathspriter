@@ -6,6 +6,7 @@ type CountdownButtonPropTypes = {
   children: JSX.Element | JSX.Element[] | string;
 };
 
+/** Button that executes a function after a given number of seconds once clicked. */
 export function CountdownButton(props: CountdownButtonPropTypes) {
   const [isCountingDown, secondsLeft, startCountdown, endCountdown] =
     useCountdown(props.seconds, props.onExecute);

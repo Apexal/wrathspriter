@@ -36,7 +36,6 @@ export function AudioRecorder(props: AudioRecorderPropTypes) {
 
       recorder.ondataavailable = (e) => {
         chunksRef.current.push(e.data);
-        console.log("data");
       };
 
       /** Once stopped, call the callback passed through props with the data URL. */
@@ -53,6 +52,7 @@ export function AudioRecorder(props: AudioRecorderPropTypes) {
     }
   }, [mediaStream, props.handleRecordingDone]);
 
+  /** Toggle the audio recorder. */
   const handleToggleRecord = () => {
     if (!mediaRecorder) return;
 
