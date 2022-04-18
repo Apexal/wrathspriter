@@ -105,14 +105,18 @@ export function ProgramCard({
 }
 
 export function CharacterProgramsStage() {
-  const { character, setCharacter } = useContext(CharacterStagesContext);
+  const { character, setCharacter, setCanNavigateNext } = useContext(
+    CharacterStagesContext
+  );
 
   useEffect(() => {
     setCharacter((oldCharacter) => ({
       ...oldCharacter,
       actions: determineCharacterActions(oldCharacter),
     }));
-  }, [character.major, character.minor, setCharacter]);
+
+    setCanNavigateNext(!!character.major && !!character.major);
+  }, [character.major, character.minor, setCanNavigateNext, setCharacter]);
 
   return (
     <section id="character-programs-stage" className="section stage">

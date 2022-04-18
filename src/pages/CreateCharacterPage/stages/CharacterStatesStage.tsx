@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { CharacterStagesContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
@@ -384,16 +384,28 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
 
 /** Stage where users record sound effects and upload animation frames for the different character states. */
 export function CharacterStatesStage() {
-  const { character } = useContext(CharacterStagesContext);
+  const { character, setCanNavigateNext } = useContext(CharacterStagesContext);
 
   const [currentState, setCurrentState] = useState<CharacterState>(states[0]);
 
-  const isDone = (state: CharacterState) =>
-    character.stateAnimations[state.id].length > 0 &&
-    (state.id in character.stateSoundEffects
-      ? // @ts-expect-error
-        character.stateSoundEffects[state.id].length > 0
-      : true);
+  const isDone = useCallback(
+    (state: CharacterState) =>
+      character.stateAnimations[state.id].length > 0 &&
+      (state.id in character.stateSoundEffects
+        ? // @ts-expect-error
+          character.stateSoundEffects[state.id].length > 0
+        : true),
+    [character.stateAnimations, character.stateSoundEffects]
+  );
+
+  useEffect(() => {
+    setCanNavigateNext(states.every(isDone));
+  }, [
+    character.stateAnimations,
+    character.stateSoundEffects,
+    isDone,
+    setCanNavigateNext,
+  ]);
 
   return (
     <section id="character-states-stage" className="section stage">

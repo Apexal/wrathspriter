@@ -26,6 +26,7 @@ export function CreateCharacterPage() {
   const [characterId, setCharacterId] = useState<string | null>(null);
   const [isSendingCharacter, setIsSendingCharacter] = useState<boolean>(false);
 
+  const [canNavigateNext, setCanNavigateNext] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
@@ -33,6 +34,7 @@ export function CreateCharacterPage() {
     () => ({
       character,
       setCharacter,
+      setCanNavigateNext,
     }),
     [character, setCharacter]
   );
@@ -141,15 +143,20 @@ export function CreateCharacterPage() {
             >
               <span className="icon">⬅️</span>
             </Link>
-            {routeIndex + 1 < stages.length && (
-              <Link
-                to={stages[routeIndex + 1]}
-                className="button"
-                onClick={save}
-              >
-                <span className="icon">➡️</span>
-              </Link>
-            )}
+            {routeIndex + 1 < stages.length &&
+              (canNavigateNext ? (
+                <Link
+                  to={stages[routeIndex + 1]}
+                  className="button"
+                  onClick={save}
+                >
+                  <span className="icon">➡️</span>
+                </Link>
+              ) : (
+                <button className="button" disabled>
+                  <span className="icon">➡️</span>
+                </button>
+              ))}
             {routeIndex !== stages.length - 1 && (
               <button
                 className={clsx("button is-danger", isSaving && "is-loading")}
