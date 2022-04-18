@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { CharacterContext } from "../../../state";
+import { CharacterStagesContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
@@ -16,7 +16,7 @@ import { PoseCameraModal } from "../../../components/PoseCameraModal/PoseCameraM
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
-  const { character, setCharacter } = useContext(CharacterContext);
+  const { character, setCharacter } = useContext(CharacterStagesContext);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isPoseCameraModalOpen, setIsPoseCameraModalOpen] =
@@ -212,7 +212,7 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
 
 /** Editor for users to record and clear sound effects for a particular state. */
 function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
-  const { character, setCharacter } = useContext(CharacterContext);
+  const { character, setCharacter } = useContext(CharacterStagesContext);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -384,7 +384,7 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
 
 /** Stage where users record sound effects and upload animation frames for the different character states. */
 export function CharacterStatesStage() {
-  const { character } = useContext(CharacterContext);
+  const { character } = useContext(CharacterStagesContext);
 
   const [currentState, setCurrentState] = useState<CharacterState>(states[0]);
 

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { CharacterContext } from "../../../state";
+import { CharacterStagesContext } from "../../../state";
 
 export function CharacterActionsStage() {
-  const { character } = useContext(CharacterContext);
+  const { character } = useContext(CharacterStagesContext);
 
   return (
     <section className="section stage" id="character-actions-stage">

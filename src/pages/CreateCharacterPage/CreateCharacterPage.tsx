@@ -3,7 +3,10 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
-import { CharacterContext, CharacterContextType } from "../../state";
+import {
+  CharacterStagesContext,
+  CharacterStagesContextType,
+} from "../../state";
 import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 import { downloadCharacter } from "../../utils/download";
@@ -26,7 +29,7 @@ export function CreateCharacterPage() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
-  const characterContextValue = useMemo<CharacterContextType>(
+  const characterStagesContextValue = useMemo<CharacterStagesContextType>(
     () => ({
       character,
       setCharacter,
@@ -96,7 +99,7 @@ export function CreateCharacterPage() {
   };
 
   return (
-    <CharacterContext.Provider value={characterContextValue}>
+    <CharacterStagesContext.Provider value={characterStagesContextValue}>
       {characterId && (
         <CharacterCodeModal
           characterId={characterId}
@@ -184,6 +187,6 @@ export function CreateCharacterPage() {
           />
         </div>
       </section>
-    </CharacterContext.Provider>
+    </CharacterStagesContext.Provider>
   );
 }

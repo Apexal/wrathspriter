@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
 import states, { CharacterState } from "../../../constants/states";
 import { SoundEffect } from "../../../interfaces";
-import { CharacterContext } from "../../../state";
+import { CharacterStagesContext } from "../../../state";
 import { ProgramCard } from "./CharacterProgramsStage";
 
 const completeTag = <span className="tag is-success">COMPLETE</span>;
@@ -36,7 +36,7 @@ function SoundEffectPlayer({ soundEffect }: { soundEffect: SoundEffect }) {
 }
 
 export function CharacterReviewStage() {
-  const { character } = useContext(CharacterContext);
+  const { character } = useContext(CharacterStagesContext);
 
   const isDetailsComplete =
     character.name.length > 0 && character.backstory.length > 0;
