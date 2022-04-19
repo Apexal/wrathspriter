@@ -357,14 +357,20 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 
 /** Editor for users to specify sound effects for certain characters */
 function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
+  const [targets, setTargets] = useState(0);
+
+  const changeTargets = (amount: number) => {
+    if (targets + amount >= 0 && targets + amount < 50) setTargets(targets + amount);
+  }
+
   return (
     <div className="box">
       <h3 className="subtitle is-capitalized">Targeted Sound Effects 🎯</h3>
       <div className = "count is-flex is-justify-content-space-between">
-        <p># of targets: <span className ="targets">0</span></p>
+        <p># of targets: <span className ="targets">{targets}</span></p>
         <div className="control">
-          <button className="button is-small">➖</button>
-          <button className="button is-small">➕</button>
+          <button onClick={() => {changeTargets(-1)}} className="button is-small">➖</button>
+          <button onClick={() => {changeTargets(1)}} className="button is-small">➕</button>
         </div>
       </div>
     </div>
