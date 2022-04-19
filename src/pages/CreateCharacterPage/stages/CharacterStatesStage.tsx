@@ -355,6 +355,22 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   );
 }
 
+/** Editor for users to specify sound effects for certain characters */
+function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
+  return (
+    <div className="box">
+      <h3 className="subtitle is-capitalized">Targeted Sound Effects 🎯</h3>
+      <div className = "count is-flex is-justify-content-space-between">
+        <p># of targets: <span className ="targets">0</span></p>
+        <div className="control">
+          <button className="button is-small">➖</button>
+          <button className="button is-small">➕</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** A self-contained editor for a particular character state. Includes SFX editor and animation editor. */
 function CharacterStateBox({ state }: { state: CharacterState }) {
   return (
@@ -376,6 +392,9 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
         </div>
         <div className="column">
           <CharacterStateAnimationEditor state={state} />
+        </div>
+        <div className="column">
+          <CharacterStateTargetEditor state = {state} />
         </div>
       </div>
     </div>
