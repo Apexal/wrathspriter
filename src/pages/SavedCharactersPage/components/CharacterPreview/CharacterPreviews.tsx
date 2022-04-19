@@ -132,7 +132,7 @@ export function CharacterPreview({
             Use
           </button>
           <Link
-            to="/create"
+            to="/create/review"
             state={{ dbId }}
             className="button is-small is-warning is-outlined"
           >

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import HelpButton from "../../components/HelpButton";
 
-import thing from "../../assets/light_punch_pose_frame_0.png";
+import logo from "../../assets/img/light_punch_pose_frame_0.png";
 
 import "./IndexPage.scss";
 
@@ -47,7 +47,7 @@ export function IndexPage() {
         </header>
         <main>
           <figure className="image display-image m-auto my-5">
-            <img src={thing} alt="Dancing animation" />
+            <img src={logo} alt="Dancing animation" />
           </figure>
           <div className="is-flex is-flex-direction-column is-align-items-center action-buttons">
             <Link to="/create" className="button is-flex-grow-0 mt-5">

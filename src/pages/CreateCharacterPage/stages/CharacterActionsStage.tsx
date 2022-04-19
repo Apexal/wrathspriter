@@ -1,8 +1,12 @@
-import { useContext } from "react";
-import { CharacterContext } from "../../../state";
+import { useContext, useEffect } from "react";
+import { CharacterStagesContext } from "../../../state";
 
 export function CharacterActionsStage() {
-  const { character } = useContext(CharacterContext);
+  const { character, setCanNavigateNext } = useContext(CharacterStagesContext);
+
+  useEffect(() => {
+    setCanNavigateNext(true);
+  }, [setCanNavigateNext]);
 
   return (
     <section className="section stage" id="character-actions-stage">

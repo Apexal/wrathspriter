@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useContext, useEffect } from "react";
 import { schoolPrograms } from "../../../constants";
 import { Character, SchoolProgram } from "../../../interfaces";
-import { CharacterContext } from "../../../state";
+import { CharacterStagesContext } from "../../../state";
 import { determineCharacterActions } from "../../../utils/actions";
 
 type ProgramCardPropTypes = {
@@ -105,14 +105,18 @@ export function ProgramCard({
 }
 
 export function CharacterProgramsStage() {
-  const { character, setCharacter } = useContext(CharacterContext);
+  const { character, setCharacter, setCanNavigateNext } = useContext(
+    CharacterStagesContext
+  );
 
   useEffect(() => {
     setCharacter((oldCharacter) => ({
       ...oldCharacter,
       actions: determineCharacterActions(oldCharacter),
     }));
-  }, [character.major, character.minor, setCharacter]);
+
+    setCanNavigateNext(!!character.major && !!character.major);
+  }, [character.major, character.minor, setCanNavigateNext, setCharacter]);
 
   return (
     <section id="character-programs-stage" className="section stage">

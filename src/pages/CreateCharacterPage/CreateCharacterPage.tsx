@@ -3,7 +3,10 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { emptyCharacter } from "../../constants";
 import { Character } from "../../interfaces";
-import { CharacterContext, CharacterContextType } from "../../state";
+import {
+  CharacterStagesContext,
+  CharacterStagesContextType,
+} from "../../state";
 import HelpButton from "../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 import { downloadCharacter } from "../../utils/download";
@@ -23,13 +26,15 @@ export function CreateCharacterPage() {
   const [characterId, setCharacterId] = useState<string | null>(null);
   const [isSendingCharacter, setIsSendingCharacter] = useState<boolean>(false);
 
+  const [canNavigateNext, setCanNavigateNext] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dbId, setDbId] = useState<number | null>(null);
   const [character, setCharacter] = useState<Character>(emptyCharacter);
-  const characterContextValue = useMemo<CharacterContextType>(
+  const characterStagesContextValue = useMemo<CharacterStagesContextType>(
     () => ({
       character,
       setCharacter,
+      setCanNavigateNext,
     }),
     [character, setCharacter]
   );
@@ -96,7 +101,7 @@ export function CreateCharacterPage() {
   };
 
   return (
-    <CharacterContext.Provider value={characterContextValue}>
+    <CharacterStagesContext.Provider value={characterStagesContextValue}>
       {characterId && (
         <CharacterCodeModal
           characterId={characterId}
@@ -138,15 +143,20 @@ export function CreateCharacterPage() {
             >
               <span className="icon">⬅️</span>
             </Link>
-            {routeIndex + 1 < stages.length && (
-              <Link
-                to={stages[routeIndex + 1]}
-                className="button"
-                onClick={save}
-              >
-                <span className="icon">➡️</span>
-              </Link>
-            )}
+            {routeIndex + 1 < stages.length &&
+              (canNavigateNext ? (
+                <Link
+                  to={stages[routeIndex + 1]}
+                  className="button"
+                  onClick={save}
+                >
+                  <span className="icon">➡️</span>
+                </Link>
+              ) : (
+                <button className="button" disabled>
+                  <span className="icon">➡️</span>
+                </button>
+              ))}
             {routeIndex !== stages.length - 1 && (
               <button
                 className={clsx("button is-danger", isSaving && "is-loading")}
@@ -184,6 +194,6 @@ export function CreateCharacterPage() {
           />
         </div>
       </section>
-    </CharacterContext.Provider>
+    </CharacterStagesContext.Provider>
   );
 }
