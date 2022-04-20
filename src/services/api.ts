@@ -1,4 +1,3 @@
-import { NormalizedLandmarkList } from "@mediapipe/pose";
 import { Character } from "../interfaces";
 
 /** The base url of the desired Wrathserver instance. */
@@ -25,17 +24,13 @@ export async function processAudio(
 }
 
 /** Sends base64 encoded PNG to be formatted by Wrathserver. Returns base64 formatted image. */
-export async function processImage(
-  imageB64: string,
-  normalizedPoseLandmarks?: NormalizedLandmarkList
-): Promise<string> {
+export async function processImage(imageB64: string): Promise<string> {
   const response = await fetch(API_BASE_URL + "/image", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      normalizedPoseLandmarks,
       base64EncodedImage: imageB64,
     }),
   });

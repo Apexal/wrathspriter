@@ -1,4 +1,3 @@
-import { NormalizedLandmarkList } from "@mediapipe/pose";
 import clsx from "clsx";
 import { useRef, useState, useEffect } from "react";
 import { useCountdown } from "../../utils/hooks";
@@ -11,10 +10,7 @@ type PoseCameraModalPropTypes = {
   isOpen: boolean;
   close: () => void;
   isProcessing: boolean;
-  handleProcessImage: (
-    b64: string,
-    poseLandmarks?: NormalizedLandmarkList | undefined
-  ) => Promise<void>;
+  handleProcessImage: (b64: string) => Promise<void>;
 };
 
 /**  */
@@ -48,7 +44,7 @@ export function PoseCameraModal({
     audioRef.current?.play();
 
     // Hand off to be processed on server
-    handleProcessImage(b64, poseCameraRef.current?.actualPose ?? undefined);
+    handleProcessImage(b64);
 
     // Restart the timer
     startCountdown();

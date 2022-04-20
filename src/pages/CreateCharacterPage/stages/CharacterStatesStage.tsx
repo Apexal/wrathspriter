@@ -11,7 +11,6 @@ import { defaultFrame } from "../../../constants";
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
 import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
-import { NormalizedLandmarkList } from "@mediapipe/pose";
 import { PoseCameraModal } from "../../../components/PoseCameraModal/PoseCameraModal";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
@@ -33,12 +32,9 @@ function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
     });
   };
 
-  const handleProcessImage = (
-    b64: string,
-    poseLandmarks?: NormalizedLandmarkList
-  ) => {
+  const handleProcessImage = (b64: string) => {
     setIsProcessing(true);
-    return processImage(b64, poseLandmarks)
+    return processImage(b64)
       .then((processB64) => {
         setCharacter({
           ...character,
