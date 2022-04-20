@@ -4,7 +4,13 @@ export interface SoundEffect {
   /** Optional display name for this sound effect */
   name: string | null;
   base64EncodedAudio: string;
-  targets: string[] | null;
+  targets: TargetedSoundEffect[] | null;
+}
+
+export interface TargetedSoundEffect {
+  name: string | null;
+  base64EncodedAudio: string;
+  targetName: string;
 }
 
 /** Represents an action the character can perform. */

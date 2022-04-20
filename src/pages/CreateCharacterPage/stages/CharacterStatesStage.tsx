@@ -3,7 +3,7 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { AnimationFrame, SoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect, TargetedSoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
@@ -358,9 +358,25 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 /** Editor for users to specify sound effects for certain characters */
 function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
   const [targets, setTargets] = useState(0);
+  const [targetInfo, setTargetInfo] = useState<TargetedSoundEffect[]>([]);
 
   const changeTargets = (amount: number) => {
-    if (targets + amount >= 0 && targets + amount < 50) setTargets(targets + amount);
+    let newTarget = targets + amount;
+    if (newTarget >= 0 && newTarget < 50) setTargets(newTarget);
+
+    let temp: TargetedSoundEffect = {
+        name: "Targeted SFX",
+        base64EncodedAudio: "",
+        targetName: "",
+    };
+    let info = targetInfo;
+    for (let i = info.length; i < newTarget; i++) {
+      info.push(temp);
+    }
+    for (let i = info.length; i > newTarget; i--) {
+      info.pop();
+    }
+    setTargetInfo(info);
   }
 
   return (
@@ -372,6 +388,11 @@ function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
           <button onClick={() => {changeTargets(-1)}} className="button is-small">➖</button>
           <button onClick={() => {changeTargets(1)}} className="button is-small">➕</button>
         </div>
+      </div>
+      <div className = "sfx">
+        {targetInfo.map((target) => (
+          <CharacterStateSfxEditor state={state} />
+        ))}
       </div>
     </div>
   );
