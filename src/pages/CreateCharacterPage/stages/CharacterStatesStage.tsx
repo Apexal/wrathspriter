@@ -3,7 +3,7 @@ import { CharacterStagesContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { AnimationFrame, SoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect, TargetedSoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
@@ -355,6 +355,49 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
   );
 }
 
+/** Editor for users to specify sound effects for certain characters */
+function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
+  const [targets, setTargets] = useState(0);
+  const [targetInfo, setTargetInfo] = useState<TargetedSoundEffect[]>([]);
+
+  const changeTargets = (amount: number) => {
+    let newTarget = targets + amount;
+    if (newTarget >= 0 && newTarget < 50) setTargets(newTarget);
+
+    let temp: TargetedSoundEffect = {
+        name: "Targeted SFX",
+        base64EncodedAudio: "",
+        targetName: "",
+    };
+    let info = targetInfo;
+    for (let i = info.length; i < newTarget; i++) {
+      info.push(temp);
+    }
+    for (let i = info.length; i > newTarget; i--) {
+      info.pop();
+    }
+    setTargetInfo(info);
+  }
+
+  return (
+    <div className="box">
+      <h3 className="subtitle is-capitalized">Targeted Sound Effects 🎯</h3>
+      <div className = "count is-flex is-justify-content-space-between">
+        <p># of targets: <span className ="targets">{targets}</span></p>
+        <div className="control">
+          <button onClick={() => {changeTargets(-1)}} className="button is-small">➖</button>
+          <button onClick={() => {changeTargets(1)}} className="button is-small">➕</button>
+        </div>
+      </div>
+      <div className = "sfx">
+        {targetInfo.map((target) => (
+          <CharacterStateSfxEditor state={state} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** A self-contained editor for a particular character state. Includes SFX editor and animation editor. */
 function CharacterStateBox({ state }: { state: CharacterState }) {
   return (
@@ -376,6 +419,9 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
         </div>
         <div className="column">
           <CharacterStateAnimationEditor state={state} />
+        </div>
+        <div className="column">
+          <CharacterStateTargetEditor state = {state} />
         </div>
       </div>
     </div>
