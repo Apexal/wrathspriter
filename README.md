@@ -33,7 +33,7 @@ https://docs.google.com/document/d/1sG4a1f0V0WRD60UnZree6GnGUDNcPrOdCTEu_o8YSVM/
 
 ## Current Maintainers
 
-- [Frank Matranga](https://github.com/Apexal) (Project Lead)
+- [Frank M](https://github.com/Apexal) (Project Lead)
 - Charles R
 - Jonathan F
 - Alexis H
