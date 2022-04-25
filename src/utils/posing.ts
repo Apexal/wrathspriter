@@ -7,13 +7,14 @@ export const poseManager = new Pose({
   },
 });
 
+// https://google.github.io/mediapipe/solutions/pose.html
 poseManager.setOptions({
-  modelComplexity: 1,
+  modelComplexity: 2,
   smoothLandmarks: true,
   enableSegmentation: true,
   smoothSegmentation: true,
   minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5,
+  minTrackingConfidence: 0.75,
 });
 
 /** Given a landmark list and a pose angle, calculates the absolute value of the angle. */
@@ -53,7 +54,11 @@ export function checkIsFullyInFrame(
   visibilityCutoff: number = 0.4
 ): boolean {
   return !landmarks.some(
-    (l) => l.visibility && l.visibility < visibilityCutoff
+    (l, index) =>
+      // Ignore where the arms and hands are
+      (index < 13 || index > 22) &&
+      l.visibility &&
+      l.visibility < visibilityCutoff
   );
 }
 
