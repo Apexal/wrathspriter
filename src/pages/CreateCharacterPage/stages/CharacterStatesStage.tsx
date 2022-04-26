@@ -3,7 +3,7 @@ import { CharacterContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
-import { AnimationFrame, SoundEffect, TargetedSoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";
@@ -305,13 +305,13 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
     <div className="box">
       <h3 className="subtitle is-capitalized">Sound Effects 🔊</h3>
       {sfx.map((soundEffect: SoundEffect, index: number) => (
-        <div key={index}>
+        (soundEffect.target === null) ? (<div key={index}>
           <audio
             title={soundEffect.name ?? ""}
             src={"data:audio/mpeg;base64," + soundEffect.base64EncodedAudio}
             controls
           ></audio>
-        </div>
+        </div>) : ""
       ))}
 
       {isProcessing && (
@@ -356,50 +356,61 @@ function CharacterStateSfxEditor({ state }: { state: CharacterState }) {
 }
 
 /** Editor for users to specify sound effects for certain characters */
-function CharacterStateTargetEditor({ state } : { state: CharacterState }) {
+function CharacterStateTargetEditor({ state }: { state: CharacterState }) {
+  const { character, setCharacter } = useContext(CharacterContext);
   const [targets, setTargets] = useState(0);
-  const [targetInfo, setTargetInfo] = useState<TargetedSoundEffect[]>([]);
+
+  // @ts-expect-error
+  let sfx = character.stateSoundEffects[state.id];
+  if (targets == 0) {
+    if (sfx.length > 1) setTargets(sfx.length - 1)
+  }
 
   const changeTargets = (amount: number) => {
+    let prevTarget = targets;
     let newTarget = targets + amount;
     if (newTarget >= 0 && newTarget < 50) setTargets(newTarget);
+    else return;
 
-    let temp: TargetedSoundEffect = {
-        name: "Targeted SFX",
-        base64EncodedAudio: "",
-        targetName: "",
+    let temp: SoundEffect = {
+      name: "Targeted SFX",
+      base64EncodedAudio: "",
+      target: "Target Name"
     };
-    let info = targetInfo;
-    for (let i = info.length; i < newTarget; i++) {
-      info.push(temp);
+    let newCharacter = character;
+    for (let i = prevTarget; i < newTarget; i++) {
+      // @ts-expect-error
+      newCharacter.stateSoundEffects[state.id].push(temp);
     }
-    for (let i = info.length; i > newTarget; i--) {
-      info.pop();
+    for (let i = prevTarget; i > newTarget; i--) {
+      // @ts-expect-error
+      newCharacter.stateSoundEffects[state.id].pop();
     }
-    setTargetInfo(info);
+    setCharacter(newCharacter);
   }
 
   return (
     <div className="box">
       <h3 className="subtitle is-capitalized">Targeted Sound Effects 🎯</h3>
-      <div className = "count is-flex is-justify-content-space-between">
-        <p># of targets: <span className ="targets">{targets}</span></p>
+      <div className="count is-flex is-justify-content-space-between">
+        <p># of targets: <span className="targets">{targets}</span></p>
         <div className="control">
-          <button onClick={() => {changeTargets(-1)}} className="button is-small">➖</button>
-          <button onClick={() => {changeTargets(1)}} className="button is-small">➕</button>
+          <button onClick={() => { changeTargets(-1) }} className="button is-small">➖</button>
+          <button onClick={() => { changeTargets(1) }} className="button is-small">➕</button>
         </div>
       </div>
-      <div className = "sfx">
-        {targetInfo.map((target, index) => (
-          <CharacterStateTargetedSFXEditor state={state} target = {index}/>
-        ))}
+      <div className="sfx">
+        {sfx.map((soundEffect: SoundEffect, index: number) => (
+          soundEffect.target != null ?
+          <CharacterStateTargetedSFXEditor key={index} state={state} target={index} targetName={soundEffect.target || "TBA"} />
+        : ""))}
       </div>
     </div>
   );
 }
 
 /** Editor for users to provide the audio clips and target character for a targeted sound effect */
-function CharacterStateTargetedSFXEditor( { state, target } : { state: CharacterState, target: number } ) {
+function CharacterStateTargetedSFXEditor({ state, target, targetName }: { state: CharacterState, target: number, targetName: string }) {
   const { character, setCharacter } = useContext(CharacterContext);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
@@ -419,21 +430,14 @@ function CharacterStateTargetedSFXEditor( { state, target } : { state: Character
       .then((processB64) => {
         let newCharacter = character;
         // @ts-expect-error
-        newCharacter.stateSoundEffects[state.id][0].targets[index].name = "Set!";
-        setCharacter(newCharacter);
+        newCharacter.stateSoundEffects[state.id][target + 1] = {
+          name: sfxName?.trim(),
+          base64EncodedAudio: processB64,
+          // @ts-expect-error
+          target: character.stateSoundEffects[state.id][target + 1].target
+        }
 
-        /*setCharacter({
-          ...character,
-          stateSoundEffects: {
-            ...character.stateSoundEffects,
-            [state.id][0] = [
-              {
-                name: sfxName.trim(),
-                base64EncodedAudio: processB64,
-              },
-            ],
-          },
-        });*/
+        setCharacter(newCharacter);
       })
       .catch((err) => {
         alert(
@@ -472,14 +476,13 @@ function CharacterStateTargetedSFXEditor( { state, target } : { state: Character
 
       fileToBase64Url(file).then((b64MP3Url) => {
         const b64 = b64MP3Url.replace("data:audio/mpeg;base64,", "");
-
         handleProcessAudio(b64, sfxName!, "audio/mpeg");
       });
     }
   };
 
   // @ts-expect-error
-  const sfx = character.stateSoundEffects[state.id];
+  const sfx = character.stateSoundEffects[state.id][target];
 
   const handleClearSfx = () => {
     setCharacter({
@@ -497,18 +500,25 @@ function CharacterStateTargetedSFXEditor( { state, target } : { state: Character
   return (
     <div className="box">
       <h3 className="subtitle is-capitalized">Target 🏹</h3>
-      {sfx.map((soundEffect: SoundEffect, index: number) => (
-        <div key={index}>
-          <div className = "field">
-            <input className="input" type="text" placeholder="Target Name"/>
-          </div>
-          <audio
-            title={soundEffect.name ?? ""}
-            src={"data:audio/mpeg;base64," + soundEffect.base64EncodedAudio}
-            controls
-          ></audio>
+      <div key={target}>
+        <div className="field">
+          <input
+            className="input"
+            type="text"
+            onChange={(e) => {
+              let newCharacter = character;
+              // @ts-expect-error
+              newCharacter.stateSoundEffects[state.id][target].target = e.currentTarget.value;
+              setCharacter(newCharacter);
+            }}
+            placeholder={sfx.target || "Target Name"}></input>
         </div>
-      ))}
+        <audio
+          title={sfx.name ?? ""}
+          src={"data:audio/mpeg;base64," + sfx.base64EncodedAudio}
+          controls
+        ></audio>
+      </div>
 
       {isProcessing && (
         <progress className="progress is-small is-dark" max={100} />
@@ -574,7 +584,7 @@ function CharacterStateBox({ state }: { state: CharacterState }) {
           <CharacterStateAnimationEditor state={state} />
         </div>
         <div className="column">
-          <CharacterStateTargetEditor state = {state} />
+          <CharacterStateTargetEditor state={state} />
         </div>
       </div>
     </div>
@@ -591,7 +601,7 @@ export function CharacterStatesStage() {
     character.stateAnimations[state.id].length > 0 &&
     (state.id in character.stateSoundEffects
       ? // @ts-expect-error
-        character.stateSoundEffects[state.id].length > 0
+      character.stateSoundEffects[state.id].length > 0
       : true);
 
   return (
