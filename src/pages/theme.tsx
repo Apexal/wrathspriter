@@ -12,7 +12,7 @@ const modifiers = [
   "light",
 ];
 
-export function ThemePage() {
+export default function ThemePage() {
   const [modifier, setModifier] = useState("primary");
 
   return (

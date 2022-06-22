@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
-import HelpButton from "../../../components/HelpButton";
+import Link from "next/link";
+import { CharacterPreview } from "@/components/CharacterPreviews";
+import HelpButton from "@/components/HelpButton";
 
-import { db } from "../../utils/db";
+import { db } from "@/utils/db";
 import { useLiveQuery } from "dexie-react-hooks";
 
 /**
  * Page that lists all saved characters from the user's browser.
  */
-export function SavedCharactersPage() {
-  const savedCharacters = useLiveQuery(() => db.characters.toArray());
+export default function SavedCharactersPage() {
+  const savedCharacters = []; //useLiveQuery(() => db.characters.toArray());
 
   return (
     <section id="saved-characters-page" className="section page">
@@ -40,8 +40,8 @@ export function SavedCharactersPage() {
         )}
 
         <hr />
-        <Link to="/" className="button">
-          Home
+        <Link href="/">
+          <button className="button">Home</button>
         </Link>
       </div>
     </section>

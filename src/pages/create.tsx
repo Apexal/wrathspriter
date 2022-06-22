@@ -1,24 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
 
-import { emptyCharacter } from "../../constants";
-import { Character } from "../../../interfaces";
-import {
-  CharacterStagesContext,
-  CharacterStagesContextType,
-} from "../../state";
-import HelpButton from "../../../components/HelpButton";
-import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
-import { downloadCharacter } from "../../utils/download";
+import { emptyCharacter } from "@/constants";
+import { Character } from "@/interfaces";
+import { CharacterStagesContext, CharacterStagesContextType } from "@/state";
+import HelpButton from "@/components/HelpButton";
+import { AddCharacterForm, db, UpdateCharacter } from "@/utils/db";
+import { downloadCharacter } from "@/utils/download";
 import clsx from "clsx";
-import { sendCharacterToServer } from "../../services/api";
-import { CharacterCodeModal } from "../SavedCharactersPage/components/CharacterPreview/CharacterPreviews";
+import { sendCharacterToServer } from "@/services/api";
+import { CharacterCodeModal } from "@/pages_old/SavedCharactersPage/components/CharacterPreview/CharacterPreviews";
+import Link from "next/link";
 
 const stages = ["", "programs", "states", "actions", "review"];
 
 export function CreateCharacterPage() {
-  const location = useLocation();
-
   const routeIndex = stages.indexOf(
     location.pathname.replace("/create", "").replace("/", "")
   );
@@ -137,7 +132,7 @@ export function CreateCharacterPage() {
         <div className="container">
           <div className="buttons">
             <Link
-              to={routeIndex - 1 >= 0 ? stages[routeIndex - 1] : "/"}
+              href={routeIndex - 1 >= 0 ? stages[routeIndex - 1] : "/"}
               className="button"
               onClick={routeIndex - 1 > 0 ? save : undefined}
             >
@@ -146,7 +141,7 @@ export function CreateCharacterPage() {
             {routeIndex + 1 < stages.length &&
               (canNavigateNext ? (
                 <Link
-                  to={stages[routeIndex + 1]}
+                  href={stages[routeIndex + 1]}
                   className="button"
                   onClick={save}
                 >
@@ -180,7 +175,7 @@ export function CreateCharacterPage() {
                   <span className="icon">🎮</span>
                   <span>Use</span>
                 </button>
-                <Link className="button" to="/">
+                <Link className="button" href="/">
                   Home
                 </Link>
               </>

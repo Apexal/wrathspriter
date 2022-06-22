@@ -1,9 +1,9 @@
 import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
-import states, { CharacterState } from "../../../constants/states";
-import { SoundEffect } from "../../../../interfaces";
-import { CharacterStagesContext } from "../../../state";
+import { AnimatedSprite } from "@/components/AnimatedSprite/AnimatedSprite";
+import states, { CharacterState } from "@/constants/states";
+import { SoundEffect } from "@/interfaces";
+import { CharacterStagesContext } from "@/state";
 import { ProgramCard } from "./CharacterProgramsStage";
 
 const completeTag = <span className="tag is-success">COMPLETE</span>;

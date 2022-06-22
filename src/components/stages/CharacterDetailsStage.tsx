@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { CharacterStagesContext } from "../../../state";
+import { CharacterStagesContext } from "@/state";
 
 export function CharacterDetailsStage() {
   const { character, setCharacter, setCanNavigateNext } = useContext(

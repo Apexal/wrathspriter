@@ -46,20 +46,20 @@ export default function IndexPage() {
           </h2>
         </header>
         <main>
-          <figure className="image display-image m-auto my-5">
+          <figure className="image display-image mx-auto my-5">
             <Image
               src="/img/logo1.png"
-              alt="Dancing animation"
+              alt="Wrathskeller logo"
               width={400}
               height={400}
             />
           </figure>
           <div className="is-flex is-flex-direction-column is-align-items-center action-buttons">
-            <Link href="/create" className="button is-flex-grow-0 mt-5">
-              Create
+            <Link href="/create">
+              <button className="button is-flex-grow-0 mt-5">Create</button>
             </Link>
-            <Link href="/saved" className="button is-flex-grow-0 mt-5">
-              Saved
+            <Link href="/saved">
+              <button className="button is-flex-grow-0 mt-5">Saved</button>
             </Link>
           </div>
         </main>
