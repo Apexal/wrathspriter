@@ -8,15 +8,18 @@ import { AddCharacterForm, db, UpdateCharacter } from "@/utils/db";
 import { downloadCharacter } from "@/utils/download";
 import clsx from "clsx";
 import { sendCharacterToServer } from "@/services/api";
-import { CharacterCodeModal } from "@/pages_old/SavedCharactersPage/components/CharacterPreview/CharacterPreviews";
+import { CharacterCodeModal } from "@/components/CharacterPreviews";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-const stages = ["", "programs", "states", "actions", "review"];
+const stages = ["details", "programs", "states", "actions", "review"];
 
-export function CreateCharacterPage() {
-  const routeIndex = stages.indexOf(
-    location.pathname.replace("/create", "").replace("/", "")
-  );
+export default function CreateCharacterPage() {
+  const router = useRouter();
+
+  console.log(router.query);
+
+  const routeIndex = stages.indexOf(router.query.stage as string);
 
   const [characterId, setCharacterId] = useState<string | null>(null);
   const [isSendingCharacter, setIsSendingCharacter] = useState<boolean>(false);
@@ -35,18 +38,23 @@ export function CreateCharacterPage() {
   );
 
   useEffect(() => {
-    if (!location.state) return;
-    const dbId = (location.state as { dbId?: number }).dbId;
+    const dbId = router.query.dbId as string | undefined;
 
-    if (location.state && dbId) {
+    if (dbId) {
+      console.log("here");
+
       db.characters.get(dbId).then((characterWrapper) => {
+        console.log(characterWrapper);
+
         if (characterWrapper?.character) {
-          setDbId(dbId);
+          setDbId(+dbId);
           setCharacter(characterWrapper.character);
         }
       });
     }
-  }, [location.state]);
+  }, [router]);
+
+  const stageComponent = null;
 
   const save = () => {
     if (isSaving) return;
@@ -126,7 +134,7 @@ export function CreateCharacterPage() {
         </ul>
       </HelpButton>
 
-      <Outlet />
+      {stageComponent}
 
       <section className="section">
         <div className="container">
