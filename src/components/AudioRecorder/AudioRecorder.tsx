@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { fileToBase64Url } from "../../utils/download";
+import { fileToBase64Url } from "@/utils/download";
 
 type AudioRecorderPropTypes = {
   disabled?: boolean;

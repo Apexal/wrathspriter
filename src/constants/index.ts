@@ -1,5 +1,5 @@
 import { POSE_LANDMARKS } from "@mediapipe/pose";
-import { AnimationFrame, Character, SchoolProgram } from "../../interfaces";
+import { AnimationFrame, Character, SchoolProgram } from "@/interfaces";
 
 export const defaultColliders = {
   hitCollider: {

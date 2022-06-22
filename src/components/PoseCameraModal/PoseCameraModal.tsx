@@ -1,10 +1,8 @@
 import clsx from "clsx";
 import { useRef, useState, useEffect } from "react";
-import { useCountdown } from "../../utils/hooks";
-import { checkIsFullyInFrame } from "../../utils/posing";
-import { PoseCameraRef, PoseCamera } from "../PoseCamera/PoseCamera";
-
-import cameraShutter from "../../assets/audio/camera_shutter.mp3";
+import { useCountdown } from "@/utils/hooks";
+import { checkIsFullyInFrame } from "@/utils/posing";
+import { PoseCameraRef, PoseCamera } from "@/components/PoseCamera/PoseCamera";
 
 type PoseCameraModalPropTypes = {
   isOpen: boolean;
@@ -126,7 +124,7 @@ export function PoseCameraModal({
 
   return (
     <div className={clsx("modal", isOpen && "is-active")}>
-      <audio src={cameraShutter} ref={audioRef}></audio>
+      <audio src="audio/camera_shutter.mp3" ref={audioRef}></audio>
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">

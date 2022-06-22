@@ -13,12 +13,12 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { PoseAngle } from "../../interfaces/pose";
+import { PoseAngle } from "@/interfaces/pose";
 import {
   checkIsFullyInFrame,
   checkIsInPose,
   poseManager,
-} from "../../utils/posing";
+} from "@/utils/posing";
 
 import "./PoseCamera.scss";
 

@@ -1,4 +1,4 @@
-import { useCountdown } from "../../utils/hooks";
+import { useCountdown } from "@/utils/hooks";
 
 type CountdownButtonPropTypes = {
   seconds: number;
