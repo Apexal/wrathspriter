@@ -1,4 +1,4 @@
-import { Character } from "../interfaces";
+import { Character } from "@/interfaces";
 
 export function fileToBase64Url(file: File | Blob): Promise<string> {
   return new Promise<string>((resolve, reject) => {

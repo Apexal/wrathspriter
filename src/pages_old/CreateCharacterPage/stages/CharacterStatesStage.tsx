@@ -3,7 +3,7 @@ import { CharacterStagesContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
 import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
-import { AnimationFrame, SoundEffect } from "../../../interfaces";
+import { AnimationFrame, SoundEffect } from "../../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
 import { defaultFrame } from "../../../constants";

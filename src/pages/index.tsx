@@ -1,6 +1,7 @@
 import Link from "next/link";
-import HelpButton from "../components/HelpButton";
 import Image from "next/image";
+
+import HelpButton from "@/components/HelpButton";
 
 import "./index.module.scss";
 

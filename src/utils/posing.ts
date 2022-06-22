@@ -1,5 +1,5 @@
 import { LandmarkList, Pose } from "@mediapipe/pose";
-import { PoseAngle } from "../interfaces/pose";
+import { PoseAngle } from "@/interfaces/pose";
 
 export const poseManager = new Pose({
   locateFile: (file) => {

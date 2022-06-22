@@ -1,4 +1,4 @@
-import { AnimationFrame, Character } from "../interfaces";
+import { AnimationFrame, Character } from "../../interfaces";
 
 export type CharacterState = {
   id: keyof Character["stateAnimations"] | keyof Character["stateSoundEffects"];

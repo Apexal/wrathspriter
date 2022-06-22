@@ -1,10 +1,7 @@
 import { useRef, useState } from "react";
-import { CountdownButton } from "../../components/CountdownButton/CountdownButton";
-import {
-  PoseCamera,
-  PoseCameraRef,
-} from "../../components/PoseCamera/PoseCamera";
-import { schoolPrograms } from "../../constants";
+import { CountdownButton } from "@/components/CountdownButton/CountdownButton";
+import { PoseCamera, PoseCameraRef } from "@/components/PoseCamera/PoseCamera";
+import { schoolPrograms } from "@/constants";
 
 export function PosingPage() {
   const poseCameraRef = useRef<PoseCameraRef | null>(null);

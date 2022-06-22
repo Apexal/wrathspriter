@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useContext, useEffect } from "react";
 import { schoolPrograms } from "../../../constants";
-import { Character, SchoolProgram } from "../../../interfaces";
+import { Character, SchoolProgram } from "../../../../interfaces";
 import { CharacterStagesContext } from "../../../state";
 import { determineCharacterActions } from "../../../utils/actions";
 

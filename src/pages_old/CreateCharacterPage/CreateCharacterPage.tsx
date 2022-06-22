@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { emptyCharacter } from "../../constants";
-import { Character } from "../../interfaces";
+import { Character } from "../../../interfaces";
 import {
   CharacterStagesContext,
   CharacterStagesContextType,

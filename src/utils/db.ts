@@ -1,5 +1,5 @@
 import Dexie, { Table } from "dexie";
-import { Character } from "../interfaces/character";
+import { Character } from "@/interfaces";
 
 export interface DBProps {
   id?: number;

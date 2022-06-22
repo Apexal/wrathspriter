@@ -1,4 +1,4 @@
-import { Character } from "../interfaces";
+import { Character } from "@/interfaces";
 
 /** The base url of the desired Wrathserver instance. */
 const API_BASE_URL =
