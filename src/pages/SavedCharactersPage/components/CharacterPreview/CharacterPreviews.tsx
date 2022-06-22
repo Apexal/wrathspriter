@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
+import { AnimatedSprite } from "../../../../../components/AnimatedSprite/AnimatedSprite";
 import { Character } from "../../../../interfaces";
 import { sendCharacterToServer } from "../../../../services/api";
 import { DeleteCharacter } from "../../../../utils/db";

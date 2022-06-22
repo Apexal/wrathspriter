@@ -1,15 +1,14 @@
-import { Link } from "react-router-dom";
-import HelpButton from "../../components/HelpButton";
+import Link from "next/link";
+import HelpButton from "../components/HelpButton";
+import Image from "next/image";
 
-import logo from "../../assets/img/light_punch_pose_frame_0.png";
-
-import "./IndexPage.scss";
+import "./index.module.scss";
 
 /**
  * The homepage displayed to all users. Allows them to either
  * create a new character or view their existing characters.
  */
-export function IndexPage() {
+export default function IndexPage() {
   return (
     <section id="index-page" className="section page">
       <HelpButton
@@ -47,13 +46,18 @@ export function IndexPage() {
         </header>
         <main>
           <figure className="image display-image m-auto my-5">
-            <img src={logo} alt="Dancing animation" />
+            <Image
+              src="/img/logo1.png"
+              alt="Dancing animation"
+              width={400}
+              height={400}
+            />
           </figure>
           <div className="is-flex is-flex-direction-column is-align-items-center action-buttons">
-            <Link to="/create" className="button is-flex-grow-0 mt-5">
+            <Link href="/create" className="button is-flex-grow-0 mt-5">
               Create
             </Link>
-            <Link to="/saved" className="button is-flex-grow-0 mt-5">
+            <Link href="/saved" className="button is-flex-grow-0 mt-5">
               Saved
             </Link>
           </div>

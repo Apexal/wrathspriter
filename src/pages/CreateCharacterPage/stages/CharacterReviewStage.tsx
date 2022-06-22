@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
+import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
 import states, { CharacterState } from "../../../constants/states";
 import { SoundEffect } from "../../../interfaces";
 import { CharacterStagesContext } from "../../../state";

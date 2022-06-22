@@ -7,7 +7,7 @@ import {
   CharacterStagesContext,
   CharacterStagesContextType,
 } from "../../state";
-import HelpButton from "../../components/HelpButton";
+import HelpButton from "../../../components/HelpButton";
 import { AddCharacterForm, db, UpdateCharacter } from "../../utils/db";
 import { downloadCharacter } from "../../utils/download";
 import clsx from "clsx";

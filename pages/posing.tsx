@@ -6,7 +6,7 @@ import {
 } from "../../components/PoseCamera/PoseCamera";
 import { schoolPrograms } from "../../constants";
 
-export function PoseTestingPage() {
+export function PosingPage() {
   const poseCameraRef = useRef<PoseCameraRef | null>(null);
   const [screenshots, setScreenshots] = useState<string[]>([]);
 

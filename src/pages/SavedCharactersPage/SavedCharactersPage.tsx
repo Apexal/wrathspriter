@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CharacterPreview } from "./components/CharacterPreview/CharacterPreviews";
-import HelpButton from "../../components/HelpButton";
+import HelpButton from "../../../components/HelpButton";
 
 import { db } from "../../utils/db";
 import { useLiveQuery } from "dexie-react-hooks";

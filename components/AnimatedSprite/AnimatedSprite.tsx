@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimationFrame } from "../../interfaces";
+import { AnimationFrame } from "../../src/interfaces";
 
 type AnimatedSpritePropTypes = {
   isPlaying?: boolean;

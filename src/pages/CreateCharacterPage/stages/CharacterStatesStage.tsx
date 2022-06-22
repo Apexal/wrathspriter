@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { CharacterStagesContext } from "../../../state";
 
 import states, { CharacterState } from "../../../constants/states";
-import { AnimatedSprite } from "../../../components/AnimatedSprite/AnimatedSprite";
+import { AnimatedSprite } from "../../../../components/AnimatedSprite/AnimatedSprite";
 import { AnimationFrame, SoundEffect } from "../../../interfaces";
 import { fileToBase64Url } from "../../../utils/download";
 import { processAudio, processImage } from "../../../services/api";
@@ -10,8 +10,8 @@ import { defaultFrame } from "../../../constants";
 
 import "./CharacterStatesStage.scss";
 import clsx from "clsx";
-import { AudioRecorder } from "../../../components/AudioRecorder/AudioRecorder";
-import { PoseCameraModal } from "../../../components/PoseCameraModal/PoseCameraModal";
+import { AudioRecorder } from "../../../../components/AudioRecorder/AudioRecorder";
+import { PoseCameraModal } from "../../../../components/PoseCameraModal/PoseCameraModal";
 
 /** Editor for users to add, edit, and clear animation frames for a particular state. */
 function CharacterStateAnimationEditor({ state }: { state: CharacterState }) {
